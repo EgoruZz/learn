@@ -24,6 +24,7 @@
 *   **Типовые классы сложности**
     *   **Константное время** - O(1)
     *   **Логарифмическое время** - O(log n)
+    *   **Корне-катое время** - O(krt(n))
     *   **Корневое время** - O(sqrt(n))
     *   **Линейное время** - O(n)
     *   **Линейно-логарифмическое** - O(n log n)
@@ -129,33 +130,399 @@
 *   **Дополнительно:**
     Bead Sort, Bitonic Sort, Bogo Sort, Bucket Sort, Circle Sort, Cocktail Shaker Sort, Comb Sort, Cycle Sort, Cyclic Sort, Double Sort, Dutch National Flag Sort, Exchange Sort, External Sort, Gnome Sort, Intro Sort, Natural Sort, Odd Even Sort, Odd Even Transposition Parallel, Odd Even Transposition Single Threaded, Pancake Sort, Patience Sort, Pigeon Sort, Pigeonhole Sort, Shell Sort, Shrink Shell Sort, Slowsort, Stalin Sort, Stooge Sort, Strand Sort, Tim Sort, Topological Sort, Tree Sort, Unknown Sort, Wiggle Sort
 
-### **II. ПОИСК**
-*  **Linear Search**
-    Double Linear Search, Double Linear Search Recursion, Sentinel Linear Search
-*   **Binary Search** (по массиву)
-    *   **Binary Search по ответу**
-    *   **Вещественный Binary Search**
-*   **Ternary Search** ❌
-*   **Exponential Search**
-*   Поиск в бесконечном массиве
-*   **Interpolation Search**
-*   **Fibonacci Search**
-*   **Параметрический поиск**
-*   **Локальный поиск**
-*   **Алгоритмы нахождения медианы:**
-    *   **Quick Select** (O(n) в среднем)
-    *   **Median Of Medians** (O(n) в худшем)
-*   **Дополнительно:**
-    Binary Tree Traversal
-    Hill Climbing
-    Jump Search
-    Simple Binary Search
-    Simulated Annealing
-    Tabu Search
+### **II. ПОИСК (SEARCH ALGORITHMS)**
+
+#### **I. ЛИНЕЙНЫЙ И ПОСЛЕДОВАТЕЛЬНЫЙ ПОИСК**
+
+##### **A. БАЗОВЫЙ ЛИНЕЙНЫЙ ПОИСК**
+*   **Linear Search (Sequential Search):**
+    *   Проход по всем элементам O(n)
+    *   Для неотсортированных массивов
+    *   Простая реализация
+*   **Оптимизации линейного поиска:**
+    *   **Sentinel Linear Search:**
+        *   Sentinel Linear Search
+        *   Добавление искомого элемента в конец
+        *   Уменьшение числа проверок условия
+    *   **Double Linear Search:**
+        *   Double Linear Search
+        *   Поиск с двух концов одновременно
+        *   Double Linear Search Recursion
+*   **Применения:**
+    *   Поиск в небольших массивах
+    *   Когда данные не отсортированы
+    *   Когда нужен первый/последний вхождение
+
+##### **B. ОСОБЫЕ СЛУЧАИ ЛИНЕЙНОГО ПОИСКА**
+*   **Search in unsorted array:**
+    *   Только линейный поиск
+    *   Ожидаемое время O(n)
+*   **Search with early exit:**
+    *   При нахождении первого подходящего элемента
+*   **Search for multiple occurrences:**
+    *   Найти все вхождения
+    *   Подсчёт количества
+
+#### **II. ДВОИЧНЫЙ ПОИСК (BINARY SEARCH)**
+
+##### **A. КЛАССИЧЕСКИЙ БИНАРНЫЙ ПОИСК**
+*   **Basic Binary Search:**
+    *   Simple Binary Search
+    *   Для отсортированных массивов
+    *   O(log n) время
+*   **Варианты реализации:**
+    *   **Итеративная версия:**
+        *   While loop с поддержанием границ
+    *   **Рекурсивная версия:**
+        *   Divide and conquer подход
+*   **Точные варианты поиска:**
+    *   **Lower bound:**
+        *   Первый элемент ≥ x
+        *   std::lower_bound в C++
+    *   **Upper bound:**
+        *   Первый элемент > x
+        *   std::upper_bound в C++
+    *   **Equal range:**
+        *   Диапазон элементов равных x
+        *   std::equal_range в C++
+
+##### **B. БИНАРНЫЙ ПОИСК ПО ОТВЕТУ (BINARY SEARCH ON ANSWER)**
+*   **Параметрический поиск:**
+    *   Binary Search по ответу
+    *   Когда ответ монотонен относительно параметра
+*   **Применения:**
+    *   Минимизация максимума
+    *   Максимизация минимума
+    *   Задачи с монотонными предикатами
+
+##### **C. ВЕЩЕСТВЕННЫЙ БИНАРНЫЙ ПОИСК**
+*   **Real-valued Binary Search:**
+    *   Для функций с вещественным аргументом
+    *   Поиск корня уравнения f(x) = 0
+*   **Точность и критерии остановки:**
+    *   Фиксированное число итераций (например, 100)
+    *   По достижении заданной точности ε
+    *   while (hi - lo > eps) { ... }
+*   **Применения:**
+    *   Нахождение корней уравнений
+    *   Оптимизация вещественных функций
+    *   Геометрические задачи
+
+##### **D. БИНАРНЫЙ ПОИСК В ОСОБЫХ СТРУКТУРАХ**
+*   **Binary Search в rotated/sorted array:**
+    *   Поиск в циклически сдвинутом массиве
+    *   Найти точку вращения (pivot)
+*   **Binary Search в 2D/3D массивах:**
+    *   Сначала по строкам, потом по столбцам
+    *   Для row-wise/column-wise sorted матриц
+*   **Binary Search в бесконечном массиве:**
+    *   Exponential Search + Binary Search
+    *   Поиск в потоке данных
+
+#### **III. ПРОМЕЖУТОЧНЫЕ АЛГОРИТМЫ ПОИСКА**
+
+##### **A. ПОИСК ПРОПУСКАНИЕМ (JUMP SEARCH)**
+*   **Jump Search:**
+    *   Прыжки фиксированного размера (√n)
+    *   Затем линейный поиск в блоке
+    *   O(√n) время, O(1) память
+*   **Оптимальный размер прыжка:**
+    *   √n минимизирует количество сравнений
+    *   Для равномерного распределения
+*   **Сравнение с Binary Search:**
+    *   Лучше для sequential access (ленточные накопители)
+    *   Хуже для random access (память)
+
+##### **B. ИНТЕРПОЛЯЦИОННЫЙ ПОИСК (INTERPOLATION SEARCH)**
+*   **Interpolation Search:**
+    *   Для равномерно распределённых данных
+    *   Предсказывает позицию элемента
+    *   O(log log n) в среднем, O(n) в худшем
+*   **Формула интерполяции**
+*   **Применения:**
+    *   Телефонные справочники
+    *   Словари
+    *   Любые равномерно распределённые данные
+
+##### **C. ПОИСК ФИБОНАЧЧИ (FIBONACCI SEARCH)**
+*   **Fibonacci Search:**
+    *   Использует числа Фибоначчи для деления
+    *   Только операции сложения/вычитания
+    *   Полезно когда деление дорого
+*   **Алгоритм:**
+    *   Найти наименьшее F(k) ≥ n
+    *   Сравнить с элементом arr[F(k-2)]
+    *   Рекурсивно сужать диапазон
+*   **Сравнение с Binary Search:**
+    *   Меньше сравнений в среднем
+    *   Сложнее реализация
+
+##### **D. ЭКСПОНЕНЦИАЛЬНЫЙ ПОИСК (EXPONENTIAL SEARCH)**
+*   **Exponential Search:**
+    *   Для бесконечных/неизвестного размера массивов
+    *   Сначала exponential range finding
+    *   Затем binary search в найденном диапазоне
+*   **Алгоритм:**
+    1. i = 1
+    2. Пока arr[i] < x: i *= 2
+    3. Binary Search в [i/2, min(i, n-1)]
+*   **Применения:**
+    *   Поиск в неограниченных массивах
+    *   Поиск в потоковых данных
+    *   Когда размер массива неизвестен
+
+#### **IV. ТРОИЧНЫЙ ПОИСК (TERNARY SEARCH)**
+
+##### **A. КЛАССИЧЕСКИЙ ТРОИЧНЫЙ ПОИСК**
+*   **Ternary Search:**
+    *   Для унимодальных функций (имеющих один экстремум)
+    *   Делит диапазон на три части
+    *   O(log₃ n) итераций
+*   **Типы унимодальных функций:**
+    *   Strictly increasing then decreasing
+    *   Strictly decreasing then increasing
+
+##### **B. ВАРИАНТЫ ТРОИЧНОГО ПОИСКА**
+*   **Целочисленный Ternary Search:**
+    *   Для дискретных функций
+    *   while (hi - lo >= 3) { ... }
+*   **Вещественный Ternary Search:**
+    *   Для непрерывных функций
+    *   Критерий остановки по ε
+*   **Golden Section Search:**
+    *   Оптимальное деление интервала
+    *   Использует золотое сечение φ ≈ 1.618
+    *   Меньше вычислений функции
+
+##### **C. ПРИМЕНЕНИЯ ТРОИЧНОГО ПОИСКА**
+*   Нахождение максимума/минимума унимодальной функции
+*   Задачи на параболы и квадратичные функции
+*   Геометрические задачи (расстояния, площади)
+*   Оптимизация в machine learning (линия поиска)
+
+#### **V. ПОИСК ВЫБОРОК И МЕДИАНЫ (SELECTION ALGORITHMS)**
+
+##### **A. БЫСТРЫЙ ВЫБОР (QUICKSELECT)**
+*   **Quick Select:**
+    *   O(n) в среднем, O(n²) в худшем
+    *   На основе QuickSort partition
+*   **Алгоритм:**
+    1. Выбрать pivot
+    2. Разделить массив вокруг pivot
+    3. Рекурсивно искать в нужной части
+*   **Randomized QuickSelect:**
+    *   Случайный выбор pivot
+    *   O(n) ожидаемое время
+
+##### **B. МЕДИАНА МЕДИАН (MEDIAN OF MEDIANS)**
+*   **Median of Medians (BFPRT):**
+    *   Детерминированный O(n) алгоритм
+    *   Blum, Floyd, Pratt, Rivest, Tarjan
+*   **Алгоритм:**
+    1. Разбить массив на группы по 5
+    2. Найти медиану каждой группы
+    3. Рекурсивно найти медиану медиан
+    4. Использовать как pivot
+*   **Сложность:**
+    *   Гарантированно O(n)
+    *   Константа ~3n сравнений
+
+##### **C. ДРУГИЕ АЛГОРИТМЫ ВЫБОРА**
+*   **IntroSelect:**
+    *   Комбинация QuickSelect и Median of Medians
+    *   Начинает с QuickSelect, переключается при плохом pivot
+*   **HeapSelect:**
+    *   С помощью min-heap или max-heap
+    *   O(n log k) для k-го элемента
+*   **Counting Select:**
+    *   Для ограниченного диапазона значений
+    *   O(n + range)
+
+##### **D. НАХОЖДЕНИЕ МЕДИАНЫ**
+*   **Медиана одного массива:**
+    *   QuickSelect или Median of Medians
+*   **Медиана двух отсортированных массивов:**
+    *   Бинарный поиск за O(log min(m,n))
+    *   Алгоритм за O(log(m+n))
+*   **Медиана в потоке данных:**
+    *   Two heaps approach (min-heap + max-heap)
+    *   O(log n) на добавление
+
+#### **VI. МЕТАЭВРИСТИКИ И ЛОКАЛЬНЫЙ ПОИСК**
+
+##### **A. ПОИСК С ВОЗВРАТАМИ (BACKTRACKING)**
+*   **Backtracking search:**
+    *   Систематический перебор с отсечениями
+    *   Для комбинаторных задач
+*   **Применения:**
+    *   N-Queens
+    *   Sudoku Solver
+    *   Graph coloring
+*   **Оптимизации:**
+    *   Forward checking
+    *   Constraint propagation
+
+##### **B. ПОИСК ПОДЪЁМОМ НА ХОЛМ (HILL CLIMBING)**
+*   **Hill Climbing:**
+    *   Локальный поиск в окрестности
+    *   Всегда движется в направлении улучшения
+*   **Варианты:**
+    *   **Simple Hill Climbing:**
+        *   Первый улучшающий ход
+    *   **Steepest Ascent Hill Climbing:**
+        *   Наилучший улучшающий ход
+    *   **Stochastic Hill Climbing:**
+        *   Случайный выбор из улучшающих
+*   **Проблемы:**
+    *   Локальные максимумы
+    *   Плато (plateaus)
+    *   Риджи (ridges)
+
+##### **C. ИМИТАЦИЯ ОТЖИГА (SIMULATED ANNEALING)**
+*   **Simulated Annealing:**
+    *   Метод Монте-Карло для глобальной оптимизации
+    *   Позволяет "плохие" ходы с уменьшающейся вероятностью
+*   **Параметры:**
+    *   Начальная температура T
+    *   Функция охлаждения cooling(T)
+    *   Критерий остановки
+
+##### **D. ПОИСК С ЗАПРЕТАМИ (TABU SEARCH)**
+*   **Tabu Search:**
+    *   Запоминает недавние ходы (tabu list)
+    *   Избегает циклов и локальных оптимумов
+*   **Компоненты:**
+    *   **Tabu list:** краткосрочная память
+    *   **Aspiration criteria:** когда игнорировать tabu
+    *   **Intensification:** углубление в хороших областях
+    *   **Diversification:** исследование новых областей
+
+##### **E. ГЕНЕТИЧЕСКИЕ АЛГОРИТМЫ (GENETIC ALGORITHMS)**
+*   **Evolutionary search:**
+    *   Популяция решений
+    *   Selection, crossover, mutation
+*   **Операторы:**
+    *   **Fitness function:** оценка решения
+    *   **Selection:** roulette, tournament, rank-based
+    *   **Crossover:** one-point, two-point, uniform
+    *   **Mutation:** random perturbation
+*   **Параметры:**
+    *   Population size
+    *   Crossover rate
+    *   Mutation rate
+    *   Number of generations
+
+##### **C. ИНФОРМИРОВАННЫЙ ПОИСК (HEURISTIC SEARCH)**
+*   **A* Search:**
+    *   f(n) = g(n) + h(n)
+    *   g(n) - стоимость от start до n
+    *   h(n) - эвристика до goal
+*   **IDA* (Iterative Deepening A*):**
+    *   Комбинация IDDFS и A*
+    *   Memory efficient
+*   **Beam Search:**
+    *   Ограниченная версия BFS
+    *   Сохраняет только k лучших узлов на каждом уровне
+
+#### **VIII. СТРИМИНГОВЫЙ И ОНЛАЙН ПОИСК**
+
+##### **A. ПОИСК В ПОТОКАХ ДАННЫХ**
+*   **Reservoir Sampling:**
+    *   Выбор случайного элемента из потока
+    *   Выбор k случайных элементов
+*   **Heavy Hitters:**
+    *   Элементы, встречающиеся часто
+    *   Misra-Gries, Count-Min Sketch
+*   **Quantiles в потоке:**
+    *   Greenwald-Khanna algorithm
+    *   t-Digest algorithm
+
+##### **B. ПРИБЛИЖЁННЫЙ ПОИСК**
+*   **Locality-Sensitive Hashing (LSH):**
+    *   Для approximate nearest neighbor
+    *   Схожие элементы попадают в один bucket
+*   **Bloom Filter:**
+    *   Вероятностная структура
+    *   Проверка принадлежности с ложными срабатываниями
+
+#### **IX. ПАРАМЕТРИЧЕСКИЙ И МНОГОКРИТЕРИАЛЬНЫЙ ПОИСК**
+
+##### **A. ПАРАМЕТРИЧЕСКИЙ ПОИСК**
+*   **Parametric Search:**
+    *   Преобразование задачи оптимизации в задачу принятия решения
+    *   Binary Search по ответу + проверка feasibility
+*   **Применения:**
+    *   Scheduling problems
+    *   Resource allocation
+    *   Minimax problems
+
+##### **B. МНОГОКРИТЕРИАЛЬНЫЙ ПОИСК**
+*   **Pareto optimal search:**
+    *   Поиск недоминируемых решений
+    *   Skyline queries
+*   **Multi-objective optimization:**
+    *   Weighted sum approach
+    *   ε-constraint method
+    *   Evolutionary multi-objective optimization
+
+#### **XII. ПАРАЛЛЕЛЬНЫЙ И РАСПРЕДЕЛЁННЫЙ ПОИСК**
+
+##### **A. ПАРАЛЛЕЛЬНЫЕ АЛГОРИТМЫ**
+*   **Parallel Binary Search:**
+    *   Для multiple queries
+    *   Offline processing
+*   **Parallel Search in arrays:**
+    *   SIMD instructions (vectorized search)
+    *   OpenMP, MPI implementations
+
+##### **B. РАСПРЕДЕЛЁННЫЙ ПОИСК**
+*   **Distributed Hash Tables (DHT):**
+    *   Chord, Kademlia, Pastry
+    *   Поиск в P2P сетях
+*   **MapReduce для поиска:**
+    *   Распределённая индексация
+    *   Inverted index construction
+
+#### **XIII. КВАНТОВЫЙ И ПРОБАБИЛИСТИЧЕСКИЙ ПОИСК**
+
+##### **A. КВАНТОВЫЕ АЛГОРИТМЫ**
+*   **Grover's Algorithm:**
+    *   Квантовый поиск в неструктурированной БД
+    *   O(√N) вместо O(N)
+*   **Quantum Walk Search:**
+    *   Для структурированных данных
+    *   Экспоненциальное ускорение для некоторых задач
+
+##### **B. ВЕРОЯТНОСТНЫЙ ПОИСК**
+*   **Randomized Search:**
+    *   Monte Carlo methods
+    *   Las Vegas algorithms
+*   **Probabilistic Data Structures:**
+    *   Bloom filter
+    *   Count-Min Sketch
+    *   HyperLogLog
+
+#### **XIV. СПЕЦИАЛИЗИРОВАННЫЕ АЛГОРИТМЫ ПОИСКА**
+
+##### **A. ПОИСК В СЖАТЫХ ДАННЫХ**
+*   **Search in compressed arrays:**
+    *   Elias-Fano encoding
+    *   Search in succinct data structures
+*   **Search in encrypted data:**
+    *   Searchable symmetric encryption
+    *   Homomorphic encryption for search
+
+##### **B. ПОИСК С УЧЁТОМ КОНТЕКСТА**
+*   **Context-aware search:**
+    *   Semantic search
+    *   Personalized search
+*   **Federated Search:**
+    *   Поиск по multiple sources
+    *   Result aggregation
 
 ### **III. ЛИНЕЙНЫЕ АЛГОРИТМЫ И МЕТОДЫ СКАНА**
 
-#### **МЕТОДЫ ДВУХ УКАЗАТЕЛЕЙ**
+#### **A. МЕТОДЫ ДВУХ УКАЗАТЕЛЕЙ**
 *   **Базовые техники двух указателей**
     *   **Встречные указатели** - сходятся к центру
     *   **Параллельные указатели** - движутся в одном направлении
@@ -176,7 +543,7 @@
     *   **Вложенные указатели** - с разными шагами сканирования
     *   Указатели для слияния K отсортированных массивов
 
-#### **АЛГОРИТМЫ СКОЛЬЗЯЩЕГО ОКНА**
+#### **B. АЛГОРИТМЫ СКОЛЬЗЯЩЕГО ОКНА**
 *   **Техники скользящего окна**
     *   **Фиксированное окно** - постоянный размер окна
     *   **Динамическое окно** - переменный размер, удовлетворяющий условиям
@@ -196,13 +563,13 @@
     *   **Reservoir sampling** для случайной выборки из потока
     *   **Exponential histograms** для подсчета скользящих квантилей
 
-#### **МЕТОД СКАНИРУЮЩЕЙ ПРЯМОЙ (SWEEP LINE)**
+#### **C. МЕТОД СКАНИРУЮЩЕЙ ПРЯМОЙ (SWEEP LINE)**
 *   **Основные принципы**
     *   **Сортировка событий** по координате
     *   **Обработка событий** в порядке сканирования
     *   **Поддержание активных множеств**
 
-#### **АЛГОРИТМЫ МАКСИМАЛЬНЫХ СУММ И ПОТОКОВ**
+#### **D. АЛГОРИТМЫ МАКСИМАЛЬНЫХ СУММ И ПОТОКОВ**
 *   **Алгоритм Кадане (Kadane's Algorithm)**
     *   **Классический вариант** - максимальная сумма подмассива
     *   **2D вариант** - максимальная сумма подматрицы за O(n³)
@@ -213,7 +580,7 @@
     *   **С ограничениями** - минимальная/максимальная длина
     *   **Для матриц** - через сведение к 1D
 
-#### **СИМПЛЕКС-МЕТОД И ЛИНЕЙНОЕ ПРОГРАММИРОВАНИЕ**
+#### **E. СИМПЛЕКС-МЕТОД И ЛИНЕЙНОЕ ПРОГРАММИРОВАНИЕ**
 *   **Основы линейного программирования**
     *   **Теоретические основы**
         *   **Теорема двойственности** - primal-dual relationships
@@ -239,7 +606,7 @@
     *   **Path-following methods** - следование центральному пути
     *   **Primal-dual methods** - одновременное решение primal и dual
 
-#### **ВЕНГЕРСКИЙ АЛГОРИТМ**
+#### **F. ВЕНГЕРСКИЙ АЛГОРИТМ**
 *   **Задача о назначениях**
     *   **Постановка**: назначение n работников на n работ с минимальной стоимостью
     *   **Матрица стоимостей** C[i][j]
@@ -256,34 +623,30 @@
     *   **Алгоритм Джонкер-Волгенаанта** - ускоренная версия
     *   **Потоковые алгоритмы** - сведение к задаче о максимальном потоке
 
+### **IV. СЖАТИЕ ДАННЫХ - ПОЛНАЯ КЛАССИФИКАЦИЯ И АЛГОРИТМЫ**
 
-### **СЖАТИЕ ДАННЫХ - ПОЛНАЯ КЛАССИФИКАЦИЯ И АЛГОРИТМЫ**
-
-#### **I. ТЕОРЕТИЧЕСКИЕ ОСНОВЫ СЖАТИЯ**
+#### **A. ТЕОРЕТИЧЕСКИЕ ОСНОВЫ СЖАТИЯ**
 *   **Теория информации Шеннона**
     *   **Энтропия**: H(X) = -Σ p(x)log₂p(x) - мера информации
     *   **Сложность Колмогорова** - минимальный размер программы, воспроизводящей данные
     *   **Пределы сжатия** - теорема Шеннона о кодировании источников
-
 *   **Метрики эффективности сжатия**
     *   **Степень сжатия**: (1 - сжатый_размер/оригинальный_размер) × 100%
     *   **Скорость сжатия/распаковки** - МБ/сек
     *   **Peak Signal to Noise Ratio (PSNR)** - для оценки качества сжатия с потерями
     *   **Bit per pixel (bpp)** - для изображений
-
 *   **Классификация методов сжатия**
     *   **Без потерь (lossless)** - полное восстановление данных
     *   **С потерями (lossy)** - приемлемые потери качества
     *   **Адаптивные vs статические** методы
     *   **Симметричные vs асимметричные** по времени сжатия/распаковки
 
-#### **II. СЖАТИЕ БЕЗ ПОТЕРЬ**
+#### **B. СЖАТИЕ БЕЗ ПОТЕРЬ**
 *   **Энтропийное кодирование**
     *   **Алгоритм Хаффмана** - префиксные коды с минимальной избыточностью
     *   **Арифметическое кодирование** - представление данных одним числом
     *   **Адаптивное кодирование Хаффмана** - без предварительного анализа частот
     *   **Коды Голомба и Райса** - для геометрических распределений
-
 *   **Словарные методы**
     * Lempel Ziv - семейство алгоритмов Лемпеля-Зива
     * Lempel Ziv Decompress - алгоритмы распаковки для LZ-семейства
@@ -291,102 +654,90 @@
     *   **LZ78** - построение словаря фраз
     *   **LZW (Лемпеля-Зива-Велча)** - улучшенный LZ78 с фиксированной шириной кода
     *   **LZSS** - улучшенный LZ77 с битовыми флагами
-
 *   **Преобразующие методы**
     *   **Run-Length Encoding (RLE)** - для данных с длинными сериями
     *   **Burrows-Wheeler Transform (BWT)** - перестановка для группировки символов
     *   **Move-to-Front (MTF)** - преобразование после BWT
     *   **Delta encoding** - кодирование разностей между последовательными значениями
 
-#### **III. СЖАТИЕ С ПОТЕРЯМИ**
+#### **C. СЖАТИЕ С ПОТЕРЯМИ**
 *   **Сжатие изображений**
     *   **JPEG** - дискретное косинусное преобразование (DCT)
     *   **JPEG 2000** - вейвлет-преобразование
     *   **WebP** - прогнозирующее кодирование
     *   **Quantization matrices** - таблицы квантования
-
 *   **Сжатие аудио**
     *   **MP3** - психоакустическая модель и MDCT
     *   **AAC** - улучшенный MP3
     * **FLAC** - сжатие без потерь с прогнозированием
     * **Opus** - низкая задержка, высокое качество
-
 *   **Сжатие видео**
     *   **H.264/AVC** - межкадровое и внутрикадровое предсказание
     *   **H.265/HEVC** - улучшенная эффективность сжатия
     *   **AV1** - открытый стандарт
     *   **Motion compensation** - компенсация движения
 
-#### **IV. СПЕЦИАЛИЗИРОВАННЫЕ МЕТОДЫ СЖАТИЯ**
+#### **D. СПЕЦИАЛИЗИРОВАННЫЕ МЕТОДЫ СЖАТИЯ**
 *   **Сжатие координат (Coordinate Compression)**
-
 *   **Дискретизация данных**
     *   **Равномерная дискретизация** - фиксированные интервалы
     *   **Квантование по значимости** - сохранение важных особенностей
     *   **Адаптивная дискретизация** - переменный шаг
-
 *   **Сжатие графов**
     *   **WebGraph framework** - для веб-графов
     *   **K²-деревья** - для WebGraph
     *   **Сжатие матриц смежности**
-
 *   **Сжатие баз данных**
     *   **Dictionary compression** - для строковых колонок
     *   **Bit-packing** - для целых чисел
     *   **Frame Of Reference (FOR)** - delta encoding для отсортированных данных
 
-#### **V. ПРОДВИНУТЫЕ АЛГОРИТМЫ И ТЕХНИКИ**
+#### **E. ПРОДВИНУТЫЕ АЛГОРИТМЫ И ТЕХНИКИ**
 *   **Адаптивные методы**
     *   **Context Modeling** - PPM (Prediction by Partial Matching)
     *   **PAQ** - нейросетевые предикторы контекста
     *   **Dynamic Markov Compression** - адаптивные марковские модели
-
 *   **Преобразования и анализ**
     *   **Wavelet transforms** - вейвлет-анализ
     *   **Fourier transforms** - частотный анализ
     *   **Karhunen-Loève transform (KLT)** - оптимальное преобразование
     * Burrows Wheeler - полная реализация преобразования и обратного преобразования
-
 *   **Гибридные методы**
     *   **BZip2** = BWT + MTF + RLE + Хаффман
     *   **DEFLATE** = LZ77 + Хаффман (используется в ZIP, gzip)
     *   **LZMA** = LZ77 + арифметическое кодирование
 
-#### **VI. ПРАКТИЧЕСКИЕ ПРИМЕНЕНИЯ И ФОРМАТЫ**
+#### **F. ПРАКТИЧЕСКИЕ ПРИМЕНЕНИЯ И ФОРМАТЫ**
 *   **Архиваторы**
     *   **ZIP** - DEFLATE алгоритм
     *   **7-Zip** - LZMA алгоритм
     *   **RAR** - проприетарный алгоритм
     *   **tar.gz** - комбинация tar и gzip
-
 *   **Форматы файлов**
     *   **PNG** - сжатие без потерь с фильтрацией + DEFLATE
     *   **GIF** - LZW сжатие
     *   **PDF** - различные методы сжатия для разных типов контента
     *   **MP4** - контейнер для сжатого видео/аудио
-
 *   **Системы хранения**
     *   **Deduplication** - устранение дубликатов данных
     *   **Compressed file systems** - прозрачное сжатие на уровне ФС
     *   **Database compression** - сжатие на уровне страниц
 
-#### **VII. АЛГОРИТМИЧЕСКИЕ ОПТИМИЗАЦИИ**
+#### **G. АЛГОРИТМИЧЕСКИЕ ОПТИМИЗАЦИИ**
 *   **Быстрые алгоритмы поиска совпадений**
     *   **Rolling hash** - для скользящего окна
     *   **Suffix arrays** - для поиска длинных совпадений
     *   **Hash chains** - в LZ77
-
 *   **Эффективные структуры данных**
     *   **Circular buffers** - для скользящего окна
     *   **Priority queues** - для алгоритма Хаффмана
     *   **Tries** - для словарных методов
-
 *   **Векторизация и параллелизм**
     *   **SIMD оптимизации** - для обработки нескольких символов одновременно
     *   **Многопоточное сжатие** - разделение данных на блоки
     *   **GPU ускорение** - для преобразований
 
-#### **VIII. ТЕОРЕТИЧЕСКИЕ ГРАНИЦЫ И СЛОЖНОСТЬ**
+#### **H. ТЕОРЕТИЧЕСКИЕ ГРАНИЦЫ И СЛОЖНОСТЬ**
 *   **Теорема Шеннона** - предел сжатия без потерь
 *   **Rate-distortion theory** - компромисс скорость-качество для сжатия с потерями
 *   **Алгоритмическая сложность**
@@ -394,17 +745,15 @@
     *   LZ77: O(n) время с хешированием, O(window_size) память
     *   BWT: O(n log n) время, O(n) память
 
-#### **IX. СОВРЕМЕННЫЕ ТЕНДЕНЦИИ**
+#### **I. СОВРЕМЕННЫЕ ТЕНДЕНЦИИ**
 *   **Нейросетевые методы сжатия**
     *   **Autoencoders** - для сжатия с потерями
     *   **Generative models** - для крайне агрессивного сжатия
     *   **Differentiable compression** - обучение end-to-end
-
 *   **Сжатие для специальных применений**
     *   **Genomic data compression** - для ДНК последовательностей
     *   **Time series compression** - для сенсорных данных
     *   **3D model compression** - для компьютерной графики
-
 *   **Аппаратное ускорение**
     *   **Dedicated compression chips**
     *   **FPGA implementations**
@@ -412,10 +761,10 @@
 
 ### **V. ЖАДНЫЕ АЛГОРИТМЫ**
 
-####   ***ТЕОРЕТИЧЕСКИЕ ОСНОВЫ**
+#### ***A. ТЕОРЕТИЧЕСКИЕ ОСНОВЫ**
 *   **Матроиды** (жадная оптимальность)
 
-####   **ЗАДАЧИ ОПТИМИЗАЦИИ РАСПИСАНИЙ**
+#### **B. ЗАДАЧИ ОПТИМИЗАЦИИ РАСПИСАНИЙ**
 *   **Задача о расписании занятий**
 *   **Задача о выборе заявок** (Activity Selection)
 *   **Minimum Waiting Time** (минимизация времени ожидания)
@@ -426,13 +775,13 @@
 Задача Джонсона с двумя станками ❌
 Оптимальный выбор заданий при известных временах завершения и длительностях выполнения ❌
 
-####   **ЗАДАЧИ РАЗМЕНА И ПОКУПОК**
+#### **C. ЗАДАЧИ РАЗМЕНА И ПОКУПОК**
 *   **Задача о размене монет**
 *   **Minimum Coin Change** (жадный вариант, когда возможен)
 *   **Best Time To Buy And Sell Stock** (оптимальные моменты покупки/продажи)
 *   **Gas Station** (задача о кругосветном путешествии с заправками)
 
-####   **ЗАДАЧИ О РЮКЗАКЕ И ПОКРЫТИИ**
+#### **D. ЗАДАЧИ О РЮКЗАКЕ И ПОКРЫТИИ**
 *   **Задача о рюкзаке (жадная)**
     *   Greedy Knapsack
     *   Knapsack (жадные варианты)
@@ -443,7 +792,7 @@
 *   **Fractional Cover Problem** (дробная задача покрытия)
 Поиск подотрезка массива с максимальной/минимальной суммой за O(N) ❌
 
-####   **ПЛАНИРОВАНИЕ**
+#### **H. ПЛАНИРОВАНИЕ**
 First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline, Job Sequencing With Deadline, Multi Level Feedback Queue, Non Preemptive Shortest Job First, Round Robin, Shortest Job First
 *   **Задачи планирования работ**
     *   **Interval scheduling** - максимальное множество непересекающихся интервалов
@@ -455,16 +804,15 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Resource allocation** - распределение ограниченных ресурсов
     *   **Bin packing** - упаковка в контейнеры (приближенные алгоритмы)
 
-### **VII. ТЕОРИЯ ИГР - ПОЛНАЯ КЛАССИФИКАЦИЯ**
+### **VI. ТЕОРИЯ ИГР - ПОЛНАЯ КЛАССИФИКАЦИЯ**
 
-#### **I. ОСНОВНЫЕ ПОНЯТИЯ И КЛАССИФИКАЦИЯ ИГР**
+#### **A. ОСНОВНЫЕ ПОНЯТИЯ И КЛАССИФИКАЦИЯ ИГР**
 *   **Формальное определение игры**
     *   Множество игроков
     *   Множество состояний и начальное состояние
     *   Множество действий и функция переходов
     * **Функция выигрыша/полезности**
     *   Терминальные состояния
-
 *   **Классификация игр**
     *   **По количеству игроков**: антагонистические (2 игрока), кооперативные, n-игроков
     *   **По сумме выигрышей**: с нулевой суммой, с ненулевой суммой
@@ -472,423 +820,923 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **По ходам**: последовательные, одновременные
     *   **По детерминированности**: детерминированные, стохастические
 
-#### **II. ИГРЫ С ПОЛНОЙ ИНФОРМАЦИЕЙ**
+#### **B. ИГРЫ С ПОЛНОЙ ИНФОРМАЦИЕЙ**
 *   **Дерево игры и его свойства**
     *   Построение полного дерева игры
     *   Оценка сложности (глубина, branching factor)
     *   Методы сокращения дерева
-
 *   **Минимакс и альфа-бета отсечение**
     *   **Алгоритм минимакс** - рекурсивное вычисление оптимальной стратегии
     *   **Альфа-бета отсечение** - оптимизация минимакс
-
+    *   **Killer heuristic** и **History heuristic** в альфа-бета
 *   **Эвристики и оценочные функции**
     *   Построение оценочных функций для различных игр
     *   Методы обучения оценочных функций
     *   Quiescence search - поиск до "спокойной" позиции
 
-#### **III. КОМБИНАТОРНАЯ ТЕОРИЯ ИГР**
+#### **C. КОМБИНАТОРНАЯ ТЕОРИЯ ИГР**
 *   **Выигрышные и проигрышные позиции**
     *   P-позиции (проигрышные) и N-позиции (выигрышные)
     *   Рекуррентное определение:
         - Терминальная позиция - P-позиция
         - Позиция, из которой есть ход в P-позицию - N-позиция
         - Позиция, из которой все ходы ведут в N-позиции - P-позиция
-
 *   **Функция Гранди (Шпрага-Гранди)**
     *   **Определение**: G(position) = mex{G(positions reachable in one move)}
     *   **Теорема Шпрага-Гранди**: Позиция проигрышная тогда и только тогда, когда её число Гранди равно 0
     *   **Сумма игр**: G(game1 + game2) = G(game1) ⊕ G(game2)
     *   Применение к композитным играм
-
 *   **Игра Ним и её варианты**
     *   **Классический ним**: G(x₁, x₂, ..., xₙ) = x₁ ⊕ x₂ ⊕ ... ⊕ xₙ
     *   **Ним в поддавки** (misère nim)
     *   **Варианты нима**: ним с ограничениями, ним с несколькими кучками
 
-#### **IV. ИГРЫ НА ГРАФАХ**
+#### **D. ИГРЫ НА ГРАФАХ**
 *   **Ациклические игровые графы**
     *   Метод ретроспективного анализа (обратный обход)
     *   Алгоритм за O(M) - обход в обратном топологическом порядке
-
 *   **Циклические игровые графы**
     *   Проблема циклов и ничьих
     *   Алгоритмы для игр с циклами
     *   Стратегии для позиций с циклами
 
-#### **V. СОВЕРШЕННАЯ ИГРА И РАВНОВЕСИЕ НЭША**
+#### **H. СОВЕРШЕННАЯ ИГРА И РАВНОВЕСИЕ НЭША**
 *   **Совершенная игра**
     *   Определение и свойства
     *   Существование оптимальных стратегий
     *   Цена игры
-
 *   **Равновесие Нэша**
     *   Чистые и смешанные стратегии
     *   Существование в смешанных стратегиях
     *   Вычисление равновесий Нэша
 
-#### **VI. СТОХАСТИЧЕСКИЕ ИГРЫ**
+#### **I. СТОХАСТИЧЕСКИЕ ИГРЫ**
 *   **Игры со случайными ходами**
     *   Ожидаемый выигрыш
     *   Алгоритм Expectiminimax
-
 *   **Марковские процессы принятия решений**
     *   Политики и функции ценности
     *   Алгоритм Value Iteration
     *   Алгоритм Policy Iteration
 
-#### **VII. ИГРЫ С НЕПОЛНОЙ ИНФОРМАЦИЕЙ**
+#### **J. ИГРЫ С НЕПОЛНОЙ ИНФОРМАЦИЕЙ**
 *   **Байесовские игры**
     *   Типы игроков и априорные распределения
     *   Байесовское равновесие Нэша
-
 *   **Игры с несовершенной информацией**
     *   Информационные множества
     *   Стратегии в играх с неполной информацией
     *   Проблема решения таких игр
 
-#### **VIII. ПРАКТИЧЕСКИЕ ПРИМЕНЕНИЯ И АЛГОРИТМЫ**
+#### **K. ПРАКТИЧЕСКИЕ ПРИМЕНЕНИЯ И АЛГОРИТМЫ**
 *   **Монте-Карло методы**
     *   Monte Carlo Tree Search (MCTS)
     *   UCB1 formula для выбора ходов
     *   Применение в компьютерном Го
-
 *   **Обучение с подкреплением в играх**
     *   Q-learning
     *   Deep Q-Networks (DQN)
     *   Policy Gradients
-
 *   **Эвристические методы**
     *   Iterative Deepening
     *   Transposition Tables
     *   Opening Books и Endgame Tables
 
-#### **IX. КЛАССИЧЕСКИЕ ИГРЫ И ИХ АНАЛИЗ**
+#### **L. КЛАССИЧЕСКИЕ ИГРЫ И ИХ АНАЛИЗ**
 *   **Шахматы**
     *   Сложность: ~10¹²⁰ позиций
     *   Основные алгоритмы и эвристики
-
 *   **Го**
     *   Сложность: ~10¹⁷⁰ позиций
     *   Подходы на основе MCTS и нейросетей
-
 *   **Пятнашки (15-puzzle)**
     *   **Критерий разрешимости**: четность перестановки + позиция пустой клетки
     *   Алгоритмы поиска решения: A*, IDA*
     *   Эвристики: Манхэттенское расстояние, линейные конфликты
-
 *   **Покер**
     *   Игра с неполной информацией
     *   Блеф и психологические аспекты
     *   Современные алгоритмы для покера
 
-#### **X. ТЕОРЕТИЧЕСКИЕ ОСНОВЫ**
+#### **M. ТЕОРЕТИЧЕСКИЕ ОСНОВЫ**
 *   **Zermelo's theorem**: В любой конечной игре с полной информацией и нулевой суммой существует либо выигрышная стратегия для первого игрока, либо для второго, либо обе стороны могут форсировать ничью.
-
 *   **Теорема Цермело-фон Неймана**: Любая конечная антагонистическая игра имеет значение и оптимальные стратегии.
-
 *   **Сложность решения игр**:
     *   EXPTIME-complete: обобщенные шахматы, шашки
     *   PSPACE-complete: Го, Реверси
     *   NP-complete: многие головоломки
 
-#### **XI. АЛГОРИТМИЧЕСКИЕ ТЕХНИКИ**
+#### **N. АЛГОРИТМИЧЕСКИЕ ТЕХНИКИ**
 *   **Bitboard представления** для эффективного хранения позиций
 *   **Pattern databases** для эвристик
-*   **Killer heuristic** и **History heuristic** в альфа-бета
 *   **Null-move pruning** и **Late Move Reductions**
 
 ---
 
 ## **3. СТРУКТУРЫ ДАННЫХ**
 
-### **Массивы**
-    Equilibrium Index In Array
-    Find Triplets With 0 Sum
-    Index 2D Array In 1D
-    Kth Largest Element
-    Median Two Array
-    Monotonic Array
-    Pairs With Given Sum
-    Permutations
-    Prefix Sum
-    Product Sum
-    Rotate Array
-    Sudoku Solver
+### **I. ЛИНЕЙНЫЕ СТРУКТУРЫ**
 
-### **ЛИНЕЙНЫЕ СТРУКТУРЫ**
-*   **Динамический массив** (`std::vector`)
-*    **Queues + виды**
-    Circular Queue
-    Circular Queue Linked List
-    Double Ended Queue
-    Linked Queue
-    Priority Queue Using List
-    Queue By List
-    Queue By Two Stacks
-    Queue On Pseudo Stack
-*    **Stacks + виды**
-    Balanced Parentheses
-    Dijkstras Two Stack Algorithm
-    Infix To Postfix Conversion
-    Infix To Prefix Conversion
-    Largest Rectangle Histogram
-    Lexicographical Numbers
-    Next Greater Element
-    Postfix Evaluation
-    Prefix Evaluation
-    Stack
-    Stack Using Two Queues
-    Stack With Doubly Linked List
-    Stack With Singly Linked List
-    Stock Span Problem
-*   **Deques + виды**
-*   **Steques + виды**
-*   **Кольцевой буфер**
-*    **Linked List**
-    Circular Linked List
-    Deque Doubly
-    Doubly Linked List
-    Doubly Linked List Two
-    Floyds Cycle Detection
-    From Sequence
-    Has Loop
-    Is Palindrome
-    Merge Two Lists
-    Middle Element Of Linked List
-    Print Reverse
-    Reverse K Group
-    Rotate To The Right
-    Singly Linked List
-    Skip List
-    Swap Nodes
+#### **A. МАССИВЫ И ПОСЛЕДОВАТЕЛЬНЫЕ КОНТЕЙНЕРЫ**
+*   **МАССИВЫ (ARRAYS)**
+    *   **Статические массивы**
+        *   C-style arrays
+        *   `std::array` (фиксированный размер)
+    *   **Динамические массивы**
+        *   `std::vector` - амортизированный анализ, управление capacity
+        *   Small Vector Optimization (SSO для векторов)
+    *   **Алгоритмы на массивах:**
+        *   Equilibrium Index In Array
+        *   Find Triplets With 0 Sum
+        *   Index 2D Array In 1D
+        *   Kth Largest Element
+        *   Median Two Array
+        *   Monotonic Array
+        *   Pairs With Given Sum
+        *   Permutations
+        *   Prefix Sum
+        *   Product Sum
+        *   Rotate Array
+        *   Sudoku Solver
+        *   **Дополнительно:**
+            *   Kadane's Algorithm (максимальная подмассивная сумма)
+            *   Dutch National Flag (сортировка 3 цветов)
+            *   Maximum Subarray Sum (разделяй и властвуй)
+            *   Sliding Window Maximum
+            *   Rain Water Trapping
+*   **BIT BOARD**
+    *   Для игровых движков (шахматы, шашки)
+    *   Побитовые операции над состояниями
 
-### **ДЕРЕВЬЯ ПОИСКА**
-*   **Деревья в STL** (`map`, `set`, `multiset`)
-*   **Декартово дерево (Treap)**
-    *   **Обычный Treap - BST + Куча**
-    *   **Неявный ключ**
-    *   **Операция `reverse` на отрезке**
-*   Splay-дерево
-*   **B-дерево**
-*   **Красно-черное дерево**
-*   **Бинарные деревья**
-    AVL-дерево
-    Basic Binary Tree
-    Binary Search Tree
-    Binary Search Tree Recursive
-    Binary Tree Mirror
-    Binary Tree Node Sum
-    Binary Tree Path Sum
-    Binary Tree Traversals
-    Diameter Of Binary Tree
-    Diff Views Of Binary Tree
-    Distribute Coins
-    Flatten Binarytree To Linkedlist
-    Floor And Ceiling
-    Inorder Tree Traversal 2022
-    Is Sorted
-    Is Sum Tree
-    Lowest Common Ancestor
-    Maximum Sum Bst
-    Merge Two Binary Trees
-    Mirror Binary Tree
-    Number Of Possible Binary Trees
-    Serialize Deserialize Binary Tree
-    Symmetric Tree
-    Wavelet Tree
+#### **B. СПИСКИ И ЦЕПОЧКИ**
+*   **LINKED LIST:**
+    *   **Односвязные списки:**
+        *   Singly Linked List
+        *   From Sequence
+        *   Print Reverse
+        *   Middle Element Of Linked List
+        *   Has Loop
+        *   Floyds Cycle Detection
+        *   `std::forward_list`
+    *   **Двусвязные списки:**
+        *   Doubly Linked List
+        *   Doubly Linked List Two
+        *   `std::list`
+    *   **Кольцевые списки:**
+        *   Circular Linked List
+    *   **Оптимизированные списки:**
+        *   XOR Linked List - память-эффективная версия
+        *   Unrolled Linked List - кэш-эффективная версия
+    *   **Сложные операции:**
+        *   Merge Two Lists
+        *   Is Palindrome
+        *   Reverse K Group
+        *   Rotate To The Right
+        *   Swap Nodes
+    *   **Продвинутые структуры:**
+        *   Skip List (вероятностная структура)
+        *   Self-Organizing List (перемещение к началу/транспозиция)
 
-### **СТРУКТУРЫ ДЛЯ МНОЖЕСТВ**
-*   **Система непересекающихся множеств (DSU/Union-Find)**
-*   **Disjoint Set**
-    Alternate Disjoint Set
-    Disjoint Set
-*   **Битсет** (`std::bitset`)
-*   Хеш-таблицы (`unordered_map`, `unordered_set`)
+#### **C. СТЕКИ (LIFO - LAST IN, FIRST OUT)**
+*   **Базовые реализации стека:**
+    *   Stack
+    *   Stack With Singly Linked List
+    *   Stack With Doubly Linked List
+*   **Реализации через другие структуры:**
+    *   Stack Using Two Queues
+    *   Stack On Pseudo Stack
+*   **Специализированные стеки:**
+    *   Min-Stack (поддержка минимума за O(1))
+    *   Max-Stack (поддержка максимума за O(1))
+    *   All-Operations-Stack (все операции за O(1))
+    *   Persistent Stack (версионный стек)
+*   **Алгоритмы на стеке:**
+    *   Balanced Parentheses
+    *   Infix To Postfix Conversion
+    *   Infix To Prefix Conversion
+    *   Postfix Evaluation
+    *   Prefix Evaluation
+    *   Largest Rectangle Histogram
+    *   Lexicographical Numbers
+    *   Next Greater Element
+    *   Stock Span Problem
+    *   Dijkstras Two Stack Algorithm
+*   **Применения:**
+    *   Call Stack (рекурсия)
+    *   Undo/Redo в редакторах
+    *   Backtracking алгоритмы
+    *   Depth-First Search (DFS)
 
-### **Hashing**
-    Bloom Filter
-    Double Hash
-    Hash Map
-    Hash Table
-    Hash Table With Linked List
-    Number Theory
-    Prime Numbers
-    Quadratic Probing
-    Tests
-        Test Hash Map
-###   **Heap**
-    Binomial Heap
-    Heap
-    Heap Generic
-    Max Heap
-    Min Heap
-    Randomized Heap
-    Skew Heap
-    Fibbonaci Heap
+#### **D. ОЧЕРЕДИ (FIFO - FIRST IN, FIRST OUT)**
+*   **Базовые реализации очереди:**
+    *   Queue By List
+    *   Linked Queue
+*   **Кольцевые очереди:**
+    *   Circular Queue
+    *   Circular Queue Linked List
+*   **Реализации через другие структуры:**
+    *   Queue By Two Stacks
+    *   Queue On Pseudo Stack
+*   **Приоритетные очереди:**
+    *   Priority Queue Using List
+    *   *(более полные реализации в разделе V. КУЧИ)*
+*   **Двусторонние очереди (DEQUE):**
+    *   Double Ended Queue
+    *   Deque Doubly
+    *   `std::deque`
+    *   Array-based Deque
+    *   Circular Deque
+    *   Catenable Deque
+    *   Deque с ограниченными операциями
+*   **Стеко-очереди (STEQUE):**
+    *   Stack-ended Queue
+    *   Комбинация стека и очереди
+*   **Специализированные очереди:**
+    *   Catenable Queue (эффективное объединение)
+    *   Calendar Queue (для дискретных событий)
+    *   Bucket Queue (ограниченные диапазоны приоритетов)
+    *   Banker's Queue / Physicist's Queue:
+    *   Hood-Melville Queue
+    *   Bootstrapped Queue
 
-#### **СТРУКТУРЫ ДЛЯ ЗАПРОСОВ**
-*   **Префиксные суммы** (1D, 2D, 3D)
-*   **Дерево Фенвика (Fenwick Tree)**
-    Maximum Fenwick Tree, ...
-*   **Разреженная таблица (Sparse Table)**
-*   **Дерево отрезков (Segment Tree)**
-    *   На массиве и на указателях
-    *   **Отложенные операции (Lazy Propagation)**
-    *   **Массовые операции**
-    *   **Segment Tree Other**
-    *   **Non Recursive Segment Tree**
-    *   **Segment Tree Beats** (`min=`, `max=`, `%=`, возведение в степень, bitwise operations)
-*   **Дерево операций (Operation Tree)**
-    *   Поддержка сложных операций на отрезках
-    *   Комбинирование разных типов обновлений
-*   **Продвинутые деревья:**
-    *   **Range Tree** - для многомерных запросов
-    *   **Interval Tree** - для работы с интервалами
+#### **E. СПЕЦИАЛИЗИРОВАННЫЕ БУФЕРЫ**
+*   **Кольцевые буферы (RING/CIRCULAR BUFFERS):**
+    *   Fixed-size circular buffer
+    *   Overwriting circular buffer
+    *   Producer-Consumer паттерны
+*   **Буферы скользящего окна:**
+    *   Time-based sliding windows
+    *   Count-based sliding windows
+    *   Moving Average вычисления
+*   **Буферы для потоков данных:**
+    *   Reservoir Sampling (случайная выборка из потока)
+    *   Bloom Filter (в разделе хэширования)
 
-#### **КОРНЕВЫЕ СТРУКТУРЫ**
-*   **Корневая декомпозиция (Sqrt-декомпозиция)**
-*   **Алгоритм Мо** (стандартный, с обновлениями)
-*   **Дерево отрезков с корневой декомпозицией**
+#### **F. ГИБРИДНЫЕ, ФУНКЦИОНАЛЬНЫЕ И ЛЕНИВЫЕ СТРУКТУРЫ**
+*   **Finger Tree:**
+    *   Обобщенные последовательности
+    *   Поддержка конкатенации, разделения, индексации
+*   **RRB-Vector (Relaxed Radix Balanced Vector):**
+    *   Персистентные векторы
+    *   Эффективное копирование с изменением
+*   **Zipper:**
+    *   Функциональные структуры данных
+    *   "Фокус" на элементе с доступом к контексту
+*   **Chunked Sequence:**
+    *   Блочное хранение для лучшей кэш-локализации
+*   **Ленивые вычисления** (Lazy Evaluation)
+    *   **Thunk** - отложенное вычисление
+    *   **Promise** - обещание значения
+    *   **Stream/Generator** - ленивые последовательности
+*   **Мемоизация и кэширование**
+    *   **Memoization деревья** - кэширование результатов функций
+    *   **Таблицы динамического программирования** как деревья
 
-#### **ПЕРСИСТЕНТНЫЕ СТРУКТУРЫ**
-*   **Персистентное дерево отрезков**
-*   **Персистентное декартово дерево**
-*   **Структуры с откатами**
-*   **Персистентный стек**
-*   **Персистентная очередь**
+### **II. КОНКУРЕНТНЫЕ (ПАРАЛЛЕЛЬНЫЕ) СТРУКТУРЫ**
+*   **Lock-based структуры:**
+    *   Mutex-protected Queue/Stack
+    *   Reader-Writer Lock структуры
+    *   Condition Variable очереди
+*   **Lock-free структуры:**
+    *   Lock-free Stack (Treiber)
+    *   Lock-free Queue (Michael-Scott)
+    *   Lock-free Deque
+    *   Atomic операции, memory ordering
+*   **Wait-free структуры:**
+    *   Wait-free Queue
+    *   Wait-free Stack
+*   **Concurrent Containers:**
+    *   `concurrent_queue`, `concurrent_stack`
+    *   `concurrent_vector`, `concurrent_hash_map`
 
-#### **ВЕРОЯТНОСТНЫЕ СТРУКТУРЫ ДАННЫХ**
-*   **HyperLogLog** - подсчет уникальных элементов
-*   **Count-Min Sketch** - частотный анализ
-*   **Count-Sketch** - улучшенная версия с лучшими гарантиями
-*   **Quotient Filter** - эффективный фильтр
-*   **AMS Sketch** - оценка моментов распределения
+### **III. ДЕРЕВЬЯ ПОИСКА**
+*   **Базовые бинарные деревья:**
+    *   Basic Binary Tree
+    *   Binary Tree Traversals:
+        *   Inorder, Preorder, Postorder
+        *   Level-order (BFS)
+        *   Inorder Tree Traversal 2022
+    *   Binary Tree Mirror
+    *   Symmetric Tree
+    *   Diameter Of Binary Tree
+    *   Binary Tree Node Sum
+    *   Binary Tree Path Sum
+    *   Distribute Coins
+    *   Lowest Common Ancestor
+    *   Serialize Deserialize Binary Tree
+    *   Merge Two Binary Trees
+*   **Бинарные деревья поиска (BST):**
+    *   Binary Search Tree
+    *   Binary Search Tree Recursive
+    *   Floor And Ceiling
+    *   Is Sorted
+    *   Is Sum Tree
+    *   Maximum Sum Bst
+*   **Сбалансированные деревья:**
+    *   AVL-дерево
+    *   Красно-черное дерево
+    *   Splay-дерево
+    *   AA-дерево
+    *   Scapegoat Tree
+*   **Многопутевые деревья:**
+    *   B-дерево
+    *   B+-дерево
+    *   B*-дерево
+    *   2-3 Tree
+    *   2-3-4 Tree
+*   **Специализированные деревья:**
+    *   Декартово дерево (Treap):
+        *   Обычный Treap - BST + Куча
+        *   Неявный ключ (implicit key)
+        *   Операция `reverse` на отрезке
+    *   Wavelet Tree
+    *   Fenwick Tree (в разделе VI)
+    *   Segment Tree (в разделе VI)
+*   **Деревья в STL:**
+    *   `std::map` (красно-черное дерево)
+    *   `std::set`, `std::multiset`
+    *   `std::multimap`
+
+### **IV. СТРУКТУРЫ ДЛЯ МНОЖЕСТВ**
+*   **Система непересекающихся множеств (DSU/Union-Find):**
+    *   Disjoint Set
+    *   Alternate Disjoint Set
+    *   **Оптимизации:**
+        *   Union by Rank/Size
+        *   Path Compression
+        *   Persistent DSU
+        *   Rollback DSU
+    *   **Варианты:**
+        *   Partially Persistent DSU
+        *   Dynamic Connectivity
+*   **Битсеты:**
+    *   `std::bitset`
+    *   Dynamic Bitset
+    *   **Операции:**
+        *   Bit manipulation
+        *   Set operations (union, intersection, difference)
+        *   Bit Count (popcount)
+
+### **V. КУЧИ (PRIORITY QUEUES)**
+*   **Бинарная куча:**
+    *   Heap
+    *   Heap Generic
+    *   Max Heap
+    *   Min Heap
+    *   `std::priority_queue`
+*   **Биномиальная куча:**
+    *   Binomial Heap
+*   **Фибоначчиева куча:**
+    *   Fibbonaci Heap
+*   **Парная куча (Pairing Heap)**
+*   **Левосторонняя куча (Leftist Heap)**
+*   **Косая куча (Skew Heap):**
+    *   Skew Heap
+*   **Рандомизированная куча:**
+    *   Randomized Heap
+*   **Для целочисленных ключей (Radix Heap):**
+*   **Двусторонняя куча (Double-ended Priority Queue):**
+    *   Min-Max Heap
+    *   Interval Heap
+    *   Deap
+
+### **VI. СТРУКТУРЫ ДЛЯ ЗАПРОСОВ НА ОТРЕЗКАХ**
+
+#### **A. ПРЕФИКСНЫЕ СУММЫ**
+*   Prefix Sum (1D)
+*   2D Prefix Sum
+*   3D Prefix Sum
+*   Difference Array (разностный массив)
+*   Prefix Sum with Updates
+
+#### **B. ДЕРЕВО ФЕНВИКА (FENWICK TREE / BINARY INDEXED TREE)**
+*   Standard Fenwick Tree
+*   Maximum Fenwick Tree
+*   Minimum Fenwick Tree
+*   **Варианты:**
+    *   2D Fenwick Tree
+    *   Fenwick Tree with Range Updates
+    *   Fenwick Tree on Fenwick Tree
+*   **Операции:**
+    *   Point Update, Range Query
+    *   Range Update, Point Query
+    *   Range Update, Range Query
+
+#### **C. РАЗРЕЖЕННАЯ ТАБЛИЦА (SPARSE TABLE)**
+*   Sparse Table для RMQ (Range Minimum Query)
+*   Sparse Table для GCD
+*   Sparse Table для любых идемпотентных операций
+*   Двумерная Sparse Table
+*   Disjoint Sparse Table
+
+#### **D. ДЕРЕВО ОТРЕЗКОВ (SEGMENT TREE)**
+*   **Базовые реализации:**
+    *   Segment Tree (на массиве)
+    *   Segment Tree (на указателях)
+    *   Non Recursive Segment Tree
+    *   Segment Tree Other
+*   **Отложенные операции (Lazy Propagation):**
+    *   Add on segment, sum on segment
+    *   Assign on segment
+    *   Add and Assign combination
+*   **Массовые операции:**
+    *   Range updates
+    *   Range queries (sum, min, max, gcd)
+*   **Segment Tree Beats:**
+    *   `min=` operation
+    *   `max=` operation
+    *   `%=` operation (modulo)
+    *   Возведение в степень на отрезке
+    *   Bitwise operations (AND, OR, XOR)
+*   **Персистентное дерево отрезков:**
+    *   Persistent Segment Tree
+    *   Внешнеплоское дерево (PST)
+*   **Segment Tree с комбинированными обновлениями**
+    *   Поддержка `add` и `set` одновременно
+    *   Приоритет операций (например, `set` перекрывает `add`)
+    *   **Операции с историей** - отслеживание изменений
+
+#### **E. ДЕРЕВЬЯ РАЗБОРА И СИНТАКСИЧЕСКИЕ СТРУКТУРЫ**
+*   **AST (Abstract Syntax Tree - Абстрактное синтаксическое дерево)**
+    *   **Бинарные AST** - для арифметических выражений
+    *   **N-арные AST** - для сложных конструкций
+    *   **Узлы**: операторы (`+`, `-`, `*`, `/`, `^`), функции (`sin`, `cos`, `log`)
+    *   **Листья**: константы, переменные, литералы
+    *   **Свойства**: приоритет операторов, ассоциативность
+*   **Parse Tree (Дерево разбора)**
+    *   Полное дерево с нетерминалами и терминалами
+    *   **Конкретное синтаксическое дерево** - включает все детали грамматики
+    *   **Канонические формы**: приведение к нормальной форме
+*   **Expression Tree (Дерево выражений)**
+    *   Специализированное AST для математических выражений
+    *   **Оптимизации**: constant folding, common subexpression elimination
+    *   **Дифференцирование**: построение производной выражения
+    *   **Упрощение**: алгебраические упрощения
+*   **Построение и обход деревьев разбора**
+    *   **Рекурсивный спуск** (Recursive Descent Parser)
+    *   **LL-парсеры** - Left-to-right, Leftmost derivation
+    *   **LR-парсеры** - Left-to-right, Rightmost derivation
+    *   **Shift-Reduce парсеры**
+    *   **Операторный парсер** (Pratt Parser) - для разных приоритетов
+*   **Трансформации и вычисления**
+    *   **Visitor Pattern** для обхода AST
+    *   **Вычисление выражений** (интерпретация)
+    *   **Компиляция в байт-код** или машинный код
+    *   **Дифференциальное выполнение** (automatic differentiation)
+    *   **Символьные вычисления** (computer algebra)
+*   **Валидация и проверка корректности**
+    *   **Проверка типов** (type checking)
+    *   **Статический анализ** выражений
+    *   **Обнаружение ошибок**: деление на ноль, переполнение
+    *   **Верификация** математических выражений
+*   **Специализированные структуры для выражений**
+    *   **DAG выражений** - Directed Acyclic Graph для общих подвыражений
+    *   **Трехадресный код** - промежуточное представление
+    *   **SSA форма** (Static Single Assignment)
+    *   **Таблица символов** (Symbol Table) для переменных и функций
+*   **Применения в компиляторах и интерпретаторах**
+    *   **Front-end компилятора**: лексический анализ → синтаксический анализ → AST
+    *   **Макропроцессоры** и препроцессоры
+    *   **Шаблонизаторы** и системы генерации кода
+    *   **Доменно-специфичные языки** (DSL)
+    *   **Конфигурационные языки** (JSON, YAML, XML парсеры)
+
+#### **F. ПРОДВИНУТЫЕ ДЕРЕВЬЯ:**
+*   **Range Tree:**
+    *   1D Range Tree
+    *   2D Range Tree
+    *   Для многомерных запросов
+*   **Interval Tree:**
+    *   Для работы с интервалами
+    *   Статические и динамические интервалы
+*   **Segment Tree with Fractional Cascading**
+*   **Li Chao Tree** (для линейных функций)
+*   **Merge Sort Tree** (для запросов k-той статистики)
+
+### **VII. КОРНЕВЫЕ СТРУКТУРЫ (SQRT DECOMPOSITION)**
+*   **Корневая декомпозиция:**
+    *   Блоки фиксированного размера
+    *   Оптимальный размер блока (√n)
+*   **Алгоритм Мо (Mo's Algorithm):**
+    *   Стандартный алгоритм Мо
+    *   Алгоритм Мо с обновлениями (Mo with updates)
+    *   Алгоритм Мо на деревьях
+*   **Дерево отрезков с корневой декомпозицией:**
+    *   Segment Tree + Sqrt Decomposition
+    *   Оптимизация для смешанных запросов
+*   **Sqrt Decomposition по блокам:**
+    *   Разбиение на тяжелые и легкие вершины
+    *   Heavy-Light Decomposition (HLD)
+
+### **VIII. ПЕРСИСТЕНТНЫЕ СТРУКТУРЫ**
+*   **Персистентное дерево отрезков:**
+    *   Persistent Segment Tree
+*   **Персистентное декартово дерево:**
+    *   Persistent Treap
+*   **Структуры с откатами:**
+    *   Rollback DSU
+    *   Persistent Stack
+    *   Persistent Queue
+*   **Fully Persistent структуры:**
+    *   Любая версия доступна для модификации
+*   **Confluently Persistent структуры:**
+    *   Слияние версий
+*   **Functional структуры:**
+    *   Persistent Vector
+    *   Persistent Map/Set
+    *   Persistent Queue (реализация на двух стеках)
+
+### **X. ПРОСТРАНСТВЕННО-ЭФФЕКТИВНЫЕ СТРУКТУРЫ**
+*   **Succinct Data Structures:**
+    *   Суффиксный массив + LCP
+    *   Wavelet Matrix
+    *   Fully Indexable Dictionary (FID)
+    *   Rank/Select структуры
+*   **Compressed Data Structures:**
+    *   Compressed Segment Tree
+    *   Sparse Table with compression
+*   **Implicit Data Structures:**
+    *   Implicit Treap
+    *   Implicit Cartesian Tree
+
+### **XI. ПРИКЛАДНЫЕ И СПЕЦИАЛИЗИРОВАННЫЕ СТРУКТУРЫ**
+*   **Для потоков данных:**
+    *   **Count-Min Sketch**
+    *   **HyperLogLog**
+    *   **Bloom Filter** (в разделе хэширования)
+    *   **Reservoir Sampling**
+*   **Для кэширования:**
+    *   LRU Cache (Least Recently Used)
+    *   LFU Cache (Least Frequently Used)
+    *   ARC Cache (Adaptive Replacement Cache)
+    *   LIRS Cache
+*   **Для графов:**
+    *   Adjacency Matrix
+    *   Adjacency List
+    *   Incidence Matrix
+    *   CSR (Compressed Sparse Row)
+    *   Forward Star
+*   **Для баз данных:**
+    *   B+Tree (индексы)
+    *   Hash Index
+    *   Bitmap Index
+    *   R-Tree (для пространственных данных)
+    *   GiST (Generalized Search Tree)
+
+### **XII. ТЕОРЕТИЧЕСКИЕ И ЭКЗОТИЧЕСКИЕ СТРУКТУРЫ**
+*   **VEB-Tree (van Emde Boas Tree):**
+    *   Для целых чисел из ограниченного универсума
+    *   Все операции за O(log log U)
+*   **Y-Fast Trie**
+*   **X-Fast Trie**
+*   **Fusion Tree:**
+    *   Для целых чисел, операции за O(log_w n)
+*   **Dynamic Connectivity структуры:**
+    *   Holm-de Lichtenberg-Thorup
+    *   ETT (Euler Tour Tree)
+*   **Retroactive Data Structures:**
+    *   Поддержка операций во времени
+
+---
+
+Отлично! Ваш раздел уже очень хорош, но добавим недостающие темы для 100% охвата. Вот расширенная версия:
 
 ---
 
 ## **4. ДИНАМИЧЕСКОЕ ПРОГРАММИРОВАНИЕ**
 
-### **ОСНОВНЫЕ ПРИНЦИПЫ ДП**
-*   **Оптимальная подструктура**
-*   **Перекрывающиеся подзадачи**
-*   **Мемоизация** (нисходящий подход)
-*   **Табуляция** (восходящий подход)
-*   **Рекуррентные соотношения**
-    Factorial, Fast Fibonacci
+### **I. ОСНОВНЫЕ ПРИНЦИПЫ И ФИЛОСОФИЯ ДП**
+*   **Основные принципы:**
+    *   **Оптимальная подструктура** (Optimal Substructure)
+    *   **Перекрывающиеся подзадачи** (Overlapping Subproblems)
+    *   **Принцип оптимальности Беллмана**
+*   **Теория сложности для ДП:**
+    *   Классы сложности: P, NP, #P
+    *   PSPACE-complete задачи
+    *   Доказательства оптимальности
+*   **Математические основы:**
+    *   Принцип индукции в ДП
+    *   Теория рекуррентных соотношений
+    *   **Рекуррентные соотношения** - математическая основа
+    *   Динамическое программирование как функциональное уравнение
+*   **Подходы к реализации:**
+    *   **Мемоизация (Top-Down)** - рекурсия с запоминанием
+    *   **Табуляция (Bottom-Up)** - заполнение таблицы
+*   **Примеры-разминка:**
+    *   Factorial
+    *   Fast Fibonacci
+    *   Catalan Numbers (основные формулы и вычисления)
 
-### **ОБЩИЕ ПРИЕМЫ**
-*   **Одномерная**
-        **Классическая** Climbing Stairs, Fibonacci, Tribonacci
-        **Оптимизационная** Max Non Adjacent Sum, Max Subarray Sum (Алгоритм Кадане), Minimum Steps To One, Minimum Coin Change, Minimum Tickets Cost
-        **Комбинаторная** Combination Sum Iv, Catalan Numbers, и остальное ...
-*   **Двумерная, многомерная динамика**
-        **На матрицы и пути** Minimum Cost Path, Trapped Water
-        **Сравнительные** Edit Distance, Longest Common Subsequence, Longest Common Substring, Wildcard Matching, Regex Match, Abbreviation, Smith Waterman
-        **Оптимизационные** Knapsack (0-1, неограниченный, с повторениями), Minimum Partition, Sum Of Subset, Target Sum, Largest Divisible Subset
-*   **Динамика по подотрезкам и подстрокам**
-    Matrix Chain Multiplication, Matrix Chain Order, Palindrome Partitioning, Longest Palindromic Subsequence (НОПалП), Longest Increasing Subsequence (Iterative = N^2, NlogN), Max Product Subarray, Rod Cutting, Optimal Binary Search Tree
-*   **Динамика по подмножествам** (**Битовые маски**)
-    Bitmask (общие техники), Iterating Through Submasks, Subset Generation, All Construct, Задача коммивояжера (TSP)
-*   **Динамика по профилю**
+### **II. ОДНОМЕРНАЯ ДИНАМИКА**
+*   **Классические задачи:**
+    *   Climbing Stairs
+    *   Fibonacci, Tribonacci
+    *   **Оптимизационные задачи:**
+        *   Max Non Adjacent Sum
+        *   Max Subarray Sum (Алгоритм Кадане)
+        *   Minimum Steps To One
+        *   Minimum Coin Change
+        *   Minimum Tickets Cost
+    *   **Комбинаторная динамика:**
+        *   Combination Sum IV
+        *   Catalan Numbers (различные интерпретации)
+        *   Подсчет путей в сетке
+        *   Размен монет (количество способов)
+
+### **III. ДВУМЕРНАЯ И МНОГОМЕРНАЯ ДИНАМИКА**
+*   **Динамика на матрицах и путях:**
+    *   Minimum Cost Path
+    *   Trapped Water (2D)
+    *   Unique Paths (с препятствиями и без)
+    *   Maximum Path Sum в треугольнике/матрице
+*   **Сравнительная динамика (Sequence Alignment):**
+    *   Edit Distance (Левенштейн)
+    *   Longest Common Subsequence (LCS)
+    *   Longest Common Substring
+    *   Wildcard Matching
+    *   Regex Match
+    *   Abbreviation
+    *   Smith Waterman (локальное выравнивание)
+    *   Needleman-Wunsch (глобальное выравнивание)
+*   **Рюкзачные задачи (Knapsack DP):**
+    *   0-1 Knapsack
+    *   Неограниченный рюкзак
+    *   Рюкзак с повторениями
+    *   Minimum Partition (разбиение на две части)
+    *   Sum Of Subset (сумма подмножества)
+    *   Target Sum (± операции)
+    *   Largest Divisible Subset
+    *   Coin Change (минимум монет/количество способов)
+
+### **IV. ДИНАМИКА ПО ОТРЕЗКАМ И ПОДСТРОКАМ**
+*   **Оптимизация разбиений:**
+    *   Matrix Chain Multiplication
+    *   Matrix Chain Order
+    *   Palindrome Partitioning
+    *   Optimal Binary Search Tree
+    *   Rod Cutting
+*   **Динамика на подстроках:**
+    *   Longest Palindromic Subsequence (LPS)
+    *   Longest Palindromic Substring
+    *   Longest Increasing Subsequence:
+        *   N² алгоритм (классический)
+        *   NlogN алгоритм (патентс/бинарный поиск)
+        *   LIS с восстановлением ответа
+    *   Max Product Subarray
+    *   **Подпоследовательности:**
+        *   Longest Bitonic Subsequence
+        *   Maximum Sum Increasing Subsequence
+        *   Count Distinct Subsequences
+
+### **V. ДИНАМИКА ПО ПОДМНОЖЕСТВАМ (БИТОВЫЕ МАСКИ)**
+*   **Основные техники:**
+    *   Bitmask (общие техники)
+    *   Iterating Through Submasks (перебор подмасок)
+    *   Subset Generation (генерация подмножеств)
+    *   All Construct (все способы построения)
+*   **Классические задачи:**
+    *   Задача коммивояжера (TSP):
+        *   Классический TSP
+        *   TSP с возвратом в старт
+        *   TSP с метрикой/без метрики
+        *   Bitonic TSP
+    *   Assignment Problem (назначение работников)
+    *   Hamiltonian Path/Cycle
+    *   Maximum Clique/Independent Set
+    *   Set Cover/Partition
+*   **Оптимизации:**
+    *   DP over subsets with meet-in-the-middle
+    *   SOS DP (Sum over Subsets)
+
+### **VI. ДИНАМИКА ПО ПРОФИЛЮ**
+*   **Основные понятия:**
+    *   Профиль - состояние границы
+    *   Переходы между профилями
+*   **Задачи на замощение:**
+    *   **Доминошками (Паркет):**
+        *   Замощение поля 2×N доминошками
+        *   Замощение поля M×N доминошками
+        *   Замощение с дефектами (дырками)
+    *   **Тримино (L-образные фигуры):**
+        *   Замощение без дефектов
+        *   Замощение с одной дыркой
+    *   **Полимино (тетримино и др.):**
+        *   Замощение фигурами тетриса
+    *   **Обобщенное замощение:**
+        *   Различными фигурами
+        *   С учетом симметрий
+*   **Другие задачи:**
     *   Minimum Squares To Represent A Number
-    *   Задачи на замощение поля фигурами:
-        *   **Задача "Паркет"** - замощение поля доминошками
-        *   **Замощение фигурами** (полимино, тримино)
-        *   **Обобщенная задача замощения**
-*   **Динамика на деревьях**
-    Binary Tree Path Sum, Maximum Sum Bst, Задачи на независимое множество, покрытие на деревьях
-*   **Задачи на матрицы:**
-    *   **Наибольшая нулевая подматрица** за O(N M)
-    *   **Наибольшая подматрица из единиц**
-    *   **Максимальная сумма подматрицы**
-*   **Динамика на DAG**
-    Floyd Warshall, Min Distance Up Bottom, Word Break, Word Ladder, Нахождение количества путей в DAG
-*   **Восстановление ответа**
+    *   Подсчет числа способов покрытия
+    *   Задачи на мосты и соединения
 
-### **СПЕЦИАЛЬНЫЕ ВИДЫ ДП**
-*   **Цифровое ДП (Digit DP)**
-    Подсчет чисел в диапазоне с определенными свойствами, Range Sum Query
-*   **Ленивая динамика**
-*   **Вероятностное ДП**
-    Viterbi, Игровые задачи с вероятностями
-*   **ДП по рюкзаку**
-*   **ДП по подотрезкам с оптимизациями**
-*   **Probability DP** - задачи с вероятностями
-*   **DP с матрицами переходов**
-*   **Техника "Рюкзак по профилю"**
-*   **Динамика с ограничениями**
-    *   **Динамика с ограничениями на сумму**
-        Integer Partition, Minimum Size Subarray Sum
+### **VII. ДИНАМИКА НА ДЕРЕВЬЯХ**
+*   **Классификация задач:**
+    *   Динамика на корневом дереве
+    *   Динамика на произвольном дереве (переподвешивание)
+*   **Типовые состояния:**
+    *   DP[v][0/1] - вершина v включена/не включена
+    *   DP на независимое множество, вершинное покрытие
+    *   DP на доминирующее множество
+*   **Примеры задач:**
+    *   Binary Tree Path Sum
+    *   Maximum Sum BST
+    *   Maximum Independent Set на дереве
+    *   Minimum Vertex Cover на дереве
+    *   Maximum Matching на дереве
+    *   Tree Diameter через DP
+    *   Подсчет поддеревьев с определенными свойствами
+*   **Специальные техники:**
+    *   Rerooting DP (переподвешивание корня)
+    *   DP на centroid decomposition
+    *   Tree DP с ограничениями на размер компонент
 
-### **ОПТИМИЗАЦИИ ДП**
-*   **Пересчет по слоям**
-*   **Оптимизация "разделяй и властвуй"**
-*   **Оптимизация Кнута**
-    Matrix Chain Multiplication
-*   **Convex Hull Trick** (+ Li-Chao Tree)
-*   **Aliens Trick (Дискретный метод Лагранжа)**
-*   **Оптимизация с помощью монотонности**
-*   **Оптимизация через очередь минимумов**
-    Max Subarray Sum
+### **VIII. ДИНАМИКА НА ГРАФАХ (DAG И НЕ ТОЛЬКО)**
+*   **На Directed Acyclic Graph (DAG):**
+    *   Нахождение количества путей в DAG
+    *   Нахождение самого длинного/короткого пути
+    *   Word Break (разбиение строки по словарю)
+    *   Word Ladder (преобразование слов)
+*   **Алгоритмы на графах как DP:**
+    *   Floyd Warshall (DP по промежуточным вершинам)
+    *   Bellman-Ford (релаксация рёбер)
+    *   Min Distance Up Bottom
+*   **Специальные задачи:**
+    *   Maximum Clique в интервальном графе
+    *   Maximum Independent Set в двудольном графе
+    *   Динамика на пути/цикле
 
-### **Выходящие из ряда вон**
-    Fizz Buzz
-    K Means Clustering Tensorflow
+### **IX. СПЕЦИАЛЬНЫЕ ВИДЫ И ТЕХНИКИ ДП**
+
+#### **A. Цифровая динамика (Digit DP)**
+*   **Основная идея:** подсчет чисел с ограничениями по цифрам
+*   **Задачи:**
+    *   Подсчет чисел в диапазоне [L, R] с определенными свойствами
+    *   Range Sum Query для цифровых свойств
+    *   Сумма цифр всех чисел в диапазоне
+    *   Числа без повторяющихся цифр
+    *   Числа, делящиеся на K
+*   **Техники:**
+    *   Состояние: (позиция, tight, leadingZero, ...)
+    *   Мемоизация со сложными состояниями
+
+#### **B. Вероятностная динамика (Probability DP)**
+*   **Основы теории вероятностей в ДП:**
+    *   Ожидаемое значение (expected value)
+    *   Вероятности переходов между состояниями
+*   **Задачи:**
+    *   Игровые задачи с вероятностями (кости, карты)
+    *   Random Walks (случайные блуждания)
+    *   Markov Chains (цепи Маркова)
+    *   Viterbi Algorithm (скрытые марковские модели)
+    *   Expected number of steps до поглощающего состояния
+
+#### **C. Комбинаторная игровая динамика (Combinatorial Game DP)**
+*   **Игры с impartial rules:**
+    *   Вычисление Grundy numbers (нимберов):
+        *   mex (minimum excludant) функция
+        *   Рекуррентное вычисление позиций
+    *   Определение P-позиций (проигрышных) и N-позиций (выигрышных)
+    *   **Классические игры:**
+        *   Nim (разные варианты)
+        *   Kayles (кегли)
+        *   Dawson's Kayles
+        *   Wythoff's game
+*   **Теорема Шпрага-Гранди:**
+    *   Разложение игры на независимые компоненты
+    *   XOR операция над нимберами
+    *   Вычисление результата составной игры
+*   **Partisan games (игры с разными правилами):**
+    *   Hot games, cold games
+    *   Сравнение игровых значений
+*   **Применения:**
+    *   Анализ конечных игр
+    *   Оптимальная стратегия в комбинаторных играх
+    *   Вычисление выигрышных позиций
+
+#### **D. Параметрическая динамика**
+*   **Динамика с дополнительными параметрами:**
+    *   DP с ограничением на количество элементов
+    *   DP с ограничением на сумму/разность
+    *   Integer Partition
+    *   Minimum Size Subarray Sum
+*   **Техника "DP с K измерениями"**
+
+#### **E. Временная динамика**
+*   **Динамика во времени:**
+    *   Scheduling problems
+    *   Time-dependent стоимости
+    *   Задачи с временными окнами
+
+#### **F. Ленивая динамика (Lazy DP)**
+*   Отложенные вычисления
+*   Динамика с кэшированием и мемоизацией по требованию
+
+### **X. СЛОЖНЫЕ ОПТИМИЗАЦИИ ДП**
+
+#### **A. Оптимизация пространства (Memory Optimization)**
+*   **Rolling DP:** хранение только необходимых слоёв
+*   **Bit DP:** сжатие состояний в биты
+*   **DP на префиксах:** O(N) памяти вместо O(N²)
+
+#### **B. Оптимизация времени пересчёта**
+
+##### **B1. Монотонные оптимизации:**
+*   **Divide & Conquer Optimization:**
+    *   Применимость: dp[i][j] = min(dp[i-1][k] + C[k][j])
+    *   Условие: Quadrangle Inequality
+    *   Сложность: O(KNlogN) → O(KN)
+*   **Knuth Optimization:**
+    *   Применимость: dp[i][j] = min(dp[i][k] + dp[k+1][j] + C[i][j])
+    *   Условие: Quadrangle Inequality + Monotonicity
+    *   Использование: Matrix Chain Multiplication
+*   **Monge Array Optimization**
+
+##### **B2. Convex Hull Trick (CHT):**
+*   **Линейные функции:** f(x) = a*x + b
+*   **Типы:**
+    *   **Static CHT:** добавление линий в порядке возрастания угла
+    *   **Dynamic CHT:** произвольное добавление линий
+*   **Реализации:**
+    *   На стеке/декке
+    *   Li Chao Tree (динамический CHT)
+    *   С дробными коэффициентами
+*   **Задачи:** Max/Min of linear functions at given x
+
+##### **B3. Aliens Trick (Лагранжева релаксация):**
+*   **Идея:** сведение задачи с дополнительным ограничением
+*   **Применение:** задачи "взять не более K элементов"
+*   **Бинарный поиск** по параметру Лагранжа
+*   **Задачи:** K-сегментное разбиение, K-route задачи
+
+##### **B4. Оптимизация через очередь минимумов:**
+*   Sliding Window минимум/максимум
+*   Deque-based оптимизация
+*   Применение: Max Subarray Sum с ограничением длины
+
+##### **B5. SMAWK Algorithm:**
+*   Алгоритм Агарвала-Клаоса-Мортина-Принса-Шора
+*   Для полностью монотонных матриц
+*   O(N) для нахождения минимумов в строках
+
+#### **C. Параллельные и распределённые реализации ДП**
+*   **GPU оптимизации:** CUDA/OpenCL реализации
+*   **Распределённое ДП:** MapReduce подход
+*   **Потоковые алгоритмы:** one-pass DP
 
 ---
 
 ## **5. МАТЕМАТИКА**
 
-### **АЛГЕБРА**
-*   **Базовые арифметические операции**
-    *   **Abs, Ceil, Floor, Signum**
-    *   **Addition Without Arithmetic**
-    *   **Binary Multiplication**
-    *   **Power Using Recursion**
-    *   **Print Multiplication Table**
-    *   **Find Max, Find Min**
-    *   **Бинарное возведение в степень**
-        *   **Binary Exponentiation** + **Modular Exponential**
-        *   **Fast Inverse Sqrt**
-*   **Многочлены**
-    *   Theory (Polynominal, Polynominal Evaluation, ...)
-    *   **Интерполяция и аппроксимация**
-        *   **Интерполяция по Лагранжу**
-        *   **Nevilles Method, Newton Forward Interpolation**
-    *   **Алгоритм Карацубы**
-    *   **Быстрое преобразование Фурье (FFT)**
-    *   **Теорема Виета**
-    *   **Схема Горнера**
-*   **БИТОВЫЕ ОПЕРАЦИИ** **← НОВЫЙ КРУПНЫЙ РАЗДЕЛ**
-    *   **БАЗОВЫЕ БИТОВЫЕ ОПЕРАЦИИ**
-        *   **Логические операции:**
-            *   Binary And Operator
-            *   Binary Or Operator  
-            *   Binary Xor Operator
-            *   Single Bit Manipulation Operations
-        *   **Битовые сдвиги:**
-            *   Binary Shifts
-        *   **Представления чисел:**
-            *   Binary Twos Complement (дополнительный код)
-            *   Numbers Different Signs (определение знаков)
-        *   **Системы счисления и кодирования:**
-            *   **Разложение числа в p-ичной системе счисления**
-            *   Binary Coded Decimal
-            *   Excess 3 Code
-            *   Gray Code Sequence
-    *   ***АНАЛИЗ И МАНИПУЛЯЦИЯ БИТАМИ**
-        *   **Подсчет битов:**
-            *   Binary Count Setbits
-            *   Count Number Of One Bits
-            *   Count 1S Brian Kernighan Method (оптимизированный подсчет)
-        *   **Поиск позиций битов:**
-            *   Binary Count Trailing Zeros (младшие нулевые биты)
-            *   Highest Set Bit (старший установленный бит)
-            *   Index Of Rightmost Set Bit (позиция младшей единицы)
-        *   **Реверс и перестановка:**
-            *   Reverse Bits
-            *   Swap All Odd And Even Bits
+### **I. АЛГЕБРА**
+#### **A. БАЗОВЫЕ АРИФМИТИЧЕСКИЕ ОПЕРАЦИИ**
+*   **Abs, Ceil, Floor, Signum**
+*   **Addition Without Arithmetic**
+*   **Binary Multiplication**
+*   **Power Using Recursion**
+*   **Print Multiplication Table**
+*   **Find Max, Find Min**
+*   **Бинарное возведение в степень**
+    *   **Binary Exponentiation** + **Modular Exponential**
+    *   **Fast Inverse Sqrt**
+#### **B. МНОГОЧЛЕНЫ**
+*   Theory (Polynominal, Polynominal Evaluation, ...)
+*   **Интерполяция и аппроксимация**
+    *   **Интерполяция по Лагранжу**
+    *   **Nevilles Method, Newton Forward Interpolation**
+*   **Алгоритм Карацубы**
+*   **Быстрое преобразование Фурье (FFT)**
+*   **Теорема Виета**
+*   **Схема Горнера**
+#### **С. БИТОВЫЕ ОПЕРАЦИИ**
+*   **БАЗОВЫЕ БИТОВЫЕ ОПЕРАЦИИ**
+    *   **Логические операции:**
+        *   Binary And Operator
+        *   Binary Or Operator  
+        *   Binary Xor Operator
+        *   Single Bit Manipulation Operations
+    *   **Битовые сдвиги:**
+        *   Binary Shifts
+    *   **Представления чисел:**
+        *   Binary Twos Complement (дополнительный код)
+        *   Numbers Different Signs (определение знаков)
+    *   **Системы счисления и кодирования:**
+        *   **Разложение числа в p-ичной системе счисления**
+        *   Binary Coded Decimal
+        *   Excess 3 Code
+        *   Gray Code Sequence
+*   ***АНАЛИЗ И МАНИПУЛЯЦИЯ БИТАМИ**
+    *   **Подсчет битов:**
+        *   Binary Count Setbits
+        *   Count Number Of One Bits
+        *   Count 1S Brian Kernighan Method (оптимизированный подсчет)
+    *   **Поиск позиций битов:**
+        *   Binary Count Trailing Zeros (младшие нулевые биты)
+        *   Highest Set Bit (старший установленный бит)
+        *   Index Of Rightmost Set Bit (позиция младшей единицы)
+    *   **Реверс и перестановка:**
+        *   Reverse Bits
+        *   Swap All Odd And Even Bits
 *   ***БИТОВЫЕ ТРЮКИ И ОПТИМИЗАЦИИ**
     *   **Проверки свойств:**
         *   Is Even (четность через младший бит)
@@ -953,7 +1801,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Сетевые протоколы:**
         *   Обработка заголовков пакетов
         *   Битовые флаги в протоколах
-*   **Преобразования**
+#### **D. ПРЕОБРАЗОВАНИЯ**
     Astronomical Length Scale Conversion
     Base Neg2 Conversion
     Binary To Decimal
@@ -1003,9 +1851,9 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 
 ---
 
-### **ЛИНЕЙНАЯ АЛГЕБРА - ПОЛНАЯ ПРОГРАММА С АЛГОРИТМАМИ**
+### **II. ЛИНЕЙНАЯ АЛГЕБРА - ПОЛНАЯ ПРОГРАММА С АЛГОРИТМАМИ**
 
-#### **0. МАТЕМАТИЧЕСКИЕ ОСНОВЫ И АЛГЕБРАИЧЕСКИЕ СТРУКТУРЫ** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
+#### **A. МАТЕМАТИЧЕСКИЕ ОСНОВЫ И АЛГЕБРАИЧЕСКИЕ СТРУКТУРЫ** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
 *   **Множества и операции над ними**
 *   **Основные алгебраические структуры**
     *   **Арифметические операции и их свойства**
@@ -1022,7 +1870,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Конечные суммы и произведения**
     *   **Приближенные вычисления**
 
-#### **I. МАТРИЦЫ И ОСНОВНЫЕ ОПЕРАЦИИ** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
+#### **B. МАТРИЦЫ И ОСНОВНЫЕ ОПЕРАЦИИ** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
 *   **Определения и типы матриц**
     *   Понятие матрицы, виды матриц (квадратные, диагональные, треугольные, единичные)
     *   **Равенство матриц**
@@ -1046,7 +1894,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Элементарные преобразования как умножения матриц**
     *   **Нахождение элементарных преобразующих матриц**
 
-#### **II. ОПРЕДЕЛИТЕЛИ И ИХ СВОЙСТВА** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
+#### **C. ОПРЕДЕЛИТЕЛИ И ИХ СВОЙСТВА** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
 *   **Определитель матрицы**
     *   **Индуктивное определение**
     *   Определение, методы вычисления
@@ -1081,7 +1929,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Метод рекуррентных уравнений**
     *   Метод выделения линейных множителей
 
-#### **III. ОБРАТНЫЕ МАТРИЦЫ И РАНГ** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
+#### **D. ОБРАТНЫЕ МАТРИЦЫ И РАНГ** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
 *   **Обратная матрица**
     *   Определение, существование и единственность обратной матрицы
     *   **Единственность обратной матрицы**
@@ -1120,7 +1968,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Метод Гаусса**
 *   **Ранг системы столбцов (строк)**
 
-#### **IV. СИСТЕМЫ ЛИНЕЙНЫХ УРАВНЕНИЙ** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
+#### **E. СИСТЕМЫ ЛИНЕЙНЫХ УРАВНЕНИЙ** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
 *   **Матричная запись систем**
     *   **Основные понятия и определения**
     *   **Матрица и расширенная матрица** системы линейных уравнений
@@ -1154,7 +2002,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Применение полуобратных матриц**
     *   **Псевдорешения системы линейных уравнений**
 
-#### **V. ЛИНЕЙНЫЕ ПРОСТРАНСТВА** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
+#### **F. ЛИНЕЙНЫЕ ПРОСТРАНСТВА** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
 *   **Основные понятия**
     *   **Определение и примеры линейных пространств**
     *   Аксиомы линейного пространства, **простейшие следствия аксиом**
@@ -1200,7 +2048,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Ранг системы векторов
     *   Связь ранга с размерностью линейной оболочки
 
-#### **VI. ЛИНЕЙНЫЕ ОПЕРАТОРЫ** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
+#### **G. ЛИНЕЙНЫЕ ОПЕРАТОРЫ** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
 *   **Линейные отображения**
     *   **Определение линейных отображений**
     *   **Примеры линейных отображений**
@@ -1235,7 +2083,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Инвариантность ранга** относительно умножения на невырожденные матрицы
     *   **Формула изменения матрицы** линейного отображения при замене базисов
 
-#### **VII. ЛИНЕЙНЫЕ, БИЛИНЕЙНЫЕ И КВАДРАТИЧНЫЕ ФОРМЫ** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
+#### **H. ЛИНЕЙНЫЕ, БИЛИНЕЙНЫЕ И КВАДРАТИЧНЫЕ ФОРМЫ** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
 *   **Линейные функционалы**
     *   **Линейные функции** на векторном пространстве
     *   **Двойственное (сопряжённое) пространство**
@@ -1268,7 +2116,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   **Полуторалинейные формы и эрмитовы пространства** ✅ **НОВОЕ**
 *   **Schur Complement** (дополнение Шура)
 
-#### **VIII. КОМПЛЕКСНЫЕ ЧИСЛА И МНОГОЧЛЕНЫ** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
+#### **I. КОМПЛЕКСНЫЕ ЧИСЛА И МНОГОЧЛЕНЫ** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
 *   **Комплексные числа**
     *   **Построение поля комплексных чисел**
     *   **Алгебраическая форма**: действительная и мнимая части
@@ -1288,7 +2136,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Утверждение о числе корней** с учётом кратностей
 *   **Polynom For Points** (интерполяция многочленами)
 
-#### **XII. ЖОРДАНОВА ФОРМА И ИНВАРИАНТНЫЕ ПОДПРОСТРАНСТВА** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
+#### **J. ЖОРДАНОВА ФОРМА И ИНВАРИАНТНЫЕ ПОДПРОСТРАНСТВА** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
 *   **Инвариантные подпространства**
     *   **Определение и примеры инвариантных подпространств**
     *   **Свойства инвариантных подпространств**
@@ -1330,13 +2178,13 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Свойства функций от матриц**
     *   **Применение функций от матриц для решения систем линейных дифференциальных уравнений с постоянными коэффициентами**
 
-#### **XIII. ФУНКЦИОНАЛЬНЫЕ МАТРИЦЫ И ВЕКТОРНЫЙ АНАЛИЗ** ✅ **НОВЫЙ РАЗДЕЛ**
+#### **K. ФУНКЦИОНАЛЬНЫЕ МАТРИЦЫ И ВЕКТОРНЫЙ АНАЛИЗ** ✅ **НОВЫЙ РАЗДЕЛ**
 *   **Функциональные матрицы скалярного аргумента**
 *   **Производные скалярной функции по векторному аргументу**
 *   **Производные векторной функции по векторному аргументу**
 *   **Производные матричной функции по векторному аргументу**
 
-#### **XIV. ЧИСЛЕННЫЕ МЕТОДЫ ЛИНЕЙНОЙ АЛГЕБРЫ** ✅ **НОВЫЙ РАЗДЕЛ**
+#### **L. ЧИСЛЕННЫЕ МЕТОДЫ ЛИНЕЙНОЙ АЛГЕБРЫ** ✅ **НОВЫЙ РАЗДЕЛ**
 *   **Основные положения. Нормы матриц**
 *   **Прямые методы решения систем линейных алгебраических уравнений**
     *   **Численные схемы реализации метода Гаусса**
@@ -1351,7 +2199,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Метод итераций**
     *   **Метод вращений**
 
-#### **XV. НОРМИРОВАННЫЕ ПРОСТРАНСТВА И ФУНКЦИОНАЛЬНЫЙ АНАЛИЗ** ✅ **НОВЫЙ РАЗДЕЛ**
+#### **M. НОРМИРОВАННЫЕ ПРОСТРАНСТВА И ФУНКЦИОНАЛЬНЫЙ АНАЛИЗ** ✅ **НОВЫЙ РАЗДЕЛ**
 *   **Нормы в векторных пространствах**
     *   **Определение нормы**, аксиомы нормы
     *   **Примеры норм** в Rⁿ: l₁, l₂, lₚ, l∞ нормы
@@ -1382,7 +2230,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Метод наименьших квадратов**
     *   **Нормальные псевдорешения**
 
-#### **XVI. СТРОЕНИЕ ЛИНЕЙНОГО ПРОСТРАНСТВА** ✅ **НОВЫЙ РАЗДЕЛ**
+#### **N. СТРОЕНИЕ ЛИНЕЙНОГО ПРОСТРАНСТВА** ✅ **НОВЫЙ РАЗДЕЛ**
 *   **Линейные комбинации и оболочки**
 *   **Линейная зависимость**
 *   **Эквивалентные системы векторов**
@@ -1394,7 +2242,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   **Изоморфизм линейных пространств**
 *   **Линейная зависимость и системы линейных уравнений**
 
-#### **XVII. ИЗМЕРЕНИЯ В ЛИНЕЙНОМ ПРОСТРАНСТВЕ** ✅ **НОВЫЙ РАЗДЕЛ**
+#### **O. ИЗМЕРЕНИЯ В ЛИНЕЙНОМ ПРОСТРАНСТВЕ** ✅ **НОВЫЙ РАЗДЕЛ**
 *   **Аффинные системы координат**
 *   **Другие системы координат**
 *   **Некоторые задачи**
@@ -1407,7 +2255,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   **Унитарное пространство**
 *   **Линейная зависимость и ортонормированные системы**
 
-#### **XVIII. ОБЪЕМ СИСТЕМЫ ВЕКТОРОВ** ✅ **НОВЫЙ РАЗДЕЛ**
+#### **P. ОБЪЕМ СИСТЕМЫ ВЕКТОРОВ** ✅ **НОВЫЙ РАЗДЕЛ**
 *   **Векторное и смешанное произведения**
 *   **Объем и ориентированный объем системы векторов**
 *   **Геометрические и алгебраические свойства объема**
@@ -1418,7 +2266,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   **Линейная зависимость и определители**
 *   **Вычисление определителей**
 
-#### **XIX. ПРЯМАЯ ЛИНИЯ И ПЛОСКОСТЬ** ✅ **НОВЫЙ РАЗДЕЛ**
+#### **Q. ПРЯМАЯ ЛИНИЯ И ПЛОСКОСТЬ** ✅ **НОВЫЙ РАЗДЕЛ**
 *   **Уравнения прямой линии и плоскости**
 *   **Совместное расположение**
 *   **Плоскость в линейном пространстве**
@@ -1426,7 +2274,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   **Полупространство**
 *   **Системы линейных уравнений**
 
-#### **XX. ПРЕДЕЛ В ЛИНЕЙНОМ ПРОСТРАНСТВЕ** ✅ **НОВЫЙ РАЗДЕЛ**
+#### **R. ПРЕДЕЛ В ЛИНЕЙНОМ ПРОСТРАНСТВЕ** ✅ **НОВЫЙ РАЗДЕЛ**
 *   **Метрическое пространство**
 *   **Полное пространство**
 *   **Вспомогательные неравенства**
@@ -1435,7 +2283,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   **Полнота нормированных пространств**
 *   **Предел и вычислительные процессы**
 
-#### **XXI. АЛГЕБРА ЛИНЕЙНЫХ ОПЕРАТОРОВ** ✅ **НОВЫЙ РАЗДЕЛ**
+#### **S. АЛГЕБРА ЛИНЕЙНЫХ ОПЕРАТОРОВ** ✅ **НОВЫЙ РАЗДЕЛ**
 *   **Операторы**
 *   **Линейное пространство операторов**
 *   **Кольцо операторов**
@@ -1446,14 +2294,14 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   **Переход к другому базису**
 *   **Эквивалентные и подобные матрицы**
 
-#### **XXII. ХАРАКТЕРИСТИЧЕСКИЙ МНОГОЧЛЕН** ✅ **НОВЫЙ РАЗДЕЛ**
+#### **T. ХАРАКТЕРИСТИЧЕСКИЙ МНОГОЧЛЕН** ✅ **НОВЫЙ РАЗДЕЛ**
 *   **Собственные значения и собственные векторы**
 *   **Характеристический многочлен**
 *   **Кольцо многочленов**
 *   **Основная теорема алгебры**
 *   **Следствия из основной теоремы**
 
-#### **XXIII. СТРОЕНИЕ ЛИНЕЙНОГО ОПЕРАТОРА** ✅ **НОВЫЙ РАЗДЕЛ**
+#### **U. СТРОЕНИЕ ЛИНЕЙНОГО ОПЕРАТОРА** ✅ **НОВЫЙ РАЗДЕЛ**
 *   **Инвариантные подпространства**
 *   **Операторный многочлен**
 *   **Треугольная форма**
@@ -1467,7 +2315,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   **Операторы в вещественном пространстве**
 *   **Матрицы специального вида**
 
-#### **XXIV. МЕТРИЧЕСКИЕ СВОЙСТВА ОПЕРАТОРА** ✅ **НОВЫЙ РАЗДЕЛ**
+#### **V. МЕТРИЧЕСКИЕ СВОЙСТВА ОПЕРАТОРА** ✅ **НОВЫЙ РАЗДЕЛ**
 *   **Непрерывность и ограниченность оператора**
 *   **Норма оператора**
 *   **Матричные нормы оператора**
@@ -1477,7 +2325,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   **Устойчивое решение уравнений**
 *   **Возмущение и собственные значения**
 
-#### **XXV. БИЛИНЕЙНО МЕТРИЧЕСКИЕ ПРОСТРАНСТВА** ✅ **НОВЫЙ РАЗДЕЛ**
+#### **W. БИЛИНЕЙНО МЕТРИЧЕСКИЕ ПРОСТРАНСТВА** ✅ **НОВЫЙ РАЗДЕЛ**
 *   **Общие свойства билинейных и квадратичных форм**
 *   **Матрицы билинейных и квадратичных форм**
 *   **Приведение к каноническому виду**
@@ -1492,7 +2340,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   **Операторы и билинейные формы**
 *   **Билинейно метрический изоморфизм**
 
-#### **XXVI. ВЫЧИСЛИТЕЛЬНЫЕ ПРОЦЕССЫ** ✅ **НОВЫЙ РАЗДЕЛ**
+#### **X. ВЫЧИСЛИТЕЛЬНЫЕ ПРОЦЕССЫ** ✅ **НОВЫЙ РАЗДЕЛ**
 *   **Процессы ортогонализации**
 *   **Ортогонализация степенной последовательности**
 *   **Методы сопряженных направлений**
@@ -1501,15 +2349,15 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 
 ---
 
-### **XXVII. ПРАКТИЧЕСКИЕ АЛГОРИТМЫ ЛИНЕЙНОЙ АЛГЕБРЫ** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
+#### **Y. ПРАКТИЧЕСКИЕ АЛГОРИТМЫ ЛИНЕЙНОЙ АЛГЕБРЫ** ✅ **ПОЛНОСТЬЮ ОБНОВЛЕНО**
 
-#### **АЛГОРИТМЫ РАБОТЫ С БАЗИСАМИ И СИСТЕМАМИ ВЕКТОРОВ**
+##### **Y1. АЛГОРИТМЫ РАБОТЫ С БАЗИСАМИ И СИСТЕМАМИ ВЕКТОРОВ**
 *   **`Extract Basis From Vectors`** - выделение базиса из системы векторов
 *   **`Find Any Basis Of Span`** - нахождение какого-то базиса линейной оболочки
 *   **`Complete To Basis With Standard Vectors`** - дополнение системы до базиса стандартными векторами
 *   **`Find Fundamental System Of Solutions`** - нахождение ФСР однородной СЛУ
 
-#### **АЛГОРИТМЫ РАБОТЫ С ПОДПРОСТРАНСТВАМИ**
+##### **Y2. АЛГОРИТМЫ РАБОТЫ С ПОДПРОСТРАНСТВАМИ**
 *   **`Subspace Basis From Matrix Equation`** - задать подпространство базисом, если оно задано матричным уравнением
 *   **`Subspace Matrix Equation From Span`** - задать подпространство матричным уравнением, если оно задано линейной оболочкой
 *   **`Sum Of Subspaces Given By Spans`** - найти сумму подпространств заданных линейными оболочками
@@ -1520,7 +2368,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   Найти сумму подпространств заданных разными способами
 *   **`Sum Of Subspaces Mixed Definitions`** - найти сумму подпространств заданных разными способами
 
-#### **АЛГОРИТМЫ ЛИНЕЙНЫХ ОТОБРАЖЕНИЙ**
+##### **Y3. АЛГОРИТМЫ ЛИНЕЙНЫХ ОТОБРАЖЕНИЙ**
 *   **`Find Change Of Basis Matrix`** - найти матрицу замены координат
 *   **`Linear Map Matrix Under Basis Change`** - найти матрицу линейного отображения при замене базиса
 *   **`Check Linear Map Existence On Vectors`** - определить существует ли линейное отображение заданное на векторах
@@ -1528,11 +2376,11 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   **`Find Linear Map With Given Kernel And Image`** - найти линейное отображение с заданными ядром и образом
 *   **`Linear Operator Matrix Under Basis Change`** - найти матрицу линейного оператора при замене базиса
 
-#### **АЛГОРИТМЫ ПРОЕКЦИЙ И РАЗЛОЖЕНИЙ**
+##### **Y4. АЛГОРИТМЫ ПРОЕКЦИЙ И РАЗЛОЖЕНИЙ**
 *   **`Vector Projection Onto Subspace`** - найти проекцию вектора на подпространство вдоль другого подпространства
 *   **`Projection Operator Onto Subspace`** - найти оператор проекции на подпространство вдоль другого подпространства
 
-#### **АЛГОРИТМЫ СОБСТВЕННЫХ ЗНАЧЕНИЙ И ЖОРДАНОВОЙ ФОРМЫ**
+##### **Y5. АЛГОРИТМЫ СОБСТВЕННЫХ ЗНАЧЕНИЙ И ЖОРДАНОВОЙ ФОРМЫ**
 *   **`Find Eigenvalues And Eigenvectors`** - поиск собственных значений и векторов
 *   **`Find Root Subspaces`** - поиск корневых подпространств
 *   **`Find Invariant Subspaces`** - поиск инвариантных подпространств
@@ -1547,7 +2395,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   **`Jordan Form 4x4 Single Eigenvalue`** - определение ЖНФ у матриц 4 на 4 с одним собственным значением
 *   **`Jordan Basis 4x4 Single Eigenvalue`** - определить Жорданов базис у матриц 4 на 4 с единственным собственным значением
 
-### **XXVIII. ВЫЧИСЛИТЕЛЬНЫЕ МЕТОДЫ** ✅
+#### **Z. ВЫЧИСЛИТЕЛЬНЫЕ МЕТОДЫ** ✅
 *   **Матричные разложения**
     *   **QR-разложение** (`Qr Decomposition`)
 *   **Итерационные методы**
@@ -1556,7 +2404,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Matrix Exponentiation** + Быстрое возведение матрицы в степень
     *   **Nth Fibonacci Using Matrix Exponentiation**
 
-### **XXIX. ПРИКЛАДНЫЕ АЛГОРИТМЫ** ✅
+##### **Z1. ПРИКЛАДНЫЕ АЛГОРИТМЫ** ✅
 *   **Работа с матрицами**
     *   `Binary Search Matrix`, `Count Islands In Matrix`
     *   `Count Negative Numbers In Sorted Matrix`, `Count Paths`
@@ -1569,7 +2417,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   `Matrix Multiplication Recursion`, `Matrix Operation`
     *   `Sherman Morrison`
 
-### **XXX. МАШИННОЕ ОБУЧЕНИЕ** ✅
+##### **Z2. МАШИННОЕ ОБУЧЕНИЕ** ✅
 *   `Apriori Algorithm`, `Astar`, `Automatic Differentiation`
 *   `Data Transformations`, `Decision Tree`, `Dimensionality Reduction`
 *   `Forecasting`, `Frequent Pattern Growth`, `Gradient Boosting Classifier`
@@ -1582,11 +2430,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   `T Stochastic Neighbour Embedding`, `Word Frequency Functions`
 *   `Xgboost Classifier`, `Xgboost Regressor`
 
----
-
-Теперь программа содержит **30 полных разделов** и представляет собой исчерпывающую энциклопедию линейной алгебры от основ до самых современных приложений.
-
-### **ТЕОРИЯ ЧИСЕЛ**
+### **III. ТЕОРИЯ ЧИСЕЛ**
 *   **Делимость, НОД, НОК**
     *   **Greatest Common Divisor, Gcd Of N Numbers**
     *   **Least Common Multiple**
@@ -1657,11 +2501,9 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Collatz Sequence, Juggler Sequence**
     *   **Sylvester Sequence**
 
----
+### **IV. КОМБИНАТОРИКА И КОМБИНАТОРНЫЕ АЛГОРИТМЫ**
 
-### **КОМБИНАТОРИКА И КОМБИНАТОРНЫЕ АЛГОРИТМЫ**
-
-#### **I. ОСНОВЫ КОМБИНАТОРИКИ**
+#### **A. ОСНОВЫ КОМБИНАТОРИКИ**
 *   **Факториалы и биномиальные коэффициенты**
     *   **Factorial, Double Factorial**
     *   **Binomial Coefficient** (вычисление, свойства, треугольник Паскаля)
@@ -1676,7 +2518,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Применение к задачам на пересчёт
     *   Задача о беспорядках (derangements)
 
-#### **II. КОМБИНАТОРНЫЕ ПОСЛЕДОВАТЕЛЬНОСТИ И ЧИСЛА**
+#### **B. КОМБИНАТОРНЫЕ ПОСЛЕДОВАТЕЛЬНОСТИ И ЧИСЛА**
 *   **Числа Каталана (Catalan Number)**
     *   Определения и рекуррентные формулы
     *   Приложения: правильные скобочные последовательности ❌, пути в решётке, триангуляции
@@ -1690,7 +2532,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Свойства и тождества
     *   Приложения в комбинаторике
 
-#### **СПЕЦИАЛЬНЫЕ КОМБИНАТОРНЫЕ КОНФИГУРАЦИИ**
+#### **C. СПЕЦИАЛЬНЫЕ КОМБИНАТОРНЫЕ КОНФИГУРАЦИИ**
 *   **Комбинаторные объекты с симметриями**
     *   **Ожерелья** - циклические последовательности ❌
     *   **Расстановки на шахматной доске**:
@@ -1703,7 +2545,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Графы с K компонентами связности**
     *   **Формула Кэли** для количества деревьев
 
-#### **III. ПРОИЗВОДЯЩИЕ ФУНКЦИИ**
+#### **D. ПРОИЗВОДЯЩИЕ ФУНКЦИИ**
 *   **Обыкновенные производящие функции (ОПФ)**
     *   Определение и основные операции
     *   Решение рекуррентных соотношений
@@ -1715,12 +2557,12 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Разбиения чисел
     *   Производящие функции для чисел Каталана и Белла
 
-#### **IV. КОМБИНАТОРНЫЕ АЛГОРИТМЫ**
+#### **E. КОМБИНАТОРНЫЕ АЛГОРИТМЫ**
 *   **Генерация комбинаторных объектов (с/без повторений)**
     *   **Генерация перестановок All Permutations:** алгоритм Нарайаны, рекурсивный перебор
     *   **Генерация сочетаний All Combinations:** рекурсивная, на основе битовых масок
     *   **All Subsequences**
-    *   **Generate Parentheses** - генерация правильных скобочных последовательностей
+    *   **Generate Parentheses** - генерация правильных скобочных последовательностей (с приоритетами и без)
     *   **Generate Parentheses Iterative** - итеративная генерация скобочных последовательностей
     *   **Генерация подмножеств:** битовые маски, Gray code
     *   **Kth Lexicographic Permutation** — нахождение k-й перестановки в лексикографическом порядке
@@ -1746,7 +2588,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Метод ветвей и границ**
     *   **Динамическое программирование** с битовыми масками
 
-#### **КОМБИНАТОРИКА РАЦИОНАЛЬНЫХ ЧИСЕЛ** ❌
+#### **F. КОМБИНАТОРИКА РАЦИОНАЛЬНЫХ ЧИСЕЛ** ❌
 *   **Дерево Штерна-Броко**
     *   Построение и свойства
     *   Алгоритмы обхода и поиска
@@ -1760,7 +2602,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Задачи оптимального поиска
     *   Криптография и теория чисел
 
-#### **V. ТЕОРИЯ ПЕРЕЧИСЛЕНИЯ**
+#### **G. ТЕОРИЯ ПЕРЕЧИСЛЕНИЯ**
 *   **Лемма Бернсайда**
     *   Подсчёт объектов с учётом симметрий
     *   Применение к задачам раскраски
@@ -1768,7 +2610,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Производящие функции для перечисления с симметриями
     *   Приложения в химии и кристаллографии
 
-#### **VI. ВЕРОЯТНОСТНЫЕ МЕТОДЫ**
+#### **H. ВЕРОЯТНОСТНЫЕ МЕТОДЫ**
 *   **Дискретная теория вероятностей**
     *   Вероятностное пространство
     *   Случайные величины и распределения
@@ -1776,11 +2618,9 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Доказательство существования комбинаторных объектов
     *   Ожидание и вероятность существования
 
----
+### **V. ДИСКРЕТНАЯ МАТЕМАТИКА И МАТЕМАТИЧЕСКАЯ ЛОГИКА**
 
-### **ДИСКРЕТНАЯ МАТЕМАТИКА И МАТЕМАТИЧЕСКАЯ ЛОГИКА**
-
-#### **I. ТЕОРИЯ МНОЖЕСТВ И ОТНОШЕНИЯ**
+#### **A. ТЕОРИЯ МНОЖЕСТВ И ОТНОШЕНИЯ**
 *   **Основы теории множеств**
     *   Основные понятия теории множеств
     *   Диаграммы Эйлера-Венна
@@ -1798,7 +2638,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Обратное соответствие
     *   Композиция (суперпозиция) соответствий
 
-#### **II. МАТЕМАТИЧЕСКАЯ ЛОГИКА**
+#### **B. МАТЕМАТИЧЕСКАЯ ЛОГИКА**
 *   **Логика высказываний**
     *   Понятие формальной логики
     *   Логические парадоксы
@@ -1829,7 +2669,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Теоремы Гёделя о неполноте ФА
     *   Теорема Чёрча о неразрешимости ФА
 
-#### **III. БУЛЕВА АЛГЕБРА И ФУНКЦИИ**
+#### **C. БУЛЕВА АЛГЕБРА И ФУНКЦИИ**
 *   **Булевы функции**
     *   Понятие булевой функции, способы задания (таблицы истинности, вектор значений)
     *   Существенные и фиктивные переменные
@@ -1850,7 +2690,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
         *   **Карты Карно (Karnaugh Map Simplification)**
         *   **Метод Квайна-МакКласки (Quine-McCluskey)**
 
-#### **IV. ВЫЧИСЛИМОСТЬ И АЛГОРИТМИЧЕСКАЯ ЛОГИКА**
+#### **D. ВЫЧИСЛИМОСТЬ И АЛГОРИТМИЧЕСКАЯ ЛОГИКА**
 *   **Вычислимые функции**
     *   Понятие алгоритмически вычислимой функции
     *   Аксиоматическая теория вычислимых функций
@@ -1859,7 +2699,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   **Нечёткая логика (Fuzzy Logic)**
     *   **Fuzzy Operations** — операции над нечёткими множествами
 
-#### **V. АВТОМАТЫ И ФОРМАЛЬНЫЕ СИСТЕМЫ**
+#### **E. АВТОМАТЫ И ФОРМАЛЬНЫЕ СИСТЕМЫ**
 *   **Клеточные автоматы**
     *   **Одномерные (One Dimensional)** — элементарные клеточные автоматы
     *   **Двумерные:**
@@ -1869,11 +2709,9 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Модели транспортных потоков:**
         *   **Модель Нагеля-Шрекенберга (Nagel-Schreckenberg)**
 
----
+### **VI. МАТАНАЛИЗ**
 
-### **МАТАНАЛИЗ**
-
-#### **I. ВВЕДЕНИЕ В АНАЛИЗ: ПРЕДЕЛЫ И НЕПРЕРЫВНОСТЬ**
+#### **A. ВВЕДЕНИЕ В АНАЛИЗ: ПРЕДЕЛЫ И НЕПРЕРЫВНОСТЬ**
 *   **Основные понятия математического анализа**
 *   **Вещественные числа и теория множеств**
     *   Рациональные и действительные числа. Принцип полноты
@@ -1938,7 +2776,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Простейшие элементарные функции
     *   Построение элементарных функций
 
-#### **II. ДИФФЕРЕНЦИАЛЬНОЕ ИСЧИСЛЕНИЕ ФУНКЦИЙ ОДНОЙ ПЕРЕМЕННОЙ**
+#### **B. ДИФФЕРЕНЦИАЛЬНОЕ ИСЧИСЛЕНИЕ ФУНКЦИЙ ОДНОЙ ПЕРЕМЕННОЙ**
 *   **Производные и дифференциалы функции (часть 1)**
     *   Понятие производной, геометрический и физический смысл
     *   Понятие производной
@@ -1997,7 +2835,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Глобальные максимум и минимум функции на сегменте. Краевой экстремум
     *   Дополнение. Алгоритм отыскания экстремальных значений функции, использующий только значения этой функции
 
-#### **III. ИНТЕГРАЛЬНОЕ ИСЧИСЛЕНИЕ ФУНКЦИЙ ОДНОЙ ПЕРЕМЕННОЙ**
+#### **C. ИНТЕГРАЛЬНОЕ ИСЧИСЛЕНИЕ ФУНКЦИЙ ОДНОЙ ПЕРЕМЕННОЙ**
 *   **Первообразная функция и неопределенный интеграл**
     *   Первообразная и неопределенный интеграл
     *   Понятие первообразной функции и неопределенного интеграла
@@ -2045,7 +2883,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Признаки сходимости несобственных интегралов
     *   Абсолютная и условная сходимость
 
-#### **IV. МЕТРИЧЕСКИЕ ПРОСТРАНСТВА И ФУНКЦИИ НЕСКОЛЬКИХ ПЕРЕМЕННЫХ**
+#### **D. МЕТРИЧЕСКИЕ ПРОСТРАНСТВА И ФУНКЦИИ НЕСКОЛЬКИХ ПЕРЕМЕННЫХ**
 *   **Метрические и нормированные пространства**
     *   Метрические и нормированные пространства. Полнота в метрических пространствах. Лемма о вложенных шарах
     *   Непрерывные отображения и их свойства. Свойства непрерывных отображений на компакте
@@ -2079,7 +2917,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Условный экстремум, метод множителей Лагранжа
     *   Наибольшее и наименьшее значения функции в замкнутой области
 
-#### **V. РЯДЫ**
+#### **E. РЯДЫ**
 *   **Числовые ряды (часть 1)**
     *   Основные понятия (сходимость, сумма)
     *   Начальные сведения о числовых рядах. Критерий Коши для ряда. Необходимый признак сходимости
@@ -2113,7 +2951,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   **Применение рядов**
     *   Приближенное вычисление значений функций и интегралов
 
-#### **VI. КРАТНЫЕ, КРИВОЛИНЕЙНЫЕ И ПОВЕРХНОСТНЫЕ ИНТЕГРАЛЫ**
+#### **F. КРАТНЫЕ, КРИВОЛИНЕЙНЫЕ И ПОВЕРХНОСТНЫЕ ИНТЕГРАЛЫ**
 *   **Двойной интеграл (часть 1)**
     *   Понятие двойного интеграла, свойства
     *   Вычисление двойного интеграла (расстановка пределов)
@@ -2128,7 +2966,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Условия независимости КРИ-2 от пути интегрирования
     *   Восстановление функции по ее полному дифференциалу
 
-#### **VII. КОМПЛЕКСНЫЕ ЧИСЛА И ФУНКЦИИ КОМПЛЕКСНОГО ПЕРЕМЕННОГО (ТФКП)**
+#### **G. КОМПЛЕКСНЫЕ ЧИСЛА И ФУНКЦИИ КОМПЛЕКСНОГО ПЕРЕМЕННОГО (ТФКП)**
 *   **Комплексные числа**
     *   Алгебраическая, тригонометрическая и показательная формы
     *   Действия с комплексными числами
@@ -2141,7 +2979,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Дифференцирование ФКП, условия Коши-Римана
     *   Интегрирование ФКП
 
-#### **VII. ДИФФЕРЕНЦИАЛЬНЫЕ УРАВНЕНИЯ (ДУ)**
+#### **H. ДИФФЕРЕНЦИАЛЬНЫЕ УРАВНЕНИЯ (ДУ)**
 *   **Введение. Основные понятия**
     *   Основные понятия
     *   Задачи, приводящие к решению дифференциальных уравнений
@@ -2339,9 +3177,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
         *   Превращения энергии в колебательном контуре
         *   Механические колебания. Математический маятник
 
----
-
-#### **IX. ОПЕРАЦИОННОЕ ИСЧИСЛЕНИЕ**
+#### **I. ОПЕРАЦИОННОЕ ИСЧИСЛЕНИЕ**
 *   **Элементы операционного исчисления (часть 1)**
     *   Преобразование Лапласа
     *   Оригинал и изображение
@@ -2352,7 +3188,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   **Элементы операционного исчисления (часть 3)**
     *   Решение линейных ДУ и систем ДУ операционным методом
 
-#### **X. СПЕЦИАЛЬНЫЕ ФУНКЦИИ И ВЫЧИСЛИТЕЛЬНЫЕ АЛГОРИТМЫ**
+#### **J. СПЕЦИАЛЬНЫЕ ФУНКЦИИ И ВЫЧИСЛИТЕЛЬНЫЕ АЛГОРИТМЫ**
 *   **Специальные функции**
     *   **Все про тигонометрию**
     *   **Sin-Cos-Tg-Ctg, Sh-Ch-Th-Cth, Гудерман, Si(x), Ci(x)**
@@ -2364,11 +3200,9 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 *   **Исторические алгоритмы**
     *   **Zellers Congruence**
 
----
+### **VII. ТЕОРИЯ ВЕРОЯТНОСТЕЙ И МАТЕМАТИЧЕСКАЯ СТАТИСТИКА**
 
-### **ТЕОРИЯ ВЕРОЯТНОСТЕЙ И МАТЕМАТИЧЕСКАЯ СТАТИСТИКА**
-
-#### **I. ОСНОВЫ ТЕОРИИ ВЕРОЯТНОСТЕЙ**
+#### **A. ОСНОВЫ ТЕОРИИ ВЕРОЯТНОСТЕЙ**
 *   **Комбинаторика и классическая вероятность**
     *   Перестановки, размещения, сочетания (с повторениями и без)
     *   Классическое определение вероятности
@@ -2385,7 +3219,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Локальная и интегральная теоремы Лапласа**
     *   Предельные теоремы (Пуассона)
 
-#### **II. АКСИОМАТИЧЕСКОЕ ПОСТРОЕНИЕ ТЕОРИИ ВЕРОЯТНОСТЕЙ** ← **НОВЫЙ РАЗДЕЛ**
+#### **B. АКСИОМАТИЧЕСКОЕ ПОСТРОЕНИЕ ТЕОРИИ ВЕРОЯТНОСТЕЙ** ← **НОВЫЙ РАЗДЕЛ**
 *   **Вероятностное пространство**
     *   **Тройка Колмогорова (Ω, F, P)**
     *   Алгебры и **σ-алгебры событий**, примеры
@@ -2398,7 +3232,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Теорема Каратеодори** о продолжении меры
     *   **Вторая теорема о π-λ-системах**
 
-#### **III. СЛУЧАЙНЫЕ ВЕЛИЧИНЫ И ИХ ХАРАКТЕРИСТИКИ**
+#### **C. СЛУЧАЙНЫЕ ВЕЛИЧИНЫ И ИХ ХАРАКТЕРИСТИКИ**
 *   **Случайные величины в общих вероятностных пространствах**
     *   **Случайные величины, векторы и элементы**
     *   **Критерий измеримости** отображения
@@ -2424,7 +3258,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Показательное распределение**
     *   Распределения хи-квадрат, Стьюдента
 
-#### **IV. МАТЕМАТИЧЕСКОЕ ОЖИДАНИЕ И ИНТЕГРИРОВАНИЕ** ← **Расширенный раздел**
+#### **D. МАТЕМАТИЧЕСКОЕ ОЖИДАНИЕ И ИНТЕГРИРОВАНИЕ** ← **Расширенный раздел**
 *   **Построение математического ожидания**
     *   Простые случайные величины и матожидание для них
     *   Неотрицательные случайные величины и приближение простыми
@@ -2438,7 +3272,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Вычисление E[g(ξ)] для абсолютно непрерывной величины
     *   Распределение случайной величины, порождённая σ-алгебра
 
-#### **V. МНОГОМЕРНЫЕ РАСПРЕДЕЛЕНИЯ И НЕЗАВИСИМОСТЬ**
+#### **E. МНОГОМЕРНЫЕ РАСПРЕДЕЛЕНИЯ И НЕЗАВИСИМОСТЬ**
 *   **Многомерные функции распределения**
     *   Функция распределения в Rⁿ, её свойства
     *   Совместная функция распределения случайных величин
@@ -2457,7 +3291,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Формула свертки** для плотности суммы независимых случайных величин
     *   **Теорема о матожидании произведения** независимых величин
 
-#### **VI. ЧИСЛОВЫЕ ХАРАКТЕРИСТИКИ И НЕРАВЕНСТВА**
+#### **F. ЧИСЛОВЫЕ ХАРАКТЕРИСТИКИ И НЕРАВЕНСТВА**
 *   **Дисперсия и ковариация**
     *   **Дисперсия** случайной величины, её свойства
     *   **Ковариация** двух случайных величин
@@ -2469,7 +3303,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Неравенство Йенсена**
     *   **Неравенство Гёльдера** и **неравенство Минковского**
 
-#### **VII. ПРЕДЕЛЬНЫЕ ТЕОРЕМЫ**
+#### **G. ПРЕДЕЛЬНЫЕ ТЕОРЕМЫ**
 *   **Закон больших чисел**
     *   **Неравенство Чебышева**
     *   **Теорема Чебышева**
@@ -2478,7 +3312,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Теорема Ляпунова**
     *   Нормальная аппроксимация биномиального распределения
 
-#### **VIII. МАТЕМАТИЧЕСКАЯ СТАТИСТИКА**
+#### **H. МАТЕМАТИЧЕСКАЯ СТАТИСТИКА**
 *   **Описательная статистика**
     *   **Average Mean** (среднее арифметическое)
     *   **Average Median** (медиана)
@@ -2500,7 +3334,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Jaccard Similarity** (коэффициент Жаккара)
     *   **Entropy** (энтропия)
 
-#### **IX. ВЕРОЯТНОСТНЫЕ АЛГОРИТМЫ И МЕТОДЫ**
+#### **I. ВЕРОЯТНОСТНЫЕ АЛГОРИТМЫ И МЕТОДЫ**
 *   **Методы Монте-Карло**
     *   **Monte Carlo** (общая схема)
     *   **Monte Carlo Dice** (броски костей)
@@ -2522,13 +3356,15 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 
 ---
 
-#### **GRAPHICS**
+### **VIII. ДОПОЛНИТЕЛЬНО**
+
+#### **A. GRAPHICS**
     Bezier Curve
     Butterfly Pattern
     Digital Differential Analyzer Line
     Vector3 For 2D Rendering
 
-#### **Шифры**
+#### **B. ШИФРЫ**
     A1Z26
     Affine Cipher
     Atbash
@@ -2577,7 +3413,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     Vigenere Cipher
     Xor Cipher
 
-#### **Digital Image Processing**
+#### **C. DIGITAL IMAGE PROCESSING**
     Change Brightness
     Change Contrast
     Convert To Negative
@@ -2609,9 +3445,9 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 
 ---
 
-### **6. ГЕОМЕТРИЯ**
+## **6. ГЕОМЕТРИЯ**
 
-#### **МАТЕМАТИЧЕСКИЕ ОСНОВЫ ГЕОМЕТРИИ**
+### **I. МАТЕМАТИЧЕСКИЕ ОСНОВЫ ГЕОМЕТРИИ**
 *   **Аксиоматика элементарной геометрии**
     *   **Аксиомы Евклида**
     *   **Схема доказательства** непротиворечивости
@@ -2637,7 +3473,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Check Polygon, Points Are Collinear 3D**
     *   **Dodecahedron**
 
-#### **ВЕКТОРНАЯ АЛГЕБРА**
+### **II. ВЕКТОРНАЯ АЛГЕБРА**
 *   **Векторы и линейные операции**
     *   **Векторы, действия над векторами**
     *   **Векторные пространства V₁, V₂, V₃**
@@ -2675,7 +3511,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Площадь параллелограмма и треугольника**
     *   **Объем параллелепипеда и тетраэдра**
 
-#### **IX. АНАЛИТИЧЕСКАЯ ГЕОМЕТРИЯ + линал**
+### **III. АНАЛИТИЧЕСКАЯ ГЕОМЕТРИЯ + линал**
 *   **Геометрия на плоскости**
     *   **Прямоугольная система координат**, **расстояние между точками**
     *   **Деление отрезка в данном отношении**
@@ -2784,7 +3620,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Изометрия**
 *   **Transformations 2D** (2D преобразования)
 
-#### **X. ЕВКЛИДОВЫ И УНИТАРНЫЕ ПРОСТРАНСТВА + линал**
+### **IV. ЕВКЛИДОВЫ И УНИТАРНЫЕ ПРОСТРАНСТВА + линал**
 *   **Основные понятия**
     *   **Евклидово пространство**, **скалярное произведение**
     *   **Длина вектора**
@@ -2828,7 +3664,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Смешанное произведение**, критерий компланарности
     *   **Расстояние в евклидовом пространстве**
 
-#### **XI. ЛИНЕЙНЫЕ ОПЕРАТОРЫ В ЕВКЛИДОВОМ ПРОСТРАНСТВЕ + линал**
+### **V. ЛИНЕЙНЫЕ ОПЕРАТОРЫ В ЕВКЛИДОВОМ ПРОСТРАНСТВЕ + линал**
 *   **Сопряжённые операторы**
     *   **Сопряжённое отображение**: определение, существование и единственность
     *   **Матрица сопряжённого отображения**
@@ -2863,7 +3699,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Фробениусова норма матрицы**
     *   **Теорема Эккарта-Янга** о низкоранговом приближении
 
-#### **XII. ПРОДВИНУТЫЕ РАЗДЕЛЫ ЛИНЕЙНОЙ АЛГЕБРЫ** ✅ **НОВЫЙ РАЗДЕЛ**
+### **VII. ПРОДВИНУТЫЕ РАЗДЕЛЫ ЛИНЕЙНОЙ АЛГЕБРЫ** ✅ **НОВЫЙ РАЗДЕЛ**
 *   **Тензорное исчисление** ✅ **ИНТЕГРИРОВАНО**
     *   **Тензоры как полилинейные функционалы**
     *   **Инвариантность координатного представления**
@@ -2875,7 +3711,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   **Тензоры в криволинейных координатах**
     *   **Ковариантные и контравариантные компоненты**
 
-#### **ГЕОМЕТРИЧЕСКИЕ ПРЕОБРАЗОВАНИЯ**
+### **VII. ГЕОМЕТРИЧЕСКИЕ ПРЕОБРАЗОВАНИЯ**
 Преобразования можно выполнять в (векторная алгебра, на плоскости, в пространстве, линейная алгебра, ...)
 *   **Основные преобразования**
     *   Линейные преобразования и их свойства
@@ -2929,7 +3765,7 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Преобразования Лоренца
     *   Канонические преобразования
 
-#### **МНОГОУГОЛЬНИКИ и Вычислительная геометрия**
+### **VIII. МНОГОУГОЛЬНИКИ И ВЫЧИСЛИТЕЛЬНАЯ ГЕОМЕТРИЯ**
 *   **БАЗОВЫЕ ХАРАКТЕРИСТИКИ И СВОЙСТВА**
     *   Периметр многоугольника
     *   Площадь многоугольника (формула шнуровки, трапециевидный метод)
@@ -2981,14 +3817,25 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Применение для построения ядра
     *   Выпуклая оболочка как пересечение полуплоскостей
 *   **ПРОСТРАНСТВЕННЫЕ СТРУКТУРЫ**
+    *   **Деревья для геометрических запросов:**
     *   **KD-tree или k-d дерево** для k-ближайших соседей
         *   Build Kdtree
         *   Nearest Neighbour Search
         *   Kd Node
     *   **Quadtree** для пространственного разбиения
+    *   **Octree** (для 3D пространства)
     *   **BSP-деревья**
     *   **Range tree** для ортогонального поиска
-    *   **Segment tree** для работы с отрезками
+    *   **Nearest Neighbor Search:**
+        *   Ближайшая точка к запросу
+        *   kd-tree, ball tree, cover tree
+    *   **Orthogonal Range Search:**
+        *   Для ось-параллельных запросов
+        *   Segment tree, Fenwick tree
+    *   **ПВГ (Полигональная сетка):**
+        *   DCEL (Doubly Connected Edge List)
+        *   Winged-edge data structure
+    *   **Segment tree для отрезков на прямой** для работы с отрезками
     *   **Диаграмма Вороного с метриками L1, L∞** ← **ПЕРЕМЕСТИТЬ СЮДА**
     *   **R-дерево** ← **ПЕРЕМЕСТИТЬ СЮДА**
 *   **ПОИСК И ЛОКАЛИЗАЦИЯ**
@@ -3049,178 +3896,184 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 
 ---
 
-### **7. ХЭШИРОВАНИЕ - ПОЛНЫЙ КУРС ОТ ОСНОВ ДО ПРОДВИНУТЫХ ТЕХНИК**
+## **7. ХЭШИРОВАНИЕ - ПОЛНЫЙ КУРС ОТ ОСНОВ ДО ПРОДВИНУТЫХ ТЕХНИК**
 
-#### **0. ОСНОВЫ ХЕШИРОВАНИЯ - ОТ ТЕОРИИ К ПРАКТИКЕ**
+### **I. ОСНОВЫ ХЕШИРОВАНИЯ - ОТ ТЕОРИИ К ПРАКТИКЕ**
 *   **Введение в хеширование**
     *   **Что такое хеш-функция** - преобразование данных в фиксированный размер
     *   **Основные применения** - хеш-таблицы, проверка целостности, криптография
     *   **Ключевые свойства** - детерминированность, равномерность, скорость, устойчивость к коллизиям
-
 *   **Принципы работы хеш-функций**
     *   **Процесс хеширования** - разбиение на блоки, компрессия, финальное преобразование
     *   **Математические основы** - модульная арифметика, битовые операции, теория вероятностей
     *   **Метрики качества** - равномерность распределения, скорость вычисления, стойкость к коллизиям
-
 *   **Практика в C++**
     *   **Стандартные средства** - std::hash, unordered_map, unordered_set
     *   **Создание кастомных хешей** - специализация std::hash, функторы, комбинирование полей
     *   **Типичные задачи** - поиск дубликатов, группировка данных, кэширование
 
-#### **I. МАТЕМАТИЧЕСКИЕ ОСНОВЫ И ТЕОРИЯ**
+### **II. МАТЕМАТИЧЕСКИЕ ОСНОВЫ И ТЕОРИЯ**
 *   **Теоретико-числовые основы**
     *   **Модульная арифметика** - свойства, обратные элементы, китайская теорема об остатках
     *   **Конечные поля** - GF(p), GF(pⁿ), арифметика в полях Галуа
     *   **Простые числа** - распределение, тесты простоты, использование в хешировании
-
+        *   *Тесты простоты* - детерминированные, вероятностные (Миллера-Рабина)
+        *   *Генерация простых чисел* - для хеш-таблиц оптимального размера
 *   **Теория вероятностей и статистика**
     *   **Парадокс дней рождений** - точные формулы и асимптотики для коллизий
     *   **Статистические тесты** - χ²-тест, тесты на равномерность, автокорреляцию
     *   **Модели случайных процессов** - марковские цепи, случайные блуждания
-
 *   **Алгебраические структуры**
     *   **Группы, кольца, поля** - формальные определения и свойства
     *   **Линейная алгебра** - матричные представления хеш-функций
     *   **Булева алгебра** - S-блоки, булевы функции, критерии нелинейности
 
-#### **II. АЛГОРИТМЫ И КОНСТРУКЦИИ ХЕШ-ФУНКЦИЙ**
+### **III. ХЭШ-ТАБЛИЦЫ: РЕАЛИЗАЦИИ И СТРАТЕГИИ РАЗРЕШЕНИЯ КОЛЛИЗИЙ**
+*   **Структура хэш-таблицы**
+    *   Hash Table, Hash Map `unordered_map`, `unordered_set`
+    *   **Массив бакетов (buckets)** - базовое хранение
+    *   **Фактор загрузки (load factor)** - оптимальные значения, автоматическое рехеширование
+    *   **Динамическое масштабирование** - увеличение/уменьшение размера таблицы
+*   **Методы разрешения коллизий**
+    *   **Separate Chaining (Цепочки)** - связные списки в каждом бакете
+        *   *Hash Table With Linked List* - классическая реализация
+        *   *Оптимизации* - переупорядочивание, объединение списков
+    *   **Open Addressing (Открытая адресация)** - поиск свободной ячейки
+        *   *Linear Probing (Линейное пробирование)* - последовательный поиск
+        *   *Quadratic Probing (Квадратичное пробирование)* - уменьшение кластеризации
+        *   *Double Hashing (Двойное хэширование)* - использование второй хэш-функции
+        *   *Cuckoo Hashing (Хэширование кукушки)* - несколько таблиц и функций
+*   **Продвинутые реализации**
+    *   **Perfect Hashing** - хэширование без коллизий для статических множеств
+    *   **Universal Hashing** - случайный выбор из семейства хэш-функций
+    *   **Robin Hood Hashing** - "заимствование" у богатых для бедных пробирований
+    *   **Hopscotch Hashing** - локальность данных для кэш-эффективности
+*   **Тестирование и бенчмаркинг**
+    *   **Test Hash Map** - модульные и интеграционные тесты
+    *   **Производительность** - сравнение стратегий при разных нагрузках
+    *   **Память** - анализ использования памяти разных реализаций
+
+### **IV. ВЕРОЯТНОСТНЫЕ СТРУКТУРЫ ДАННЫХ**
+*   **Фильтр Блума и его варианты**
+    *   **Базовый Bloom Filter** - теория, вероятностный анализ, оптимизация параметров
+    *   **Counting Bloom Filter** - поддержка удалений, анализ ошибок
+    *   **Scalable Bloom Filter** - адаптация к растущим наборам данных
+    *   **Bloomier Filter** - ассоциативный фильтр Блума
+*   **Sketch-структуры**
+    *   **Count-Min Sketch** - теория, гарантии точности, оптимизация памяти
+    *   **Count-Sketch** - улучшенная версия с лучшими гарантиями
+    *   **HyperLogLog** - оценка кардинальности, статистический анализ
+    *   **AMS Sketch** - оценка моментов распределения
+*   **Продвинутые вероятностные структуры**
+    *   **Quotient Filter** - эффективное использование памяти
+    *   **Cuckoo Filter** - лучшая производительность чем фильтр Блума
+
+### **V. АЛГОРИТМЫ И КОНСТРУКЦИИ ХЕШ-ФУНКЦИЙ**
 *   **Универсальные семейства хеш-функций**
     *   **Теорема Картера-Вегмана** - конструкция и доказательство
     *   **Полиномиальное хеширование** - над конечными полями, свойства распределения
-    *   **Tabulation hashing** - теоретические гарантии и практическая эффективность
-
+    *   **Tabulation Hashing** - теоретические гарантии и практическая эффективность
 *   **Криптографические конструкции**
     *   **Merkle-Damgård** - структура, свойства, уязвимости к атакам расширения
-    *   **Sponge construction** - поглощение, сжатие, теоретическая емкость
+    *   **Sponge Construction** - поглощение, сжатие, теоретическая емкость
     *   **HAIFA** - улучшенная конструкция с счетчиком
     *   **Криптографические хеш-функции** 
-        *   **Md5** - Message Digest 5, 128-битный, уязвим к коллизиям
-        *   **Sha1** - Secure Hash Algorithm 1, 160-битный, криптографически сломан
-        *   **Sha256** - Secure Hash Algorithm 256-битный, часть семейства SHA-2
-
+        *   **MD5** - Message Digest 5, 128-битный, уязвим к коллизиям
+        *   **SHA-1** - Secure Hash Algorithm 1, 160-битный, криптографически сломан
+        *   **SHA-256** - Secure Hash Algorithm 256-битный, часть семейства SHA-2
 *   **Некриптографические хеш-функции**
     *   **Djb2** - алгоритм Дэниела Бернстайна, умножение на 33
     *   **Sdbm** - вариант используемый в SDBM database
     *   **Elf** - хеш-функция из Executable and Linkable Format
     *   **Adler32** - контрольная сумма, используется в zlib
     *   **Fletcher16** - алгоритм контрольной суммы
-
 *   **Специализированные алгоритмы**
-    *   **Rolling hashes** - полиномиальные, Rabin-Karp, циклические
-    *   **Locality-sensitive hashing** - MinHash, SimHash, случайные проекции
-    *   **Perceptual hashing** - pHash, dHash, wHash для изображений
+    *   **Rolling Hashes** - полиномиальные, Rabin-Karp, циклические
+    *   **Locality-Sensitive Hashing** - MinHash, SimHash, случайные проекции
+    *   **Perceptual Hashing** - pHash, dHash, wHash для изображений
     *   **Luhn** - алгоритм проверки чисел (кредитные карты)
     *   **Hamming Code** - код Хэмминга для обнаружения и исправления ошибок
     *   **Chaos Machine** - теоретическая модель на основе хаотических систем
-    *   **Enigma Machine** - историческая шифровальная машина WWII
 
-#### **III. ВЕРОЯТНОСТНЫЕ СТРУКТУРЫ ДАННЫХ**
-*   **Фильтр Блума и его варианты**
-    *   **Базовый фильтр Блума** - теория, вероятностный анализ, оптимизация параметров
-    *   **Counting Bloom filter** - поддержка удалений, анализ ошибок
-    *   **Scalable Bloom filter** - адаптация к растущим наборам данных
-
-*   **Sketch-структуры**
-    *   **Count-Min Sketch** - теория, гарантии точности, оптимизация памяти
-    *   **Count-Sketch** - улучшенная версия с лучшими гарантиями
-    *   **HyperLogLog** - оценка кардинальности, статистический анализ
-
-*   **Продвинутые вероятностные структуры**
-    *   **Bloomier filter** - ассоциативный фильтр Блума
-    *   **Quotient filter** - эффективное использование памяти
-    *   **Cuckoo filter** - лучшая производительность чем фильтр Блума
-
-#### **IV. КРИПТОГРАФИЧЕСКИЕ АСПЕКТЫ**
+### **VI. КРИПТОГРАФИЧЕСКИЕ АСПЕКТЫ**
 *   **Криптоанализ хеш-функций**
     *   **Дифференциальный криптоанализ** - дифференциальные пути, активные S-блоки
     *   **Линейный криптоанализ** - линейные аппроксимации, Piling-up lemma
     *   **Алгебраические атаки** - системы уравнений, базисы Грёбнера
-
 *   **Современные криптографические хеши**
     *   **SHA-2 семейство** - SHA-256, SHA-512, структура раундов, константы
     *   **SHA-3 (Keccak)** - sponge construction, преобразования θ, ρ, π, χ, ι
     *   **BLAKE3** - дерево Меркла, параллелизм, производительность
-
 *   **Специализированные криптографические примитивы**
     *   **Argon2** - memory-hard функции для хеширования паролей
     *   **HMAC** - хеш-блоки для аутентификации сообщений
     *   **HKDF** - производные ключи из главного ключа
 
-#### **V. ОПТИМИЗАЦИЯ И ВЫСОКОПРОИЗВОДИТЕЛЬНЫЕ РЕАЛИЗАЦИИ**
+### **VII. ОПТИМИЗАЦИЯ И ВЫСОКОПРОИЗВОДИТЕЛЬНЫЕ РЕАЛИЗАЦИИ**
 *   **Алгоритмические оптимизации**
-    *   **Lookup tables** - предвычисленные таблицы для быстрого доступа
-    *   **Loop unrolling** - развертывание циклов для уменьшения накладных расходов
-    *   **Branchless programming** - устранение условных переходов
-
+    *   **Lookup Tables** - предвычисленные таблицы для быстрого доступа
+    *   **Loop Unrolling** - развертывание циклов для уменьшения накладных расходов
+    *   **Branchless Programming** - устранение условных переходов
 *   **Аппаратные оптимизации**
     *   **SIMD программирование** - векторизация с использованием AVX2, AVX-512
     *   **Аппаратные ускорения** - AES-NI, SHA-NI, CRC32 инструкции
     *   **Кэш-оптимизация** - выравнивание данных, предвыборка, локализация
-
 *   **Распределенные и параллельные реализации**
     *   **Многопоточные хеш-функции** - lock-free структуры, атомарные операции
     *   **GPU ускорение** - массово-параллельные реализации
     *   **Распределенное хеширование** - консистентное хеширование, шардирование
 
-#### **VI. СПЕЦИАЛИЗИРОВАННЫЕ ПРИМЕНЕНИЯ**
+### **VIII. СПЕЦИАЛИЗИРОВАННЫЕ ПРИМЕНЕНИЯ**
 *   **Хеширование сложных структур данных**
     *   **Графы и сети** - канонические формы, инварианты изоморфизма
     *   **Геометрические объекты** - точки, векторы, полигоны, с сохранением свойств
     *   **Множества и последовательности** - порядко-независимые хеши
-
 *   **Базы данных и системы хранения**
     *   **Индексирование** - хеш-индексы, их преимущества и ограничения
     *   **Дедупликация** - обнаружение дублирующихся данных
     *   **Версионность** - хеши для отслеживания изменений
-
 *   **Сетевые протоколы и распределенные системы**
     *   **Консистентное хеширование** - теория, реализации, балансировка нагрузки
     *   **DHT (Distributed Hash Tables)** - Chord, Kademlia, Pastry
     *   **Верифицимые вычисления** - Меркловы деревья, доказательства включения
 
-#### **VII. ФОРМАЛЬНАЯ ВЕРИФИКАЦИЯ И АНАЛИЗ**
+### **IX. ФОРМАЛЬНАЯ ВЕРИФИКАЦИЯ И АНАЛИЗ**
 *   **Доказуемая безопасность**
     *   **Модель случайного оракула** - предположения и ограничения
-    *   **Standard model security** - доказательства в стандартной модели
-    *   **Game-based proofs** - доказательства безопасности через игры
-
+    *   **Standard Model Security** - доказательства в стандартной модели
+    *   **Game-based Proofs** - доказательства безопасности через игры
 *   **Автоматизированная верификация**
     *   **Coq, Isabelle** - формальная верификация реализаций
-    *   **Model checking** - проверка моделей хеш-функций
-    *   **Symbolic execution** - символьное выполнение для поиска уязвимостей
-
+    *   **Model Checking** - проверка моделей хеш-функций
+    *   **Symbolic Execution** - символьное выполнение для поиска уязвимостей
 *   **Статический и динамический анализ**
     *   **Fuzzing** - автоматическое тестирование на корректность
-    *   **Side-channel analysis** - анализ времени выполнения, энергопотребления
-    *   **Differential testing** - сравнение различных реализаций
+    *   **Side-channel Analysis** - анализ времени выполнения, энергопотребления
+    *   **Differential Testing** - сравнение различных реализаций
 
-#### **VIII. БУДУЩИЕ НАПРАВЛЕНИЯ И ИССЛЕДОВАНИЯ**
+### **X. БУДУЩИЕ НАПРАВЛЕНИЯ И ИССЛЕДОВАНИЯ**
 *   **Постквантовая криптография**
-    *   **Устойчивость к квантовым атакам** - Grover's algorithm, коллизионные атаки
-    *   **Hash-based signatures** - XMSS, SPHINCS+, состояния и безопасность
-    *   **Lattice-based хеши** - конструкции на основе решеток
-
+    *   **Устойчивость к квантовым атакам** - Grover's Algorithm, коллизионные атаки
+    *   **Hash-based Signatures** - XMSS, SPHINCS+, состояния и безопасность
+    *   **Lattice-based Хеши** - конструкции на основе решеток
 *   **Новые парадигмы хеширования**
     *   **Гомоморфное хеширование** - свойства и применения
-    *   **Zero-knowledge хеши** - для доказательств с нулевым разглашением
+    *   **Zero-knowledge Хеши** - для доказательств с нулевым разглашением
     *   **Биометрическое хеширование** - с сохранением приватности
-
 *   **Экзотические применения**
     *   **Квантовое хеширование** - использование квантовых эффектов
     *   **Нейросетевые хеш-функции** - обученные модели для хеширования
     *   **Биологическое хеширование** - ДНК-based хеш-функции
 
-#### **IX. ПРАКТИКУМ И РЕАЛИЗАЦИИ**
+### **XI. ПРАКТИКУМ И РЕАЛИЗАЦИИ**
 *   **Эталонные реализации**
     *   **Академические реализации** - четкие, верифицируемые, документированные
     *   **Промышленные реализации** - оптимизированные, надежные, безопасные
     *   **Исследовательские прототипы** - экспериментальные, модифицируемые
-
 *   **Тестовые стенды и бенчмарки**
-    *   **Стандартизированные тесты** - NIST test suite, Dieharder, TestU01
+    *   **Стандартизированные тесты** - NIST Test Suite, Dieharder, TestU01
     *   **Специализированные бенчмарки** - для конкретных применений
     *   **Сравнительный анализ** - производительность, безопасность, качество
-
 *   **Инструменты разработки**
     *   **Профилировщики** - анализ производительности и оптимизация
     *   **Отладчики** - поиск и исправление ошибок
@@ -3228,412 +4081,1200 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 
 ---
 
-### **8. ТЕОРИЯ ГРАФОВ**
+## **8. ТЕОРИЯ ГРАФОВ**
 
-#### **БАЗОВЫЕ ПОНЯТИЯ И ОБХОДЫ**
-*   **Хранение графов**
-    Graph Adjacency List - списки смежности
-    Graph Adjacency Matrix - матрица
-    Graph List - список ребер
-    All Types of Graphs, Basic Graphs
-    Directed And Undirected Weighted Graph
-*   **Поиск в глубину (DFS)**
-    Depth First Search
-    Depth First Search 2
-    *   **Топологическая сортировка**
-        G Topological Sort
-        Kahns Algorithm Topo
-        Kahns Algorithm Long
-    *   **Check Cycle**
-    *   **Connected Components**
-    Deep Clone Graph
-*   **Поиск в ширину (BFS)**
-    Breadth First Search
-    Breadth First Search 2
-    Breadth First Search Shortest Path
-    Breadth First Search Shortest Path 2
-    Breadth First Search Zero One Shortest Path
-    Bidirectional BFS
-    Bidirectional Search
-    *   **BFS 0-1**
-    *   **BFS 0-k**
-    *   **Многопоточный BFS**
+### **I. БАЗОВЫЕ ПОНЯТИЯ, ПРЕДСТАВЛЕНИЯ И ОБХОДЫ**
 
-#### **СВЯЗНОСТЬ**
-*   **Поиск компонент связности**
-❌ Рёберная связность - ОТСУТСТВУЕТ
-❌ Вершинная связность - ОТСУТСТВУЕТ
-❌ Построение графа с заданной связностью - ОТСУТСТВУЕТ
-*   **Двудольные графы и раскраски**
-    Check Bipatrite
-    ❌ Покраска рёбер дерева - ОТСУТСТВУЕТ
-    Coloring
-*   **Мосты и точки сочленения**
-    Articulation Points, Finding Bridges
-*   **Компоненты сильной связности (SCC)**
-    *   Алгоритм Косарайю
-    *   Алгоритм Тарьяна
-    Strongly Connected Components
-*   **2-SAT**
-*   **Динамическая связность**
-*   **Двусвязные компоненты**
-*   **Ребра связности**
-*   **Алгоритмы случайного сокращения** Karger
-❌ Поиск мостов в режиме онлайн за O(1) - ОТСУТСТВУЕТ
+#### **A. ОСНОВНЫЕ ОПРЕДЕЛЕНИЯ И КЛАССИФИКАЦИЯ**
+*   **Типы графов:**
+    *   Directed/Undirected (ориентированные/неориентированные)
+    *   Weighted/Unweighted (взвешенные/невзвешенные)
+    *   Simple/Multigraph (простые/мультиграфы)
+    *   Complete/Empty (полные/пустые)
+    *   Bipartite/General (двудольные/общие)
+    *   Connected/Disconnected (связные/несвязные)
+    *   Acyclic/Cyclic (ациклические/циклические)
+    *   All Types of Graphs, Basic Graphs
+    *   Directed And Undirected Weighted Graph
 
-#### **КРАТЧАЙШИЕ ПУТИ**
-*   **Пути в ациклических графах (DAG)**
-*   Кратчайшие пути из одной вершины:
-    *   **Алгоритм Дейкстры**
-        Dijkstra, Dijkstra 2, Dijkstra Algorithm, Dijkstra Alternate, Dijkstra Binary Grid, Bi Directional Dijkstra
-    *   **Алгоритм Форда-Беллмана**
-    *   **Алгоритм SPFA**
-*   Кратчайшие пути между всеми парами вершин:
-    *   Алгоритм Флойда-Уоршелла
-    ❌ Подсчёт путей фиксированной длины - ОТСУТСТВУЕТ
-*   Алгоритм Джонсона
-*   **Алгоритм A***
-    A-star, Bidirectional A Star, Multi Heuristic Astar
-    Greedy Best First
-❌ Алгоритм Левита - ОТСУТСТВУЕТ
+#### **B. ПРЕДСТАВЛЕНИЯ ГРАФОВ В ПАМЯТИ**
+*   **Списки смежности (Adjacency List):**
+    *   Graph Adjacency List
+    *   Dynamic adjacency lists
+    *   Compressed adjacency lists
+*   **Матрица смежности (Adjacency Matrix):**
+    *   Graph Adjacency Matrix
+    *   Bit matrix representation
+*   **Список рёбер (Edge List):**
+    *   Graph List
+    *   Sorted edge list
+*   **Специализированные представления:**
+    *   **CSR/CSC** (Compressed Sparse Row/Column)
+    *   **Forward Star**
+    *   **Incidence Matrix**
+    *   **Implicit Graph Representation**
+*   **Сравнение представлений:**
+    *   Space complexity
+    *   Time complexity для различных операций
 
-#### **ОСТОВНЫЕ ДЕРЕВЬЯ**
-*   **Алгоритм Прима**
-    Prim
-    Minimum Spanning Tree Prims
-    Minimum Spanning Tree Prims2
-*   **Алгоритм Краскала**
-    Minimum Spanning Tree Kruskal
-    Minimum Spanning Tree Kruskal2 (with DSU)
-*  **Tests**
-    Test Min Spanning Tree Kruskal
-    Test Min Spanning Tree Prim
-*   **Алгоритм Борувки**
-    Boruvka
-    Minimum Spanning Tree Boruvka
-*   **Минимальное остовное дерево (MST)**
-*   **Второе по минимальности остовное дерево**
-❌ Обратная задача SSSP - ОТСУТСТВУЕТ
-❌ Обратная задача MST - ОТСУТСТВУЕТ
-❌ Матричная теорема Кирхгофа - ОТСУТСТВУЕТ
-❌ Код Прюфера, формула Кэли - ОТСУТСТВУЕТ
+#### **C. ПОИСК В ГЛУБИНУ (DEPTH-FIRST SEARCH - DFS)**
+*   **Базовые реализации:**
+    *   Depth First Search
+    *   Depth First Search 2
+    *   Recursive/Iterative DFS
+*   **Применения DFS:**
+    *   **Проверка на циклы:**
+        *   Check Cycle в ориентированных графах
+        *   Check Cycle в неориентированных графах
+    *   **Топологическая сортировка:**
+        *   G Topological Sort
+        *   Kahns Algorithm Topo
+        *   Kahns Algorithm Long
+    *   **Компоненты связности:**
+        *   Connected Components (Undirected)
+        *   Strongly Connected Components (Directed)
+    *   **Копирование графов:**
+        *   Deep Clone Graph
+    *   **Другие применения:**
+        *   Articulation Points (точки сочленения)
+        *   Finding Bridges (мосты)
+        *   Bipartite checking через DFS
+*   **Продвинутые техники DFS:**
+    *   **Iterative Deepening DFS (IDDFS)**
+    *   **DFS with timestamping** (discovery/finish times)
+    *   **DFS Tree/DFS Forest**
+    *   **Back Edges, Forward Edges, Cross Edges**
 
-#### **ЭЙЛЕРОВЫ ГРАФЫ**
-#### **ОСНОВНЫЕ ПОНЯТИЯ И ОПРЕДЕЛЕНИЯ**
-*   **Эйлеров цикл** - цикл, проходящий через каждое ребро графа ровно один раз
-*   **Эйлеров путь** - путь, проходящий через каждое ребро графа ровно один раз
-*   **Эйлеров граф** - граф, содержащий эйлеров цикл
-*   **Полуэйлеров граф** - граф, содержащий эйлеров путь, но не содержащий эйлеров цикл
-#### **КРИТЕРИИ ЭЙЛЕРОВОСТИ**
+#### **D. ПОИСК В ШИРИНУ (BREADTH-FIRST SEARCH - BFS)**
+*   **Базовые реализации:**
+    *   Breadth First Search
+    *   Breadth First Search 2
+*   **BFS для кратчайших путей:**
+    *   Breadth First Search Shortest Path
+    *   Breadth First Search Shortest Path 2
+    *   Breadth First Search Zero One Shortest Path
+    *   Unweighted shortest paths
+*   **Продвинутые варианты BFS:**
+    *   **Bidirectional BFS:**
+        *   Bidirectional BFS
+        *   Bidirectional Search
+        *   Meet-in-the-middle search
+    *   **0-1 BFS:**
+        *   BFS 0-1 для графов с рёбрами веса 0/1
+        *   Использование deque
+    *   **BFS 0-k:**
+        *   Для графов с ограниченными весами рёбер
+    *   **Многопоточный BFS:**
+        *   Parallel BFS
+        *   Level-synchronous BFS
+    *   **BFS на state-space graphs**
+*   **Применения BFS:**
+    *   Shortest path в невзвешенных графах
+    *   Connected components
+    *   Bipartite checking
+    *   Web crawling
+
+### **II. СВЯЗНОСТЬ В ГРАФАХ**
+
+#### **A. КОМПОНЕНТЫ СВЯЗНОСТИ**
 *   **Для неориентированных графов:**
-    *   Эйлеров цикл: все вершины имеют четную степень
-    *   Эйлеров путь: ровно 0 или 2 вершины имеют нечетную степень
+    *   Connected Components
+    *   Counting connected components
+    *   **Biconnected Components** (двусвязные компоненты):
+        *   Двусвязность через точки сочленения
+        *   Алгоритм Тарьяна для biconnected components
+    *   **Edge Biconnected Components**
 *   **Для ориентированных графов:**
-    *   Эйлеров цикл: полустепень захода равна полустепени исхода для всех вершин
-    *   Эйлеров путь: одна вершина имеет полустепень исхода на 1 больше полустепени захода, другая - на 1 меньше, остальные равны
-#### **АЛГОРИТМЫ ПОИСКА ЭЙЛЕРОВА ЦИКЛА**
-*   **Алгоритм Флёри** - пошаговый алгоритм с избеганием мостов
-*   **Алгоритм Хьерхольцера** - эффективный алгоритм с использованием стека
-*   **Рекурсивные алгоритмы** поиска эйлерова цикла
-#### **ЧАСТНЫЕ СЛУЧАИ И ОБОБЩЕНИЯ**
-*   **Мультиграфы** и эйлеровы пути в них
-*   **Смешанные графы** (содержащие и ориентированные и неориентированные ребра)
-*   **Взвешенные графы** и оптимальные эйлеровы пути
-#### **ИЕРАРХИЧЕСКИЕ ГРАФЫ И ДЕКОМПОЗИЦИЯ**
-*   **Иерархические графы** - графы с древовидной структурой
-*   **Декомпозиция на цепи** - представление графа в виде объединения простых цепей
-*   **Эйлерова ориентация** - ориентация ребер неориентированного графа для получения эйлерова ориентированного графа
-#### **ПРИМЕНЕНИЯ И СМЕЖНЫЕ ЗАДАЧИ**
-*   **Задача китайского почтальона** - поиск кратчайшего замкнутого пути, покрывающего все ребра
-*   **Задача коммивояжера на эйлеровых графах**
-*   **ДНК-секвенирование** и задачи сборки генома
-*   **Сетевые маршрутизаторы** и задачи планирования трафика
+    *   **Strongly Connected Components (SCC):**
+        *   Kosaraju's Algorithm
+        *   Tarjan's Algorithm
+        *   Strongly Connected Components
+        *   Condensation graph (конденсация графа)
+    *   **Weakly Connected Components**
+*   **Поиск компонент:**
+    *   DFS/BFS based approaches
+    *   Union-Find для динамической связности
 
-#### **ГАМИЛЬТОНОВЫ ГРАФЫ**
-#### **ОСНОВНЫЕ ПОНЯТИЯ И ОПРЕДЕЛЕНИЯ**
-*   **Гамильтонов цикл** - цикл, проходящий через каждую вершину графа ровно один раз
-*   **Гамильтонов путь** - путь, проходящий через каждую вершину графа ровно один раз
-*   **Гамильтонов граф** - граф, содержащий гамильтонов цикл (Hamilton cycle)
-*   **Полугамильтонов граф** - граф, содержащий гамильтонов путь, но не содержащий гамильтонов цикл
-#### **КРИТЕРИИ И ДОСТАТОЧНЫЕ УСЛОВИЯ**
-*   **Теорема Дирака** - если степень каждой вершины ≥ n/2, то граф гамильтонов
-*   **Теорема Оре** - если для любых двух несмежных вершин сумма степеней ≥ n, то граф гамильтонов
-*   **Теорема Поша** - обобщение теорем Дирака и Оре
-*   **Теорема Бонди-Хватала** - условие замыкания графа
-#### **АЛГОРИТМЫ ПОИСКА ГАМИЛЬТОНОВА ЦИКЛА**
-*   **Алгоритм Робертса-Флореса** - backtracking подход
-*   **Метод ветвей и границ** для задачи коммивояжера
-*   **Алгоритмы с эвристиками** для больших графов
-*   **Динамическое программирование** с битовыми масками (алгоритм Хелда-Карпа)
-#### **ЧАСТНЫЕ СЛУЧАИ И СПЕЦИАЛЬНЫЕ ГРАФЫ**
-*   **Турниры** - ориентированные полные графы
-*   **Планарные графы** - достаточные условия гамильтоновости
-*   **Реберно-транзитивные графы**
-*   **Графы-решетки** и их гамильтоновы пути
-#### **СЛОЖНОСТЬ И ВЫЧИСЛИТЕЛЬНЫЕ АСПЕКТЫ**
-*   **NP-полнота** задачи о гамильтоновом цикле
-*   **Приближенные алгоритмы** для специальных классов графов
-*   **Вероятностные методы** поиска гамильтоновых циклов
-#### **ПРИМЕНЕНИЯ И СМЕЖНЫЕ ЗАДАЧИ**
-*   **Задача коммивояжера** - взвешенная версия гамильтонова цикла
-*   **Гамильтоновы пути в ориентированных графах**
-*   **Гамильтоновы циклы в гиперграфах**
+#### **B. МОСТЫ И ТОЧКИ СОЧНЕНИЯ (BRIDGES AND ARTICULATION POINTS)**
+*   **Мосты (Bridges):**
+    *   Finding Bridges
+    *   Алгоритм Тарьяна для поиска мостов
+    *   Мосты в ориентированных графах
+*   **Точки сочленения (Articulation Points):**
+    *   Articulation Points
+    *   Алгоритм Тарьяна для точек сочленения
+    *   Critical nodes в сетях
+*   **Online алгоритмы для мостов:**
+    *   Динамическое поддержание мостов за O(log n)
+    *   Link-Cut Trees для динамических мостов
+    *   Поиск мостов за O(1) в режиме онлайн (fully dynamic)
 
-#### **КОРНЕВЫЕ ДЕРЕВЬЯ**
-*   **Запросы на деревьях**
-    Even Tree
-    Minimum Path Sum
-*   **Наименьший общий предок (LCA)**
-    *   **Метод двоичных подъемов**
-    *   **Сведение LCA к RMQ**
-    *   **Динамическое LCA**
-    *   **❌RMQ❌ за O(n) предподсчета и O(1) на запрос**
-    ❌ Алгоритм Фарах-Колтона и Бендера - ОТСУТСТВУЕТ
-*   **Эйлеров обход**
-*   **Центроидная декомпозиция**
-*   **Heavy-Light декомпозиция (HLD)**
-*   **Лестничная декомпозиция**
-*   **Дерево отрезков на HLD**
-*   **Sack (DSU on trees)** - эффективные запросы на поддеревьях
+#### **C. К-СВЯЗНОСТЬ И МИНИМАЛЬНЫЕ РАЗРЕЗЫ**
+*   **Вершинная связность (Vertex Connectivity):**
+    *   k-вершинная связность
+    *   Теорема Менгера
+    *   Алгоритмы поиска минимального вершинного разреза
+*   **Рёберная связность (Edge Connectivity):**
+    *   k-рёберная связность
+    *   Минимальный разрез по рёбрам
+    *   **Алгоритм Каргера:**
+        *   Karger's Algorithm (рандомизированный)
+        *   Karger-Stein Algorithm
+        *   Для нахождения минимального разреза
+*   **Глобальная минимальная связность:**
+    *   Нахождение k-связности графа
+    *   Проверка k-вершинной/рёберной связности
 
-#### **ПАРОСОЧЕТАНИЯ**
-*   **Лемма Бержа**
-*   **Алгоритм Куна**
-*   **Теорема Холла ("о свадьбах")**
-❌ Взвешенное паросочетание - ОТСУТСТВУЕТ
-❌ Покрытие путями DAG - ОТСУТСТВУЕТ
-❌ Матрица Татта - ОТСУТСТВУЕТ
-*   Алгоритм Хопкрофта-Карпа
-*   Взвешенные паросочетания
-*   **Паросочетания в двудольных графах**
-    Gale Shapley Bigraph
-*   **Паросочетания в общих графах (алгоритм Эдмондса)**
-*   **Вершинные покрытия**
-    Matching Min Vertex Cover
-    Greedy Min Vertex Cover
+#### **D. ДВУДОЛЬНЫЕ ГРАФЫ И РАСКРАСКИ**
+*   **Проверка двудольности:**
+    *   Check Bipatrite
+    *   DFS/BFS based bipartite checking
+*   **Раскраски графов:**
+    *   Coloring
+    *   **Vertex Coloring:**
+        *   Greedy coloring
+        *   Welsh-Powell algorithm
+        *   Brelaz's heuristic
+        *   Chromatic number
+    *   **Edge Coloring:**
+        *   Покраска рёбер дерева
+        *   Vizing's theorem
+        *   Edge chromatic number
+    *   **Особые раскраски:**
+        *   Acyclic coloring
+        *   Star coloring
+        *   Harmonious coloring
+*   **Теоремы о раскрасках:**
+    *   Four Color Theorem (для планарных графов)
+    *   Five Color Theorem
+    *   Brooks' Theorem
 
-#### **ПОТОКИ В СЕТЯХ**
-*   Алгоритм Форда-Фалкерсона
-    Minimum Cut
-*   Алгоритм Эдмондса-Карпа, Edmonds Karp Multiple Source And Sink
-*   **Алгоритм Диница**
-*   Теорема о максимальном потоке и минимальном разрезе
-*   **Поток минимальной стоимости (MCF)**
-*   **Алгоритм поиска потока минимальной стоимости**
-*   **Задача о назначениях**
-❌ Метод Проталкивания предпотока - ОТСУТСТВУЕТ
-❌ Модификация метода Проталкивания - ОТСУТСТВУЕТ
-❌ Поток с ограничениями - ОТСУТСТВУЕТ
-❌ Min-cost-flow - ОТСУТСТВУЕТ
-❌ Задача о назначениях через min-cost-flow - ОТСУТСТВУЕТ
-*   **Потоки расширенной функциональности:**
-    *   **Мультипотоки**
-    *   **Потоки с ограничениями на вершины**
-    *   **Минимальный разрез в планарных графах**
+#### **E. ДИНАМИЧЕСКАЯ СВЯЗНОСТЬ**
+*   **Incremental Connectivity:**
+    *   Добавление рёбер
+    *   Union-Find с откатами
+*   **Decremental Connectivity:**
+    *   Удаление рёбер
+    *   Spanning forest maintenance
+*   **Fully Dynamic Connectivity:**
+    *   Добавление и удаление рёбер
+    *   Holmgren's algorithm
+    *   Euler Tour Trees (ETT)
+    *   Link-Cut Trees
+
+#### **F. 2-SAT И КОНДЕНСАЦИЯ ГРАФА ИМПЛИКАЦИЙ**
+*   **2-SAT Problem:**
+    *   Сведение к ориентированному графу
+    *   Построение графа импликаций
+    *   Алгоритм за O(N+M)
+*   **Решение 2-SAT:**
+    *   Поиск SCC в графе импликаций
+    *   Построение решения
+    *   Нахождение всех решений
+*   **Применения 2-SAT:**
+    *   Scheduling problems
+    *   Circuit design
+    *   Resource allocation
+
+### **III. КРАТЧАЙШИЕ ПУТИ В ГРАФАХ**
+
+#### **A. ОДНОИСТОЧНИКОВЫЕ КРАТЧАЙШИЕ ПУТИ (SSSP)**
+*   **Для невзвешенных графов:**
+    *   BFS (уже в разделе I)
+*   **Для неотрицательных весов (Dijkstra):**
+    *   **Алгоритм Дейкстры:**
+        *   Dijkstra
+        *   Dijkstra 2
+        *   Dijkstra Algorithm
+        *   Dijkstra Alternate
+        *   Dijkstra Binary Grid
+        *   Биекционная Дейкстра:
+            *   Bi Directional Dijkstra
+    *   **Реализации:**
+        *   Priority Queue based
+        *   Fibonacci Heap optimization
+        *   Dial's implementation (для малых целых весов)
+*   **Для произвольных весов (Bellman-Ford):**
+    *   **Алгоритм Форда-Беллмана:**
+        *   Standard Bellman-Ford
+        *   Shortest Path Faster Algorithm (SPFA)
+        *   Detection of negative cycles
+    *   **Алгоритм Левита:**
+        *   Levit's Algorithm (для смешанных графов)
+        *   Использование трёх очередей
+*   **Для DAG (Directed Acyclic Graph):**
+    *   Topological sort + DP
+    *   Longest path в DAG
+
+#### **B. КРАТЧАЙШИЕ ПУТИ МЕЖДУ ВСЕМИ ПАРАМИ (APSP)**
+*   **Алгоритм Флойда-Уоршелла:**
+    *   Floyd Warshall
+    *   Transitive closure
+    *   Detection of negative cycles
+*   **Алгоритм Джонсона:**
+    *   Johnson's Algorithm
+    *   Для разреженных графов с отрицательными весами
+*   **Специальные алгоритмы:**
+    *   **Matrix Multiplication method:**
+        *   Min-plus matrix multiplication
+        *   Repeated squaring
+    *   **Подсчёт путей фиксированной длины:**
+        *   Через возведение матрицы смежности в степень
+*   **Для разреженных графов:**
+    *   Run Dijkstra from each vertex
+    *   Optimization tricks
+
+#### **C. ЭВРИСТИЧЕСКИЕ АЛГОРИТМЫ ПОИСКА ПУТИ**
+*   **A* Search Algorithm:**
+    *   A-star
+    *   Bidirectional A Star
+    *   Multi Heuristic Astar
+    *   Admissible/Consistent heuristics
+*   **Greedy Best First Search:**
+    *   Greedy Best First
+*   **IDEA* (Iterative Deepening A*)**
+*   **D* и D* Lite** (для динамических сред)
+
+#### **D. СПЕЦИАЛЬНЫЕ ВИДЫ ПУТЕЙ**
+*   **k-кратчайших путей:**
+    *   Yen's algorithm
+    *   Eppstein's algorithm
+*   **Наиболее надежные пути**
+*   **Пути с ограничениями** (по времени, ресурсам)
+
+### **IV. ОСТОВНЫЕ ДЕРЕВЬЯ (SPANNING TREES)**
+
+#### **A. МИНИМАЛЬНОЕ ОСТОВНОЕ ДЕРЕВО (MST)**
+*   **Алгоритм Крускала:**
+    *   Minimum Spanning Tree Kruskal
+    *   Minimum Spanning Tree Kruskal2 (with DSU)
+    *   Test Min Spanning Tree Kruskal
+    *   Union-Find optimization
+*   **Алгоритм Прима:**
+    *   Prim
+    *   Minimum Spanning Tree Prims
+    *   Minimum Spanning Tree Prims2
+    *   Test Min Spanning Tree Prim
+    *   Fibonacci Heap optimization
+*   **Алгоритм Борувки:**
+    *   Boruvka
+    *   Minimum Spanning Tree Boruvka
+    *   Parallel Boruvka
+*   **Сравнение алгоритмов:**
+    *   Time/space complexity
+    *   Применимость для разных типов графов
+
+#### **B. ВТОРОЕ ПО МИНИМАЛЬНОСТИ ОСТОВНОЕ ДЕРЕВО**
+*   **Second-best MST:**
+    *   Алгоритм за O(M log N)
+    *   На основе MST + LCA
+*   **Minimum Bottleneck Spanning Tree (MBST)**
+*   **Minimum Spanning Forest** (для несвязных графов)
+
+#### **C. ТЕОРЕТИЧЕСКИЕ ОСНОВЫ**
+*   **Матричная теорема Кирхгофа:**
+    *   Kirchhoff's Matrix Tree Theorem
+    *   Подсчёт остовных деревьев
+    *   Laplacian matrix
+*   **Код Прюфера:**
+    *   Prüfer sequence
+    *   Взаимно однозначное соответствие деревьев и последовательностей
+    *   Применения в подсчёте
+*   **Формула Кэли:**
+    *   Cayley's formula: n^(n-2) деревьев на n вершинах
+    *   Обобщения формулы Кэли
+
+#### **D. ОБРАТНЫЕ ЗАДАЧИ И ОПТИМИЗАЦИИ**
+*   **Обратная задача MST:**
+    *   Задан граф и дерево, сделать его MST с минимальными изменениями
+*   **Steiner Tree Problem:**
+    *   Минимальное дерево, соединяющее заданное подмножество вершин
+    *   Приближённые алгоритмы
+*   **Degree-constrained MST**
+*   **Capacitated MST**
+
+### **V. ЭЙЛЕРОВЫ И ГАМИЛЬТОНОВЫ ГРАФЫ**
+
+#### **A. ЭЙЛЕРОВЫ ПУТИ И ЦИКЛЫ**
+*   **Основные определения:**
+    *   Эйлеров цикл/путь
+    *   Эйлеров/полуэйлеров граф
+*   **Критерии эйлеровости:**
+    *   Для неориентированных графов
+    *   Для ориентированных графов
+*   **Алгоритмы поиска:**
+    *   **Алгоритм Флёри** (Fleury's algorithm)
+    *   **Алгоритм Хьерхольцера** (Hierholzer's algorithm)
+    *   Рекурсивные алгоритмы
+*   **Применения:**
+    *   **Задача китайского почтальона:**
+        *   Chinese Postman Problem
+        *   Для неориентированных/ориентированных графов
+    *   DNA sequencing
+    *   Network routing
+
+#### **B. ГАМИЛЬТОНОВЫ ПУТИ И ЦИКЛЫ**
+*   **Основные определения:**
+    *   Гамильтонов цикл/путь
+    *   Гамильтонов/полугамильтонов граф
+*   **Достаточные условия:**
+    *   Теорема Дирака
+    *   Теорема Оре
+    *   Теорема Поша
+    *   Теорема Бонди-Хватала
+*   **Алгоритмы поиска:**
+    *   **Алгоритм Робертса-Флореса** (backtracking)
+    *   **Алгоритм Хелда-Карпа** (DP with bitmask)
+    *   Метод ветвей и границ
+*   **NP-полнота задачи**
+*   **Приближённые алгоритмы**
+*   **Частные случаи:**
+    *   Турниры (ориентированные полные графы)
+    *   Планарные графы
+    *   Решётки (grid graphs)
+
+#### **C. ОБОБЩЁННЫЕ ЗАДАЧИ**
+*   **Longest Path Problem:**
+    *   В произвольных графах (NP-hard)
+    *   В DAG (полиномиально)
+*   **Traveling Salesman Problem (TSP):**
+    *   Классическая формулировка
+    *   Метрический TSP
+    *   Алгоритмы: DP (Held-Karp), Approximation (Christofides)
+
+### **VI. ДЕРЕВЬЯ И ИХ ДЕКОМПОЗИЦИИ**
+
+#### **A. ОСНОВНЫЕ АЛГОРИТМЫ НА ДЕРЕВЬЯХ**
+*   **Обходы деревьев:**
+    *   DFS/BFS обходы
+    *   Pre-order, In-order, Post-order
+    *   Level-order
+*   **Базовые запросы:**
+    *   Even Tree
+    *   Minimum Path Sum
+    *   Diameter of tree
+    *   Центр(ы) дерева
+*   **Подсчёт поддеревьев:**
+    *   Количество поддеревьев с условиями
+    *   DP на деревьях
+
+#### **B. НАИМЕНЬШИЙ ОБЩИЙ ПРЕДОК (LOWEST COMMON ANCESTOR - LCA)**
+*   **Бинарные подъёмы (Binary Lifting):**
+    *   O(N log N) предподсчёт, O(log N) запрос
+    *   Поддержка различных запросов на пути
+*   **Сведение к RMQ:**
+    *   Euler Tour + RMQ
+    *   **Алгоритм Фарах-Колтона и Бендера:**
+        *   RMQ за O(N) предподсчёт, O(1) запрос
+        *   ±1 RMQ для деревьев
+*   **Метод эйлерова обхода:**
+    *   Euler Tour Technique
+    *   Преобразование дерева в массив
+*   **Tarjan's Offline LCA:**
+    *   O(N + Q) для оффлайн запросов
+    *   Union-Find based
+*   **Динамическое LCA:**
+    *   Link-Cut Trees
+    *   Для динамически изменяющихся деревьев
+
+#### **C. ДЕКОМПОЗИЦИИ ДЕРЕВЬЕВ**
+*   **Heavy-Light Decomposition (HLD):**
+    *   Разбиение дерева на тяжёлые/лёгкие пути
+    *   Запросы на путях за O(log² N)
+    *   Дерево отрезков на HLD
+*   **Центроидная декомпозиция:**
+    *   Centroid Decomposition
+    *   Разбиение дерева на центроиды
+    *   Запросы на расстояниях
+*   **Лестничная декомпозиция:**
+    *   Ladder Decomposition
+    *   Для LCA и запросов на путях
+*   **Моноидная декомпозиция**
+
+#### **D. ПРОДВИНУТЫЕ АЛГОРИТМЫ НА ДЕРЕВЬЯХ**
+*   **DSU on Tree (Sack):**
+    *   Merge small-to-large technique
+    *   Запросы на поддеревьях за O(N log N)
+*   **Rerooting DP:**
+    *   Переподвешивание корня
+    *   DP на дереве с пересчётом при смене корня
+*   **Virtual Trees:**
+    *   Построение virtual tree по набору вершин
+    *   Сжатие путей
+*   **Tree Isomorphism:**
+    *   AHU algorithm
+    *   Tree canonization
+
+### **VII. ПАРОСОЧЕТАНИЯ В ГРАФАХ**
+
+#### **A. ДВУДОЛЬНЫЕ ПАРОСОЧЕТАНИЯ**
+*   **Теорема Холла (Hall's Marriage Theorem)**
+*   **Алгоритм Куна (Kuhn's Algorithm):**
+    *   DFS-based matching
+    *   O(VE) complexity
+*   **Алгоритм Хопкрофта-Карпа:**
+    *   Hopcroft-Karp Algorithm
+    *   O(E√V) complexity
+    *   BFS для поиска augmenting paths
+*   **Maximum matching в двудольных графах:**
+    *   Gale Shapley Bigraph (Stable Marriage)
+    *   Weighted bipartite matching
+
+#### **B. ПАРОСОЧЕТАНИЯ В ОБЩИХ ГРАФАХ**
+*   **Теорема Татта (Tutte's Theorem)**
+*   **Алгоритм Эдмондса (Blossom Algorithm):**
+    *   Edmonds' Blossom Algorithm
+    *   O(V³) implementation
+    *   Blossom contraction
+*   **Матрица Татта (Tutte Matrix):**
+    *   Алгебраический подход
+    *   Рандомизированный алгоритм
+*   **Maximum matching за O(√V E)**
+
+#### **C. ВЗВЕШЕННЫЕ ПАРОСОЧЕТАНИЯ**
+*   **Взвешенное паросочетание в двудольных графах:**
+    *   Hungarian Algorithm
+    *   O(V³) implementation
+*   **Взвешенное паросочетание в общих графах:**
+    *   Edmonds' algorithm for weighted matching
+    *   Blossom V algorithm
+
+#### **D. СМЕЖНЫЕ ПОНЯТИЯ**
+*   **Вершинные покрытия:**
+    *   Matching Min Vertex Cover
+    *   Greedy Min Vertex Cover
+    *   König's theorem (для двудольных графов)
+*   **Покрытие путями в DAG:**
+    *   Dilworth's theorem
+    *   Минимальное покрытие путями
+*   **Maximum Independent Set:**
+    *   В двудольных графах
+    *   В общих графах (NP-hard)
+
+### **VIII. ПОТОКИ В СЕТЯХ (NETWORK FLOW)**
+
+#### **A. МАКСИМАЛЬНЫЙ ПОТОК (MAX-FLOW)**
+*   **Алгоритм Форда-Фалкерсона:**
+    *   Ford-Fulkerson method
+    *   Edmonds-Karp variant: O(VE²)
+    *   Edmonds Karp Multiple Source And Sink
+*   **Алгоритм Диница:**
+    *   Dinic's Algorithm
+    *   O(V²E) или O(√V E) для unit capacities
+    *   Level graph + blocking flow
+*   **Push-Relabel Алгоритмы:**
+    *   **Метод проталкивания предпотока:**
+        *   Goldberg-Tarjan algorithm
+        *   O(V³) или O(V²√E)
+    *   **Highest-label push-relabel**
+    *   **FIFO push-relabel**
 *   **Максимальный поток с динамическими обновлениями**
-❌ Циркуляция минимальной стоимости - ОТСУТСТВУЕТ
 
-#### **АЛГОРИТМЫ НА ПЛАНАРНЫХ ГРАФАХ**
-*   **Алгоритм разделения планарных графов**
-*   **Алгоритмы на строках как графах:**
-    *   **Алгоритм Укконена** для суффиксного дерева
+#### **B. МИНИМАЛЬНЫЙ РАЗРЕЗ (MIN-CUT)**
+*   **Теорема о максимальном потоке и минимальном разрезе**
+*   **Minimum Cut:**
+    *   Global min-cut (Stoer-Wagner algorithm)
+    *   s-t min-cut
+*   **Приложения min-cut:**
+    *   Image segmentation
+    *   Project selection
 
-#### **ВЕРОЯТНОСТНЫЕ И ЭВРИСТИЧЕСКИЕ МЕТОДЫ**
-*   **Вероятностные алгоритмы**
-    Markov Chain
-    Page Rank (→ алгоритм на графах, основанный на цепях Маркова)
-*   **Метаэвристики**
-    Ant Colony Optimization Algorithms
-*   **Генерация графов**
-    Random Graph Generator
+#### **C. ПОТОК МИНИМАЛЬНОЙ СТОИМОСТИ (MIN-COST FLOW)**
+*   **Successive Shortest Path:**
+    *   With potentials (Johnson's reweighting)
+    *   O(F E log V) где F - величина потока
+*   **Cycle Canceling:**
+    *   Klein's cycle canceling algorithm
+    *   Negative cycle detection
+*   **Minimum Cost Maximum Flow**
+*   **Cost Scaling Algorithms**
 
-#### **ПРИКЛАДНЫЕ АЛГОРИТМЫ**
-*   **Data Mining на графах**
-    Frequent Pattern Graph Miner
-*  **Алгоритмы линейной алгебры для графов**
-    Lanczos Eigenvectors (→ для нахождения собственных векторов матрицы смежности)
+#### **D. СПЕЦИАЛЬНЫЕ ВИДЫ ПОТОКОВ**
+*   **Циркуляция:**
+    *   Circulation with demands
+    *   Циркуляция минимальной стоимости
+*   **Мультипотоки (Multicommodity Flow):**
+    *   Maximum concurrent flow
+    *   Minimum cost multicommodity flow
+*   **Потоки с ограничениями:**
+    *   Edge capacities
+    *   Vertex capacities
+    *   Lower bounds on flow
+*   **Потоки в планарных графах:**
+    *   Min-cut в планарных графах за O(N log N)
+
+#### **E. ПРИМЕНЕНИЯ ПОТОКОВ**
+*   **Задача о назначениях (Assignment Problem):**
+    *   Сведение к min-cost flow
+    *   Hungarian algorithm как частный случай
+*   **Maximum Bipartite Matching** (как частный случай max-flow)
+*   **Minimum Path Cover** в DAG
+*   **Baseball Elimination**
+*   **Airline Scheduling**
+
+### **IX. ПЛАНАРНЫЕ ГРАФЫ И АЛГОРИТМЫ**
+
+#### **A. ОСНОВНЫЕ СВОЙСТВА ПЛАНАРНЫХ ГРАФОВ**
+*   **Определения и критерии:**
+    *   Euler's formula: V - E + F = 2
+    *   Kuratowski's theorem
+    *   Planarity testing algorithms
+*   **Представления планарных графов:**
+    *   Planar embedding
+    *   Dual graph
+    *   Straight-line drawing
+*   **Разделение планарных графов:**
+    *   Planar separator theorem (Lipton-Tarjan)
+    *   Applications in divide-and-conquer
+
+#### **B. АЛГОРИТМЫ НА ПЛАНАРНЫХ ГРАФАХ**
+*   **Кратчайшие пути:**
+    *   Dijkstra с special heaps для планарных графов
+    *   Multiple-source shortest paths
+*   **Минимальный разрез в планарных графах**
+*   **Maximum flow в планарных графах:**
+    *   Сведение к shortest path в dual graph
+*   **Planar embedding algorithms**
+
+#### **C. ГРАФЫ НА ПОВЕРХНОСТЯХ**
+*   **Графы на торе и других поверхностях**
+*   **Графы с ограниченным genus**
+
+### **X. СПЕЦИАЛЬНЫЕ КЛАССЫ ГРАФОВ И АЛГОРИТМЫ**
+
+#### **A. ГРАФЫ С ОГРАНИЧЕННЫМИ ПАРАМЕТРАМИ**
+*   **Графы с ограниченной treewidth:**
+    *   Tree decomposition
+    *   DP on tree decomposition
+    *   Courcelle's theorem
+*   **Графы с ограниченной clique-width**
+*   **Графы с ограниченной степенью (degree-bounded)**
+*   **Интервальные графы:**
+    *   Maximum clique/independent set
+    *   Interval scheduling
+*   **Графы перестановок (permutation graphs)**
+
+#### **B. ГРАФЫ В СТРОКАХ И СЕQUENCE ANALYSIS**
+*   **Суффиксные структуры:**
+    *   **Алгоритм Укконена** для построения суффиксного дерева
+    *   Suffix automaton
+    *   Suffix array + LCP
+*   **De Bruijn Graphs** для genome assembly
+*   **Overlap graphs**
+
+#### **C. ГИПЕРГРАФЫ И МУЛЬТИГРАФЫ**
+*   **Гиперграфы:**
+    *   Представления
+    *   Transversal/hitting set
+*   **Мультиграфы**
+*   **Directed hypergraphs**
+
+### **XI. ВЕРОЯТНОСТНЫЕ И ЭВРИСТИЧЕСКИЕ МЕТОДЫ**
+
+#### **A. ВЕРОЯТНОСТНЫЕ АЛГОРИТМЫ**
+*   **Random Walks:**
+    *   Markov Chain
+    *   Stationary distribution
+    *   Mixing time
+*   **PageRank:**
+    *   Page Rank algorithm
+    *   Random surfer model
+    *   Applications in web search
+*   **Случайные графы:**
+    *   Erdős–Rényi model
+    *   Random Graph Generator
+    *   Properties of random graphs
+
+#### **B. МЕТАЭВРИСТИКИ И ПОИСК С ОГРАНИЧЕНИЯМИ**
+*   **Ant Colony Optimization:**
+    *   Ant Colony Optimization Algorithms
+    *   Pheromone update strategies
+*   **Genetic Algorithms для графов**
+*   **Simulated Annealing**
+*   **Tabu Search**
+
+#### **C. ЛОКАЛЬНЫЙ ПОИСК И ЖАДНЫЕ АЛГОРИТМЫ**
+*   **Greedy algorithms для графовых задач**
+*   **Local search heuristics**
+*   **Approximation algorithms:**
+    *   Vertex Cover (2-approximation)
+    *   Metric TSP (1.5-approximation)
+    *   Set Cover (log n-approximation)
+
+### **XII. ПРИКЛАДНЫЕ АЛГОРИТМЫ НА ГРАФАХ**
+
+#### **A. DATA MINING И АНАЛИЗ СЕТЕЙ**
+*   **Frequent Pattern Mining:**
+    *   Frequent Pattern Graph Miner
+    *   Subgraph isomorphism
+*   **Community Detection:**
+    *   Girvan-Newman algorithm
+    *   Modularity optimization
+    *   Louvain method
+*   **Centrality Measures:**
+    *   Betweenness centrality
+    *   Closeness centrality
+    *   Eigenvector centrality
+*   **Link Prediction**
+
+#### **B. СОЦИАЛЬНЫЕ СЕТИ И WEB ГРАФЫ**
+*   **Small-world networks**
+*   **Scale-free networks**
+*   **Web graph algorithms:**
+    *   HITS algorithm
+    *   SALSA
+
+#### **C. ЛИНЕЙНАЯ АЛГЕБРА ДЛЯ ГРАФОВ**
+*   **Спектральная теория графов:**
+    *   Собственные значения матрицы смежности
+    *   Lanczos Eigenvectors algorithm
+    *   Spectral clustering
+*   **Laplacian matrix:**
+    *   Fiedler vector
+    *   Graph partitioning
+*   **Incidence matrix applications**
+
+#### **D. ГРАФОВЫЕ БАЗЫ ДАННЫХ И СИСТЕМЫ**
+*   **Graph databases:**
+    *   Query languages (Cypher, Gremlin)
+    *   Indexing techniques
+*   **Distributed graph processing:**
+    *   Pregel model
+    *   Graph processing frameworks
+
+### **XIII. ДИНАМИЧЕСКИЕ И ОНЛАЙН АЛГОРИТМЫ**
+
+#### **A. ДИНАМИЧЕСКИЕ ГРАФОВЫЕ АЛГОРИТМЫ**
+*   **Dynamic Connectivity:**
+    *   Fully dynamic connectivity
+    *   Euler Tour Trees
+    *   Link-Cut Trees
+*   **Dynamic Shortest Paths:**
+    *   Incremental/decremental
+    *   Fully dynamic
+*   **Dynamic MST**
+
+#### **B. ОНЛАЙН АЛГОРИТМЫ**
+*   **Online Matching**
+*   **Online Steiner Tree**
+*   **Competitive analysis**
 
 ---
 
-### **9. СТРОКИ**
+Отлично! Обновляю раздел строк с полным охватом, интегрируя новое и сохраняя всё существующее:
 
-#### **ПОИСК ПОДСТРОКИ**
-*   **Префикс-функция** Prefix Function
-*   **Z-функция**
-*   **Алгоритм Кнута-Морриса-Пратта (KMP)**
-*   **Алгоритм Манакера** (поиск палиндромов)
-*   **Алгоритм Рабина-Карпа**
-*   **Алгоритм Бойера-Мура**
-*   **Bitap String Match**
-*   **Naive String Search**
-*   **Wildcard Pattern Matching**
-Match Word Pattern - сопоставление с шаблоном (как специализированный алгоритм поиска)
+---
 
-#### **РАССТОЯНИЯ И РЕДАКТИРОВАНИЕ СТРОК**
-*   **Расстояние Левенштейна** (Levenshtein Distance)
-*   **Расстояние Дамерау-Левенштейна** (Damerau Levenshtein Distance)
-*   **Расстояние Хэмминга** (Hamming Distance)
-*   **Расстояние Джарро-Винклера** (Jaro Winkler)
-*   **Min Cost String Conversion** (→ задача на редактирование со стоимостями)
-*   **Edit Distance** (→ общее название для задач редактирования)
+## **9. СТРОКИ И ТЕКСТОВЫЕ АЛГОРИТМЫ**
 
-#### **ХЕШИРОВАНИЕ**
-*   **Полиномиальное хеширование**
-*   **Коллизии хешей**
-*   **Проверки на изоморфизм**
-*   **Хеширование подстрок**
-*   **Двойное хеширование**
-*   **String hashing** с двойным модулем
-*   **Ngram** - можно использовать с хэшированием
+### **I. БАЗОВЫЕ СТРУКТУРЫ ДАННЫХ ДЛЯ СТРОК**
 
-#### **СТРОКОВЫЕ АВТОМАТЫ И СТРУКТУРЫ**
-*   **Префиксное дерево (Trie = Бор)**
-    Trie
-    Radix Tree
-    Autocomplete Using Trie
-    Word Break - разбиение строки на слова из словаря (часто решается через Trie + ДП)
-    Word Search - поиск слов в матрице символов (использует Trie для эффективного поиска множества слов)
-*   **Алгоритм Ахо-Корасик**
-*   **Дерево палиндромов**
-*   **Суффиксный массив**
-    *   Построение за O(n log n)
-    *   Поиск наибольшего общего префикса (LCP)
-    *   **Алгоритм Касаи**
-*   Суффиксный автомат
-*   **Суффиксное дерево**
-    Suffix Tree
-        Example
-            Example Usage
-    Suffix Tree Node
-    Tests
-        Test Suffix Tree
-*   **Алгоритм Укконена** (построение суффиксного дерева за O(n))
-*   **Алгоритм Фараха** (построение суффиксного массива за O(n))
+#### **A. СТАНДАРТНЫЕ СТРОКОВЫЕ КОНТЕЙНЕРЫ**
+*   **`std::string` (C++):**
+    *   Динамический массив символов
+    *   Small String Optimization (SSO)
+    *   Copy-on-Write (устаревшее в современных реализациях)
+    *   Member functions: `append()`, `substr()`, `find()`, `replace()`, etc.
+*   **`std::string_view` (C++17):**
+    *   Легковесная read-only view на строку
+    *   Не владеет данными, только ссылка
+    *   Идеален для параметров функций
+*   **`std::wstring`, `std::u16string`, `std::u32string`:**
+    *   Для Unicode символов (UTF-16, UTF-32)
+*   **`std::basic_string<T>`:** шаблонная версия для любых типов
+*   **С-строки:** null-terminated char arrays
+*   **`std::stringstream`, `std::ostringstream`, `std::istringstream`:**
+    *   Потоки для форматирования строк
+    *   Преобразование типов
+    *   Парсинг данных из строк
+*   Small String Optimization (SSO)
+*   Copy-on-Write строки
 
-#### **АНАЛИЗ И ПРЕОБРАЗОВАНИЕ СТРОК**
-*   **Анализ частот**
-    Frequency Finder
-    Word Occurrence
-    Count Vowels
-    Top K Frequent Words
-*   **Проверка свойств**
-    Is Contains Unique Chars
-    Is Isogram (слово без повторяющихся букв)
-    Is Pangram (текст, содержащий все буквы алфавита)
-    Can String Be Rearranged As Palindrome
-*   **Преобразование регистра**
-    Capitalize
-    Lower
-    Upper
-    Title
-    String Switch Case
-*   **Форматирование строк**
-    Camel Case To Snake Case
-    Snake Case To Camel Pascal Case
-    Reverse Letters
-    Reverse Words
-    Join
-    Split
-    Strip (удаление пробелов)
-    Wave String (преобразование в "волнообразный" вид)
-*   **Текстовые алгоритмы**
-    Text Justification (выравнивание текста)
-    Remove Duplicate (удаление дубликатов)
-*  **Палиндромы и аннаграмы**
-    Palindrome (проверка палиндромов)
-    Anagrams (поиск анаграмм)
-    Check Anagrams (проверка анаграмм)
-    Alternative String Arrange (альтернативные расположения строк)
-    Word Ladder - преобразование слов через цепочку (задача на преобразование строк)
+#### **B. ПРОДВИНУТЫЕ СТРОКОВЫЕ СТРУКТУРЫ**
+*   **Rope (Канатная структура):**
+    *   Для очень больших строк (>10MB)
+    *   Сбалансированное бинарное дерево строк
+    *   Быстрые вставки/удаления в любой позиции
+    *   Используется в текстовых редакторах
+*   **Gap Buffer:**
+    *   Для текстовых редакторов
+    *   Быстрые операции в позиции курсора
+    *   "Разрыв" в массиве для эффективных вставок
+*   **Piece Table:**
+    *   Используется в Visual Studio Code
+    *   Хранение оригинального и модифицированного текста
+    *   Легковесные модификации
 
-#### **СЖАТИЕ СТРОК**
-*   **Алгоритм Хаффмана**
-*   **Алгоритм LZW**
-*   **Преобразование Барроуза-Уилера**
-*   **Алгоритм RLE**
-*   **Алгоритм Крочемора** (сжатие строк)
+#### **C. ПАМЯТЬ И ОПТИМИЗАЦИИ**
+*   **String interning** - пул строк для экономии памяти
+*   **Flyweight pattern** для строк
+*   **Copy-on-Write** (исторически, теперь редко)
+*   **Short String Optimization** (SSO) - до 15-23 символов в стеке
 
-#### **ПАТТЕРНЫ И ВАЛИДАЦИЯ**
-*   **Валидация данных**
-    Is Valid Email Address
-    Credit Card Validator
-    Barcode Validator
-    Indian Phone Validator
-    Is Srilankan Phone Number
-    Is Polish National Id
-    Is Spain National Id
-*   **Распознавание паттернов**
-    Word Patterns (соответствие строки шаблону)
-    Detecting English Programmatically
-    Dna (обработка DNA-последовательностей)
+### **II. ПОИСК ПОДСТРОКИ (STRING MATCHING)**
 
-#### **РАЗБОР И ОБРАБОТКА ВЫРАЖЕНИЙ** ❌
-*   **Обратная польская нотация (RPN)**
-    *   Преобразование инфиксной записи в постфиксную
-    *   Вычисление выражений в RPN
-*   **Алгоритм сортировочной станции (Shunting Yard)**
-    *   Разбор арифметических выражений
+#### **A. БАЗОВЫЕ АЛГОРИТМЫ**
+*   **Наивный поиск (Naive):**
+    *   Naive String Search
+    *   O(n*m) в худшем случае
+*   **Bitap Algorithm (Shift-Or/Shift-And):**
+    *   Bitap String Match
+    *   Для поиска с нечётким соответствием
+    *   Использует битовые операции
+
+#### **B. КЛАССИЧЕСКИЕ АЛГОРИТМЫ**
+*   **Алгоритм Кнута-Морриса-Пратта (KMP):**
+    *   Префикс-функция
+    *   Prefix Function
+    *   O(n+m) время
+*   **Алгоритм Рабина-Карпа:**
+    *   Использует хеширование
+    *   Rolling hash technique
+    *   Вероятностный, но быстрый на практике
+*   **Алгоритм Бойера-Мура:**
+    *   Bad character rule
+    *   Good suffix rule
+    *   Очень быстрый на практике
+*   **Алгоритм З (Z-algorithm):**
+    *   Z-функция
+    *   Z-box technique
+    *   Применения в различных задачах
+
+#### **C. СПЕЦИАЛИЗИРОВАННЫЕ АЛГОРИТМЫ**
+*   **Алгоритм Манакера:**
+    *   Поиск всех палиндромов за O(n)
+    *   Использует уже вычисленную информацию
+*   **Two-way string matching algorithm:**
+    *   Алгоритм Крочемора-Перрина
+    *   Гарантированно линейное время
+*   **Apostolico-Giancarlo algorithm**
+*   **Commentz-Walter algorithm** (для множества паттернов)
+
+#### **D. ПОИСК С ШАБЛОНАМИ**
+*   **Wildcard Pattern Matching:**
+    *   Символы '*' и '?'
+    *   Динамическое программирование
+*   **Regular Expression Matching:**
+    *   NFA/DFA построение
+    *   Thompson's construction
+    *   Регулярные выражения с обратными ссылками
+
+### **III. СТРОКОВЫЕ РАССТОЯНИЯ И РЕДАКТИРОВАНИЕ**
+
+#### **A. МЕТРИКИ РАССТОЯНИЯ**
+*   **Расстояние Левенштейна (Levenshtein Distance):**
+    *   Минимальное число вставок, удалений, замен
+    *   Динамическое программирование O(n*m)
+    *   Edit Distance (общий термин)
+*   **Расстояние Дамерау-Левенштейна:**
+    *   Damerau Levenshtein Distance
+    *   Добавлена операция транспозиции (перестановки соседних символов)
+*   **Расстояние Хэмминга:**
+    *   Hamming Distance
+    *   Только для строк одинаковой длины
+    *   Число позиций с разными символами
+*   **Расстояние Джарро-Винклера:**
+    *   Jaro Winkler Distance
+    *   Для сравнения имён и коротких строк
+    *   Учитывает префиксы
+
+#### **B. ДРУГИЕ МЕТРИКИ СХОДСТВА**
+*   **Cosine similarity** для текстов
+*   **Jaccard similarity** для наборов n-грамм
+*   **Sørensen–Dice coefficient**
+*   **Longest Common Subsequence (LCS)**
+*   **Longest Common Substring**
+
+#### **C. ОПТИМИЗАЦИИ И ПРИМЕНЕНИЯ**
+*   **Min Cost String Conversion:**
+    *   Задача редактирования с различными стоимостями операций
+*   **Алгоритм Укконена для edit distance**
+*   **Bit-parallel DP** для ускорения вычислений
+*   **Four Russians method** для edit distance
+
+### **IV. ХЕШИРОВАНИЕ СТРОК**
+
+#### **A. ПОЛИНОМИАЛЬНОЕ ХЕШИРОВАНИЕ**
+*   **Базовое хеширование:**
+    *   String hashing
+    *   Полиномиальные хеши
+    *   Выбор основания и модуля
+*   **Двойное хеширование:**
+    *   String hashing с двойным модулем
+    *   Для уменьшения коллизий
+*   **Rolling hash:**
+    *   Для скользящего окна
+    *   Rabin-Karp algorithm
+
+#### **B. ПРИМЕНЕНИЯ ХЕШИРОВАНИЯ**
+*   **Сравнение подстрок за O(1):**
+    *   Префиксные хеши
+    *   Хеширование подстрок
+*   **Поиск повторяющихся подстрок**
+*   **Проверки на изоморфизм** строк
+*   **Циклические сдвиги и минимальный сдвиг**
+*   **Поиск палиндромов через хеши**
+
+#### **C. КОЛЛИЗИИ И БЕЗОПАСНОСТЬ**
+*   **Коллизии хешей:**
+    *   Birthday paradox применительно к хешам
+    *   Атаки на хеш-функции
+*   **Universal hashing** для строк
+*   **Cryptographic string hashes** (SHA, MD5 для строк)
+
+### **V. СТРОКОВЫЕ АВТОМАТЫ И СТРУКТУРЫ**
+
+#### **A. ПРЕФИКСНОЕ ДЕРЕВО (TRIE)**
+*   **Базовый Trie:**
+    *   Trie
+    *   Вставка, поиск, удаление
+    *   Префиксный поиск
+*   **Специализированные Trie:**
+    *   **Radix Tree (Patricia Tree):**
+        *   Radix Tree
+        *   Сжатый trie
+        *   Экономия памяти
+    *   **Suffix Trie**
+    *   **Ternary Search Trie**
+*   **Применения Trie:**
+    *   Autocomplete Using Trie
+    *   Word Break (разбиение строки на слова)
+    *   Word Search (поиск слов в матрице)
+    *   Spell checker
+    *   IP routing tables
+
+#### **B. АЛГОРИТМ АХО-КОРАСИК**
+*   **Построение автомата:**
+    *   Trie + failure links
+    *   BFS для построения fail-ссылок
+*   **Множественный поиск паттернов:**
+    *   Линейное время O(n + m + k)
+    *   Где k - число вхождений
+*   **Применения:**
+    *   Intrusion detection systems
+    *   Bioinformatics pattern search
+
+#### **C. ДЕРЕВО ПАЛИНДРОМОВ**
+*   **Структура дерева палиндромов:**
+    *   Хранение всех различных палиндромных подстрок
+    *   Ссылки на суффиксные палиндромы
+*   **Алгоритм построения за O(n):**
+    *   Online algorithm
+    *   Использует серийные ссылки
+*   **Применения:**
+    *   Число различных палиндромных подстрок
+    *   Самый длинный палиндромный префикс/суффикс
+
+#### **D. СУФФИКСНЫЕ СТРУКТУРЫ**
+
+##### **1. Суффиксный массив:**
+*   **Построение:**
+    *   Naive O(n² log n)
+    *   Prefix doubling O(n log n)
+    *   **Алгоритм Фараха** O(n) - сложный, но оптимальный
+    *   DC3/Skew algorithm O(n)
+*   **LCP массив:**
+    *   **Алгоритм Касаи** O(n) для построения LCP
+    *   Наибольший общий префикс соседних суффиксов
+*   **Применения:**
+    *   Поиск подстроки O(m log n)
+    *   Число различных подстрок
+    *   Самый длинный повторяющийся подстрок
+    *   Поиск наибольшей общей подстроки
+
+##### **2. Суффиксное дерево:**
+*   **Структура:**
+    *   Suffix Tree
+    *   Suffix Tree Node
+    *   Примеры:
+        *   Example
+        *   Example Usage
+*   **Алгоритм Укконена:**
+    *   Online построение за O(n)
+    *   Suffix links, active point
+    *   Tests:
+        *   Test Suffix Tree
+*   **Применения:**
+    *   Все применения суффиксного массива + больше
+    *   Поиск всех вхождений паттерна за O(m)
+    *   Наибольшая общая подстрока нескольких строк
+
+##### **3. Суффиксный автомат:**
+*   **Минимальный автомат для всех подстрок**
+*   **Построение за O(n)**
+*   **Применения:**
+    *   Число различных подстрок
+    *   Поиск кратчайшей строки, не входящей в текст
+    *   Статистика подстрок
+
+### **VI. АНАЛИЗ И ПРЕОБРАЗОВАНИЕ СТРОК**
+
+#### **A. СТАТИСТИЧЕСКИЙ АНАЛИЗ**
+*   **Частотный анализ:**
+    *   Frequency Finder
+    *   Word Occurrence
+    *   Count Vowels
+    *   Character frequency distribution
+*   **Топ-K анализ:**
+    *   Top K Frequent Words
+    *   Heap-based approach
+    *   Bucket sort approach
+*   **N-gram анализ:**
+    *   Ngram generation
+    *   Для анализа текста и предсказания
+
+#### **B. ПРОВЕРКА СВОЙСТВ СТРОК**
+*   **Уникальность:**
+    *   Is Contains Unique Chars
+    *   Bitmask approach для ASCII
+*   **Изограммы и панграммы:**
+    *   Is Isogram (слово без повторяющихся букв)
+    *   Is Pangram (текст со всеми буквами алфавита)
+*   **Палиндромы:**
+    *   Palindrome
+    *   Can String Be Rearranged As Palindrome
+*   **Анаграммы:**
+    *   Anagrams
+    *   Check Anagrams
+    *   Sorting vs frequency counting
+
+#### **C. ТРАНСФОРМАЦИИ СТРОК**
+*   **Регистр:**
+    *   Capitalize
+    *   Lower
+    *   Upper
+    *   Title
+    *   String Switch Case
+*   **Форматы:**
+    *   Camel Case To Snake Case
+    *   Snake Case To Camel Pascal Case
+    *   Kebab case, dot case, etc.
+*   **Перестановки:**
+    *   Reverse Letters
+    *   Reverse Words
+    *   Alternative String Arrange
+*   **Разделение и объединение:**
+    *   Join
+    *   Split
+    *   Tokenization
+    *   Strip (удаление пробелов)
+
+#### **D. ТЕКСТОВАЯ ОБРАБОТКА**
+*   **Выравнивание текста:**
+    *   Text Justification
+    *   Перенос слов, выравнивание по ширине
+*   **Удаление дубликатов:**
+    *   Remove Duplicate
+    *   In-place removal
+*   **Волнообразные преобразования:**
+    *   Wave String
+    *   Zigzag conversion
+
+### **VII. СЖАТИЕ СТРОК И ДАННЫХ**
+
+#### **A. БЕЗПОТЕРЬНЫЕ АЛГОРИТМЫ СЖАТИЯ**
+*   **Run-Length Encoding (RLE):**
+    *   Алгоритм RLE
+    *   Для данных с повторениями
+*   **Алгоритм Хаффмана:**
+    *   Префиксные коды
+    *   Оптимальное сжатие без потерь
+    *   Canonical Huffman codes
+*   **Алгоритм LZW (Lempel-Ziv-Welch):**
+    *   Словарное сжатие
+    *   Используется в GIF, UNIX compress
+*   **Алгоритмы LZ77/LZ78:**
+    *   Sliding window compression
+    *   Deflate (gzip) использует LZ77 + Huffman
+
+#### **B. ПРЕОБРАЗОВАНИЯ ДЛЯ СЖАТИЯ**
+*   **Преобразование Барроуза-Уилера (BWT):**
+    *   Burrows-Wheeler Transform
+    *   Делает данные более сжимаемыми
+    *   Используется в bzip2
+*   **Move-to-Front transform**
+*   **Delta encoding**
+
+#### **C. СПЕЦИАЛИЗИРОВАННЫЕ АЛГОРИТМЫ**
+*   **Алгоритм Крочемора:**
+    *   Для сжатия строк
+    *   На основе LZ77 с оптимизациями
+
+### **VIII. ВАЛИДАЦИЯ И ПАТТЕРНЫ**
+
+#### **A. ВАЛИДАЦИЯ ДАННЫХ**
+*   **Email валидация:**
+    *   Is Valid Email Address
+    *   RFC 5322 compliance
+*   **Phone number валидация:**
+    *   Indian Phone Validator
+    *   Is Srilankan Phone Number
+    *   E.164 format validation
+*   **ID валидация:**
+    *   Is Polish National Id
+    *   Is Spain National Id
+    *   Luhn algorithm для проверки цифр
+*   **Прочие валидаторы:**
+    *   Credit Card Validator
+    *   Barcode Validator (UPC, EAN)
+    *   ISBN validator
+
+#### **B. РАСПОЗНАВАНИЕ ПАТТЕРНОВ**
+*   **Word Patterns:**
+    *   Match Word Pattern
+    *   Word Patterns
+    *   Биекция между строками и паттернами
+*   **Language detection:**
+    *   Detecting English Programmatically
+    *   N-gram based detection
+    *   Stop words analysis
+*   **Bioinformatics patterns:**
+    *   Dna sequence processing
+    *   Protein sequence analysis
+    *   Restriction enzyme sites
+
+#### **C. РЕГУЛЯРНЫЕ ВЫРАЖЕНИЯ**
+*   **Регулярные выражения:**
+    *   Реализация engine
+    *   NFA/DFA construction
+    *   Backtracking vs automaton
+*   **Конечные автоматы** для паттернов
+
+### **IX. РАЗБОР И ОБРАБОТКА ВЫРАЖЕНИЙ**
+
+#### **A. НОТАЦИИ И ПРЕОБРАЗОВАНИЯ**
+*   **Инфиксная, префиксная, постфиксная нотации**
+*   **Алгоритм сортировочной станции (Shunting Yard):**
+    *   Edsger Dijkstra's algorithm
+    *   Преобразование инфикс → постфикс
     *   Обработка операторов и приоритетов
-*   **Рекурсивный спуск**
-    *   Разбор контекстно-свободных грамматик
-    *   Построение синтаксических деревьев
-*   **Валидация и вычисление выражений**
-    *   Проверка корректности скобок
-    *   Вычисление сложных выражений
+*   **Обратная польская нотация (RPN):**
+    *   Вычисление выражений
+    *   Stack-based evaluation
 
-#### **ПРОДВИНУТЫЕ СТРОКОВЫЕ АЛГОРИТМЫ** ❌
-*   **Декомпозиция Линдона и алгоритм Дюваля**
-    *   Разложение строки на слова Линдона
-    *   Нахождение наименьшего циклического сдвига за O(N)
-    *   Применения в теории строк
-*   **Поиск тандемных повторов**
-    *   **Алгоритм Мейна-Лоренца** (разделяй и властвуй) за O(N log N)
-    *   Тандемные повторы и их свойства
+#### **B. СИНТАКСИЧЕСКИЙ АНАЛИЗ**
+*   **Рекурсивный спуск:**
+    *   Top-down parsing
+    *   LL(k) parsers
+    *   Построение AST
+*   **Parser combinators** в функциональных языках
+*   **Operator precedence parsing**
+
+#### **C. ВАЛИДАЦИЯ ВЫРАЖЕНИЙ**
+*   **Проверка скобок:**
+    *   Stack-based validation
+    *   Multiple bracket types
+*   **Expression evaluation:**
+    *   С поддержкой переменных
+    *   Function calls
+*   **Syntax highlighting** основы
+
+### **X. ПРОДВИНУТЫЕ СТРОКОВЫЕ АЛГОРИТМЫ**
+
+#### **A. ТЕОРИЯ СТРОК И КОМБИНАТОРИКА**
+*   **Декомпозиция Линдона:**
+    *   Lyndon decomposition
+    *   **Алгоритм Дюваля** за O(n)
+    *   Нахождение наименьшего циклического сдвига
+*   **Border array:**
+    *   Обобщение префикс-функции
+    *   Связь с периодичностями
+*   **Z-функция и её обобщения**
+
+#### **B. ПЕРИОДИЧНОСТИ И ПОВТОРЫ**
+*   **Поиск периода строки:**
+    *   Префикс-функция для поиска периода
+    *   Border theory
+*   **Тандемные повторы:**
+    *   **Алгоритм Мейна-Лоренца:**
+        *   O(n log n) divide-and-conquer
+        *   Поиск всех тандемных повторов
+    *   **Crochemore's algorithm** за O(n log n)
     *   Применения в биоинформатике
+*   **Квадраты в строках:**
+    *   Квадрат = два вхождения одной строки
+    *   Алгоритмы поиска квадратов
 
-#### **ФОНЕТИЧЕСКИЕ И ИГРОВЫЕ АЛГОРИТМЫ**
-    Pig Latin (языковая игра)
+#### **C. МИНИМАЛЬНЫЕ И МАКСИМАЛЬНЫЕ СТРОКИ**
+*   **Минимальный циклический сдвиг:**
+    *   Booth's algorithm O(n)
+    *   Использование префикс-функции
+*   **Лексикографически наименьший/наибольший**
+*   **Сортировка циклических сдвигов**
 
-#### **БИТОВЫЕ ОПЕРАЦИИ СО СТРОКАМИ**
-*   **Перевод строк в двоичный вид**
-*   **Применение операций `xor`, `and`, `or` к строкам**
-*   **Битовые маски для строк**
+### **XI. ФОНЕТИЧЕСКИЕ И ИГРОВЫЕ АЛГОРИТМЫ**
+
+#### **A. ФОНЕТИЧЕСКИЕ АЛГОРИТМЫ**
+*   **Soundex algorithm:**
+    *   Для фонетического сравнения имён
+    *   Используется в генеалогии
+*   **Metaphone и Double Metaphone**
+*   **NYSIIS** (New York State Identification and Intelligence System)
+
+#### **B. ИГРЫ СО СТРОКАМИ**
+*   **Pig Latin:**
+    *   Языковая игра
+    *   Простые трансформации строк
+*   **Word Ladder:**
+    *   Преобразование одного слова в другое
+    *   BFS на графе слов
+*   **Boggle word search**
+*   **Scrabble word validation**
+
+### **XII. БИТОВЫЕ И НИЗКОУРОВНЕВЫЕ ОПЕРАЦИИ**
+
+#### **A. БИТОВЫЕ МАНИПУЛЯЦИИ**
+*   **Битовые операции со строками:**
+    *   Перевод строк в двоичный вид
+    *   XOR, AND, OR операций над строками
+*   **Bitmask для строк:**
+    *   Для строк из малого алфавита
+    *   Проверка уникальности символов через битовую маску
+*   **Bit-parallel string matching:**
+    *   Shift-Or algorithm
+    *   Для небольших алфавитов
+
+#### **B. СИМВОЛЫ И КОДИРОВКИ**
+*   **ASCII, UTF-8, UTF-16, UTF-32:**
+    *   Кодировки символов
+    *   Unicode normalization
+*   **Byte order mark (BOM) handling**
+*   **String encoding conversion**
 
 ---
 
-### **10. АЛГОРИТМЫ ДЛЯ СПЕЦИАЛЬНЫХ КЛАССОВ ЗАДАЧ**
+## **10. АЛГОРИТМЫ ДЛЯ СПЕЦИАЛЬНЫХ КЛАССОВ ЗАДАЧ**
 
-#### **ОНЛАЙН АЛГОРИТМЫ**
+#### **A. ОНЛАЙН АЛГОРИТМЫ**
 *   **Paging algorithms** (LRU, FIFO)
 *   **Алгоритмы для кэширования**
 *   **Competitive analysis**
 
-#### **ПОТОКОВЫЕ АЛГОРИТМЫ**
+#### **B. ПОТОКОВЫЕ АЛГОРИТМЫ**
 *   **Reservoir sampling**
 *   **Algorithms for data streams**
 *   **Sliding window algorithms**
 *   **Counting distinct elements in streams**
 
-#### **АЛГОРИТМЫ ВНЕШНЕЙ ПАМЯТИ**
+#### **C. АЛГОРИТМЫ ВНЕШНЕЙ ПАМЯТИ**
 *   **B-tree** для внешней памяти
 *   **Algorithms for large datasets**
 *   **External sorting**
 *   **Cache-oblivious algorithms**
 
-#### **РАСПРЕДЕЛЕННЫЕ АЛГОРИТМЫ**
+#### **D. РАСПРЕДЕЛЕННЫЕ АЛГОРИТМЫ**
 *   **MapReduce algorithms**
 *   **Consensus algorithms**
 *   **Distributed graph algorithms**
-
 *   **Алгоритмы приближения:**
     *   **PTAS, FPTAS** схемы приближения
     *   **Аппроксимационные алгоритмы для NP-трудных задач**
 
 ---
 
-### **11. МЕТА-АЛГОРИТМИКА И ИНЖЕНЕРИЯ**
+## **11. МЕТА-АЛГОРИТМИКА И ИНЖЕНЕРИЯ**
 
-#### **ТЕХНОЛОГИИ ПРОГРАММИРОВАНИЯ**
+### **I. ТЕХНОЛОГИИ ПРОГРАММИРОВАНИЯ**
 *   **Стресс-тестирование**
 *   **Написание скриптов на Python/Linux** для генерации тестов
 *   Чекер, валидатор, программа-времянка
@@ -3647,7 +5288,7 @@ Match Word Pattern - сопоставление с шаблоном (как сп
     *   **Cache-friendly алгоритмы**
     *   **Memory allocation оптимизации**
 
-#### **СМЕЖНЫЕ ОБЛАСТИ**
+### **II. СМЕЖНЫЕ ОБЛАСТИ**
 *   **Информационная безопасность, CTF**
 *   **Машинное обучение в спортивном программировании**
 *   **Параллельное программирование**
