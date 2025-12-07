@@ -1399,10 +1399,6 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
 
 ---
 
-Отлично! Ваш раздел уже очень хорош, но добавим недостающие темы для 100% охвата. Вот расширенная версия:
-
----
-
 ## **4. ДИНАМИЧЕСКОЕ ПРОГРАММИРОВАНИЕ**
 
 ### **I. ОСНОВНЫЕ ПРИНЦИПЫ И ФИЛОСОФИЯ ДП**
@@ -5240,57 +5236,3 @@ First Come First Served, Highest Response Ratio Next, Job Sequence With Deadline
     *   Unicode normalization
 *   **Byte order mark (BOM) handling**
 *   **String encoding conversion**
-
----
-
-## **10. АЛГОРИТМЫ ДЛЯ СПЕЦИАЛЬНЫХ КЛАССОВ ЗАДАЧ**
-
-#### **A. ОНЛАЙН АЛГОРИТМЫ**
-*   **Paging algorithms** (LRU, FIFO)
-*   **Алгоритмы для кэширования**
-*   **Competitive analysis**
-
-#### **B. ПОТОКОВЫЕ АЛГОРИТМЫ**
-*   **Reservoir sampling**
-*   **Algorithms for data streams**
-*   **Sliding window algorithms**
-*   **Counting distinct elements in streams**
-
-#### **C. АЛГОРИТМЫ ВНЕШНЕЙ ПАМЯТИ**
-*   **B-tree** для внешней памяти
-*   **Algorithms for large datasets**
-*   **External sorting**
-*   **Cache-oblivious algorithms**
-
-#### **D. РАСПРЕДЕЛЕННЫЕ АЛГОРИТМЫ**
-*   **MapReduce algorithms**
-*   **Consensus algorithms**
-*   **Distributed graph algorithms**
-*   **Алгоритмы приближения:**
-    *   **PTAS, FPTAS** схемы приближения
-    *   **Аппроксимационные алгоритмы для NP-трудных задач**
-
----
-
-## **11. МЕТА-АЛГОРИТМИКА И ИНЖЕНЕРИЯ**
-
-### **I. ТЕХНОЛОГИИ ПРОГРАММИРОВАНИЯ**
-*   **Стресс-тестирование**
-*   **Написание скриптов на Python/Linux** для генерации тестов
-*   Чекер, валидатор, программа-времянка
-*   Оверкилл и упрощение
-*   **Отладка и профилирование**
-*   **Тестирование на граничных случаях**
-*   **Техники отладки:**
-    *   **Binary search по коду**
-    *   **Stress testing с детекцией ошибок**
-*   **Оптимизации времени выполнения:**
-    *   **Cache-friendly алгоритмы**
-    *   **Memory allocation оптимизации**
-
-### **II. СМЕЖНЫЕ ОБЛАСТИ**
-*   **Информационная безопасность, CTF**
-*   **Машинное обучение в спортивном программировании**
-*   **Параллельное программирование**
-*   **Распределенные системы**
-*   **Операционные системы и низкоуровневая оптимизация**
