@@ -1,74 +1,84 @@
-# **III. ТЕОРИЯ ЧИСЕЛ**
-*   **Делимость, НОД, НОК**
-    *   **Greatest Common Divisor, Gcd Of N Numbers**
-    *   **Least Common Multiple**
-    *   **Aliquot Sum**
-    *   **Factors, Prime Factors**
-*   **Свойства чисел**
-    *   **Number Of Digits, Sum Of Digits**
-    *   **Is Int Palindrome, Persistence**
-    *   **Largest Of Very Large Numbers**
-    *   **Integer Square Root**
-    *   **Remove Digit**
-*   **Диофантовы уравнения и Модулярная арифметика**
-    *   **Бинарное возведение в степень**
-    *   **Modular Division** (обратный элемент)
-    *   **Теорема Эйлера**
-    *   **Fermat Little Theorem**
-    *   **Линейные диофантовы уравнения:** AX + BY = C
-    *   **Модульные уравнения:** AX ≡ B (mod M)
-    *   **Системы модульных уравнений**
-    *   **Алгоритм Гарнера** для решения систем сравнений
-    *   **Китайская теорема об остатках/Chinese Remainder Theorem** (расширенная версия)
+# **I. ТЕОРИЯ ЧИСЕЛ**
+
+## **A. Делимость, НОД, НОК**
+*   **Greatest Common Divisor, Gcd Of N Numbers**
+*   **Least Common Multiple**
+*   **Aliquot Sum**
+*   **Factors, Prime Factors**
+
+## **B. Свойства чисел**
+*   **Number Of Digits, Sum Of Digits**
+*   **Is Int Palindrome, Persistence**
+*   **Largest Of Very Large Numbers**
+*   **Integer Square Root**
+*   **Remove Digit**
+
+## **C. Диофантовы уравнения и Модулярная арифметика**
+*   **Бинарное возведение в степень**
 *   **Алгоритм Евклида**
     *   **Extended Euclidean Algorithm**
-*   **Дискретный анализ и корни**
-    *   **Дискретное логарифмирование:** алгоритм baby-step-giant-step
-    *   **Дискретное извлечение корня**
-    *   **Первообразные корни:** существование и алгоритмы нахождения
-    *   **Индексы (дискретные логарифмы)**
-*   **Специальные алгоритмы для факториалов**
-    *   **Нахождение степени делителя в факториале**
-    *   **Вычисление N! mod P за O(P log N)** (теорема Вильсона)
-    *   **Троичная сбалансированная система счисления**
-*   **Простые числа**
-    *   **Теория простых чисел**
-        *   **Eulers Totient**
-        *   **Mobius Function, Liouville Lambda**
-        *   **Is Square Free**
-    *   **Prime Check, Prime Numbers**
-    *   **Prime Sieve Eratosthenes, Sieve Of Eratosthenes**
-    *   **Segmented Sieve, Odd Sieve**
-    *   **Lucas Lehmer Primality Test**
-    *   **Solovay Strassen Primality Test**
-    *   **Решето Сундарама**
-    *   **Оптимизированные решета**
-    *   **Решето Эратосфена с линейным временем работы**
-    *   **Сравнение временной сложности различных решет**
-    *   Функция Эйлера
-    *   **Тест Миллера-Рабина**
-    *   **Germain Primes, Twin Prime**
-    *   **Алгоритм Полларда p-1** старт
-    *   **Алгоритм Полларда Rho**
-    *   **Метод Бента**
-    *   **Метод Полларда Монте-Карло**
-    *   **Метод факторизации Ферма**
-    *   **Метод тривиального деления**
-    *   **Тест BPSW** (Baillie-PSW) стоп
-    *   **Сравнение алгоритмов факторизации**
-*   **Специальные числа**
-    *   **Классификация чисел**
-        *   **Perfect Number, Perfect Square, Perfect Cube**
-        *   **Automorphic Number, Krishnamurthy Number**
-        *   **Hamming Numbers, Happy Number, Harshad Numbers**
-        *   **Polygonal Numbers, Pronic Number, Proth Number**
-        *   **Triangular Numbers, Ugly Numbers, Weird Number**
-        *   **Armstrong Numbers, Carmichael Number**
-        *   **Realistic + Complex, P-adic Numbers**
-*   **Специальные последовательности**
-    *   **Fibonacci, Lucas Series**
-    *   **Collatz Sequence, Juggler Sequence**
-    *   **Sylvester Sequence**
+*   **Modular Division** (обратный элемент)
+*   **Теорема Эйлера**
+*   **Fermat Little Theorem**
+*   **Линейные диофантовы уравнения:** AX + BY = C
+*   **Модульные уравнения:** AX ≡ B (mod M)
+*   **Системы модульных уравнений**
+*   **Алгоритм Гарнера** для решения систем сравнений
+*   **Китайская теорема об остатках/Chinese Remainder Theorem** (расширенная версия)
+
+## **D. Дискретный анализ и корни**
+*   **Дискретное логарифмирование:** алгоритм baby-step-giant-step
+*   **Дискретное извлечение корня**
+*   **Первообразные корни:** существование и алгоритмы нахождения
+*   **Индексы (дискретные логарифмы)**
+
+## **E. Специальные алгоритмы для факториалов**
+*   **Нахождение степени делителя в факториале**
+*   **Вычисление N! mod P за O(P log N)** (теорема Вильсона)
+*   **Троичная сбалансированная система счисления**
+
+## **F. Простые числа**
+*   **Теория простых чисел**
+    *   **Eulers Totient**
+    *   **Mobius Function, Liouville Lambda**
+    *   **Is Square Free**
+*   **Prime Check, Prime Numbers**
+*   **Prime Sieve Eratosthenes, Sieve Of Eratosthenes**
+*   **Segmented Sieve, Odd Sieve**
+*   **Lucas Lehmer Primality Test**
+*   **Solovay Strassen Primality Test**
+*   **Решето Сундарама**
+*   **Оптимизированные решета**
+*   **Решето Эратосфена с линейным временем работы**
+*   **Сравнение временной сложности различных решет**
+*   Функция Эйлера
+*   **Тест Миллера-Рабина**
+*   **Germain Primes, Twin Prime**
+*   **Алгоритм Полларда p-1** старт
+*   **Алгоритм Полларда Rho**
+*   **Метод Бента**
+*   **Метод Полларда Монте-Карло**
+*   **Метод факторизации Ферма**
+*   **Метод тривиального деления**
+*   **Тест BPSW** (Baillie-PSW) стоп
+*   **Сравнение алгоритмов факторизации**
+
+## **G. Специальные числа**
+*   **Классификация чисел**
+    *   **Perfect Number, Perfect Square, Perfect Cube**
+    *   **Automorphic Number, Krishnamurthy Number**
+    *   **Hamming Numbers, Happy Number, Harshad Numbers**
+    *   **Polygonal Numbers, Pronic Number, Proth Number**
+    *   **Triangular Numbers, Ugly Numbers, Weird Number**
+    *   **Armstrong Numbers, Carmichael Number**
+    *   **Realistic + Complex, P-adic Numbers**
+
+## **H. Специальные последовательности**
+*   **Fibonacci, Lucas Series**
+*   **Collatz Sequence, Juggler Sequence**
+*   **Sylvester Sequence**
+
+---
 
 # **IV. КОМБИНАТОРИКА И КОМБИНАТОРНЫЕ АЛГОРИТМЫ**
 
