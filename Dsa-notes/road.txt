@@ -1,9 +1,19 @@
-1. math
-2. geometry
-3. hashing
-4. dynamic
-5. graph
-6. string
-7. struct
-8. technique
-9. analysis
+1. math:
+    теория чисел
+    комбинаторика
+    дискретная
+    алгебра
+    линейная алгебра
+    2. geometry
+    матанализ
+    теория вероятности
+    картинки
+    3. hashing
+
+чередовать с:
+    4. dynamic
+    5. graph
+    6. string
+    7. struct
+    8. technique
+    9. analysis
