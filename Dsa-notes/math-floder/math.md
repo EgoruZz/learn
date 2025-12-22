@@ -72,6 +72,7 @@
     *   **Triangular Numbers, Ugly Numbers, Weird Number**
     *   **Armstrong Numbers, Carmichael Number**
     *   **Realistic + Complex, P-adic Numbers**
+    *   Экзотические классы
 
 ## **H. Специальные последовательности**
 *   **Fibonacci, Lucas Series**
