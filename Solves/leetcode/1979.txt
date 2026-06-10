@@ -1,0 +1,14 @@
+class Solution {
+public:
+    int findGCD(vector<int>& nums) {
+        int mx = -1e9, mn = 1e9;
+        for (auto elem : nums) mn = min(mn, elem);
+        for (auto elem : nums) mx = max(mx, elem);
+        return my_gcd(mn, mx);
+    }
+
+    int my_gcd(int a, int b) {
+        while (b) swap(a %= b, b);
+        return a;
+    }
+};

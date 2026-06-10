@@ -1,0 +1,14 @@
+class Solution {
+public:
+    bool hasGroupsSizeX(vector<int>& deck) {
+        vector<int> numbers(10'000 + 1, 0);
+        for (auto elem : deck) numbers[elem]++;
+        vector<int> uniq;
+        for (int i = 0; i <= 10'000; i++) {
+            if (numbers[i] != 0) uniq.push_back(i);
+        }
+        int g = numbers[uniq[0]];
+        for (auto elem : uniq) g = gcd(g, numbers[elem]);
+        return (g != 1) ? true : false;
+    }
+};

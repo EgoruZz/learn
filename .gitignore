@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Compiled files
+*.dSYM/
+*.o
+*.exe
+*.out
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Build artifacts
+a
+a.out

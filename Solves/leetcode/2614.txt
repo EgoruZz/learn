@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int diagonalPrime(vector<vector<int>>& nums) {
+        int n = 4e6 + 1;
+        vector<int> sieve(n, 1);
+        sieve[0] = 0;
+        sieve[1] = 0;
+        for (int i = 2; i * i <= n; i++) {
+            if (sieve[i] == 0) continue;
+            for (int j = 2 * i; j < n; j += i) sieve[j] = 0;
+        }
+
+        int mx = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            int a1 = nums[i][i], a2 = nums[i][nums[0].size() - i - 1];
+            if (sieve[a1]) mx = max(mx, a1);
+            if (sieve[a2]) mx = max(mx, a2);
+        }
+
+        return mx;
+    }
+};
