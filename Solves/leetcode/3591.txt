@@ -1,0 +1,18 @@
+class Solution {
+public:
+    bool checkPrimeFrequency(vector<int>& nums) {
+        int m = 1e3;
+        vector<int> prime(m + 1, true);
+        prime[0] = false;
+        prime[1] = false;
+        for (int i = 2; i * i <= m; i++) {
+            if (prime[i] == false) continue;
+            for (int j = 2 * i; j < m; j += i) prime[j] = false;
+        }
+        vector<int> freq(100 + 1, 0);
+        bool ans = true;
+        for (auto elem : nums) freq[elem]++;
+        for (auto elem : freq) ans *= !(prime[elem]);
+        return (ans == false) ? true : false;
+    }
+};

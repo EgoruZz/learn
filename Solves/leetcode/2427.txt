@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int commonFactors(int a, int b) {
+        int cnt = 0, g = gcd(a, b);
+        for (int x = 1; x * x <= g; x++) {
+            if (g % x == 0) {
+                cnt++;
+                if (g / x != x) cnt++;
+            }
+        }
+        return cnt;
+    }
+};

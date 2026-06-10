@@ -1,0 +1,13 @@
+class Solution {
+public:
+    bool isThree(int n) {
+        int cnt = 2;
+        for (int x = 2; x * x <= n; x++) {
+            if (n % x == 0) {
+                cnt++;
+                if ((n / x) != x) cnt++;
+            }
+        }
+        return cnt == 3;
+    }
+};

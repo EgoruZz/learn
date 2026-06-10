@@ -1,0 +1,25 @@
+class Solution {
+public:
+    using ull = unsigned long long; 
+
+    int nthUglyNumber(int n, int a, int b, int c) {
+        return bs(n, a, b, c);
+    }
+
+    bool foo(ull x, ull n, ull a, ull b, ull c) {
+        return n <= x/a + x/b + x/c - x/lcm(a, b) - x/lcm(a, c) - x/lcm(b, c) + x/lcm(lcm(a, b), c);
+    }
+
+    int bs(int n, int a, int b, int c) {
+        int ls = 0, rs = 2e9; // [1, 2e9]
+        while (rs - ls > 1) {
+            int mid = ls + (rs - ls) / 2;
+            if (foo(mid, n, a, b, c)) {
+                rs = mid;
+            } else {
+                ls = mid;
+            }
+        }
+        return rs;
+    }
+};

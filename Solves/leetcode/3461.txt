@@ -1,0 +1,22 @@
+class Solution {
+public:
+    bool hasSameDigits(string s) {
+        int n = (int) s.length();
+        vector<vector<int>> pascal(n - 1, vector<int>(n));
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j <= i; j++) {
+                if (j == 0 || j == i) pascal[i][j] = 1;
+                else pascal[i][j] = (pascal[i - 1][j - 1] + pascal[i - 1][j]) % 10;
+            }
+        }
+
+        int d1 = 0, d2 = 0;
+        for (auto i = 0; i < n - 1; i++) {
+            d1 += pascal[n - 1 - 1][i] % 10 * (s[i] - '0') % 10;
+        }
+        for (auto i = 1; i < n; i++) {
+            d2 += pascal[n - 1 - 1][i - 1] * (s[i] - '0') % 10;
+        }
+        return d1 % 10 == d2 % 10;
+    }
+};
