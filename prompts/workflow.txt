@@ -55,6 +55,10 @@ git push origin learning
 Выбирай: “Create merge commit” (если хочешь видеть историю веток)
 или “Squash and merge” (рекомендую на старте)
 
-13. Удаляешь ветку (опционально)
+13. Уходишь в другую ветку (необязательный шаг)
+git checkout main
+git pull origin main
+
+14. Удаляешь ветку (опционально)
 git branch -d learning
 git push origin --delete learning
