@@ -1,7 +1,9 @@
 # **ТЕОРИЯ ЧИСЕЛ**
 
 > Разделы A–F: `number-theory/a-folder/` ... `number-theory/f-folder/`
+
 > Специальные числа: `special-numbers/` (на уровне с number-theory)
+
 > Специальные последовательности: `special-sequences/` (на уровне с number-theory)
 
 ---

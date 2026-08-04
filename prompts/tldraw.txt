@@ -1,0 +1,242 @@
+tldraw / tldraw offline — самобриф агента
+==========================================
+
+Ты работаешь с tldraw: это два разных, но связанных продукта.
+Перед любой работой с холстом прочитай этот файл целиком.
+
+⸻
+
+1. ЧТО ЭТО
+⸻
+
+tldraw
+- open-source SDK бесконечного холста на React (пакет @tldraw/tldraw).
+- GitHub: tldraw/tldraw (~49.6K★), 74K подписчиков X, ~313–345K npm-загрузок/неделю.
+- В проде: Google, Shopify, ClickUp, Autodesk, Runway, Replit, BlackRock, Luma, SchoolAI, Padlet и др.
+- Продукты компании: tldraw Sync (мультиплеер, 2024), tldraw MCP App (мар 2026), SDK 4.0 (сен 2025), SDK 5.0 (май 2026).
+- Финансы: seed $2.7M (2022), +$2M (2023), $10M (апр 2025).
+
+tldraw offline
+- Десктоп-приложение (Electron) для локальных файлов. Анонс 16 июля 2026 (Steve Ruiz).
+- Слоган: «A local whiteboard for you and your agents».
+- Без аккаунтов и серверов, работает без интернета. Всё локально и приватно.
+- Файл: формат `.tldraw` — canvas + страницы + медиа + скрипты в одном файле.
+  Унаследованный `.tldr` открывается и импортируется как новый документ.
+- GitHub: tldraw/tldraw-offline (~423★). НЕ open source: «All rights reserved».
+- Скачать: offline.tldraw.com, релизы: github.com/tldraw/tldraw-offline/releases/latest.
+- macOS (Universal DMG), Windows (x64/Arm64), Linux (AppImage/.deb).
+- Приложение не мержит внешние изменения в открытый файл: перед заменой файла извне — закрой документ.
+
+⸻
+
+2. КОНТЕКСТ ПОЛЬЗОВАТЕЛЯ (наша связка)
+⸻
+
+- Стек: голос → whiteboard. Холст tldraw offline используется как «доска преподавателя» для
+  конспектов по Computer Science.
+- Агент: OpenCode (официально поддерживается tldraw: упомянут в README и на offline.tldraw.com).
+- API: локальный Local Canvas API на порту 7236 (читается из server.json).
+- Файл-промт AI Professor: /Users/egorsergeev/learn/prompts/whiteboard.txt
+  (обучает через холст: title → problem → intuition → visualization → examples → definition →
+  algorithm/proof → complexity → applications → mistakes → connections).
+- Материалы: /Users/egorsergeev/learn/Dsa-notes/ (technique, dynamic, graph, string, struct,
+  hashing, geometry, analysis, math, number-theory).
+- Холсты: /Users/egorsergeev/learn/tldraw/canvas.tldraw.
+- Пример проделанной работы: задача ACMP №47 «Наилучший делитель» нарисована на холсте
+  (149 фигур, 11 разделов, проверено через API).
+
+⸻
+
+3. АКТУАЛЬНЫЕ ИСТОЧНИКИ ПРАВДЫ (проверять при любой новой задаче)
+⸻
+
+- Блог анонса: https://tldraw.dev/blog/tldraw-offline
+- Примеры и шаблоны: https://tldraw.dev/blog/building-with-tldraw-offline
+- Сайт: https://offline.tldraw.com/
+- Репозиторий: https://github.com/tldraw/tldraw-offline
+- User manual (Notion): https://tldraw.notion.site/User-manual-tldraw-offline-39a3e4c324c080e7b2eacc5afd078e85
+- Changelog (Notion): https://tldraw.notion.site/Changelog-3a73e4c324c08077996ccc791523cbb7
+- X: @tldraw, @steveruizok (Steve Ruiz, CEO/founder).
+- Discord: discord.gg/s4FXZ6fppJ.
+- SDK-доки: https://tldraw.dev/ (quick-start, docs, releases).
+- Релизы: https://github.com/tldraw/tldraw-offline/releases/latest
+
+Порядок при «свежей» задаче: сначала changelog + releases (не вышел ли новый формат/эндпоинт),
+затем user manual (изменились ли настройки агента), затем блог (новые шаблоны/примеры).
+
+⸻
+
+4. LOCAL CANVAS API (как агент управляет холстом)
+⸻
+
+- При запуске приложение пишет server.json в конфиг-каталог:
+  macOS  ~/Library/Application Support/tldraw/server.json
+  Linux  ~/.config/tldraw/server.json
+  Windows %APPDATA%\tldraw\server.json
+- Содержит: port (по умолчанию 7236), bearer token, pid, startedAt.
+- Все запросы, кроме GET /, требуют заголовок: Authorization: Bearer <token>.
+- Чистый выход удаляет server.json. Если файл есть, а порт молчит — приложение упало некорректно.
+- ПРАВИЛО: порт и токен перечитывать из файла ПРИ КАЖДОМ вызове (каждый вызов — свежий shell).
+  Не хардкодить 7236, не кэшировать токен.
+
+Основные вызовы (curl):
+- Найти документ: POST /api/search {"code": "return (await api.getFocusedDoc()).id"}
+  альтернативы: api.getDocs(), api.getShapes(docId), api.getBindings(docId),
+  api.getScreenshot(docId) → {filePath,...}
+- Разовый код на холсте: POST /api/doc/:id/exec {"code": "..."}
+  В scope: editor + helpers. Можно await import("tldraw") (createShapeId, toRichText).
+- Persistent script (путь к файлу): POST /api/doc/:id/script-workspace → {mainJsPath, isDefaultScript}
+- Статус применения скрипта: GET /api/doc/:id/script-status
+  state: "applied" (currentDiskDigest === lastAppliedDigest === manifestSha256,
+  pendingApply=false, lastApplyError=null) | "pending" | "error" (читать errorLogPath) | "not-watching".
+- Разовый exec — это живое редактирование, НЕ сохраняется как скрипт.
+
+⸻
+
+5. ДВА ПОДХОДА К РАБОТЕ
+⸻
+
+A. One-off edits (exec) — генерация/раскладка/чистка. Не переживает перезагрузку.
+   Пример exec:
+   const {createShapeId, toRichText} = await import("tldraw");
+   editor.createShape({id:createShapeId(), type:"geo", x:0, y:0,
+     props:{geo:"rectangle", w:200, h:100, color:"blue", fill:"solid",
+            richText:toRichText("hello")}});
+   return editor.getCurrentPageShapes().length;
+
+B. Durable behavior (document script) — переживает перезагрузку, грузится при каждом открытии.
+   Живёт в файле `script/main.js` (путь получить через /script-workspace), приложение следит
+   за файлом watcher-ом и применяет при изменении.
+   Контракт (script-context.d.ts):
+     import { createShapeId, toRichText } from 'tldraw'   // примитивы: import, не глобалы
+     export default function ({ editor, helpers, signal }) {
+       editor.run(() => {                                 // batch = один шаг undo
+         helpers.createShapeIfMissing({                   // идемпотентная мебель
+           id: createShapeId('node-1'), type: 'geo', x: 0, y: 0,
+           props: { geo: 'rectangle', w: 200, h: 100, richText: toRichText('hi') },
+         })
+       })
+       const stop = editor.store.listen(() => { /* реагировать на изменения */ })
+       signal.addEventListener('abort', () => stop())     // ОБЯЗАТЕЛЬНАЯ очистка
+     }
+   - Только импорты из 'tldraw' / 'react' / 'react-dom'. Это не Node-проект.
+   - Скрипт запускается снова на каждом load — делай всё идемпотентным
+     (helpers.createShapeIfMissing + стабильные createShapeId('name')).
+   - Записи скрипта вне undo: editor.run(fn, { history: 'ignore' }).
+   - editor.on('tick') — RAF, пауза при скрытом окне; setInterval в фоне тормозится ~1/с.
+   - Согласие: «This document contains a script → Run Script». Чтобы пропустить диалог:
+     metadata.json со script-манифестом { sha256: "<digest>" } (sha256 по каждому
+     script-пути как `${path}\0${sha256hex(bytes)}\n`, пути отсортированы) +
+     преддоверие в ~/.tldraw/script-trust.json ({"trusted":["<digest>"]}) или $TLDRAW_SCRIPT_TRUST.
+     Несовпадение digest = файл отвергается как подделанный.
+
+⸻
+
+6. ПРИНЦИПЫ РАБОТЫ АГЕНТА (критично)
+⸻
+
+- НЕ «рисуй» фигуры вручную, имитируя рисунок. Пиши код, который их генерирует.
+  Агент на порядок сильнее в скриптинге холста, чем в рисовании.
+- НЕ кликай мышью (computer-use) и НЕ редактируй .tldraw файл руками напрямую.
+  Управление только через локальный HTTP API. Держи tldraw offline открытым.
+- Верификация: после exec читай обратно api.getShapes(docId) / api.getBindings(docId);
+  скрин api.getScreenshot(docId) и посмотри на него глазами.
+  Для интерактивного скрипта проверяй «один симулированный клик + одно чтение состояния»
+  через /exec (editor.dispatch pointer event), а НЕ реальной мышью.
+- Учитывай лимиты хоста: на Linux watcher использует inotify; нехватка max_user_instances
+  → script-status "not-watching", скрипт не выполняется.
+- Скрипт применяется только когда watcher его подхватил; не докладывай успех при "pending".
+- Безопасность: скрипты = исполняемый код. Открывать только доверенные файлы.
+
+⸻
+
+7. ЧТО АГЕНТ УМЕЕТ НА ХОЛСТЕ (latent features SDK)
+⸻
+
+- Создавать/удалять/перемещать фигуры (editor.createShape/createShapes, select, delete).
+- Импортировать ассеты (изображения, видео).
+- Слушать изменения (editor.store.listen) и реагировать (например, «корзина», удаляющая
+  перетащенные фигуры).
+- Заполнять пробелы React-части: hover-состояния и прочее через escape hatches.
+- Писать persistent-скрипты = превращать .tldraw файл в «маленькое приложение»:
+  реагировать на внешние данные, общаться с другим ПО.
+- Если агент может сделать это на компьютере — может сделать и в tldraw offline.
+
+⸻
+
+8. ОФИЦИАЛЬНЫЕ ШАБЛОНЫ (скачиваемые .tldraw, с блога 22 июл 2026)
+⸻
+
+- Data visualizer — интерактивный глобус землетрясений из локального CSV (Claude-агент).
+  https://pub-6ce42c104372415d97d2ee86b717059f.r2.dev/dataviz-example%20(1).tldraw
+- Presentation mode — slide deck из фреймов tldraw.
+  https://pub-6ce42c104372415d97d2ee86b717059f.r2.dev/presentation-example.tldraw
+- Kanban board — карточки зеленеют в колонке Done.
+  https://pub-6ce42c104372415d97d2ee86b717059f.r2.dev/kanban-example%20(2).tldraw
+- Color palette selector — палитра из брошенного изображения.
+  https://pub-6ce42c104372415d97d2ee86b717059f.r2.dev/palette%20(1).tldraw
+- Task tracker — перетаскивание дат на задачи.
+  https://pub-6ce42c104372415d97d2ee86b717059f.r2.dev/todo%20copy-2.tldraw
+- Local Model Playground — WebLLM-инференс ВНУТРИ .tldraw файла, офлайн после кэша.
+  https://pub-6ce42c104372415d97d2ee86b717059f.r2.dev/local-model-demo.tldraw
+  (движок: github.com/mlc-ai/web-llm, WebGPU, локальные модели из коробки)
+
+⸻
+
+9. КОМЬЮНИТИ, ДЕМО, ОБУЧЕНИЕ
+⸻
+
+- Демо из X (из блога): @emanperez28/2079799032390574428, @miltovi777/2078249844506857849,
+  @osadavc/2079470670703190066, @satishgoda/2077864963222512059, @milindlabs/2078508667180306561,
+  @tldraw/2078420241596506276, @ggsimm/2078612787719279003.
+- YouTube: «Agent Draw» (выделить область на холсте → сказать вслух → агент рисует):
+  youtube.com/watch?v=iIH2hJAxxm8, youtube.com/watch?v=livloOnVpC8.
+  Доклады Steve Ruiz: «Make Real: tldraw's AI Adventure», «What's Under the Pointer?».
+- Экоскистема скиллов для агентов:
+  * Встроенный: Develop → Install Agent Skills (пишет скилл в ~/.codex/skills/,
+    ~/.claude/skills/, ~/.cursor/skills/, ~/.gemini/skills/).
+  * Сторонние: nousresearch Hermes skill (creative-tldraw-offline), Jack5316/tldraw_offline-skill,
+    skills.rest/tldraw-offline, DeepWiki: deepwiki.com/tldraw/tldraw-offline (док-ция по скриптам).
+- Отслеживать в X: аккаунт @tldraw (74K) и тег/поиск «tldraw offline».
+
+⸻
+
+10. ТРЕНДЫ И НАПРАВЛЕНИЕ (чтобы работать «современно»)
+⸻
+
+- Главный вектор компании: canvas + AI-агенты. tldraw offline — «local whiteboard for you and
+  your agents». Онлайн vs офлайн: онлайн — агент ограничен схемой (защита от script-injection),
+  офлайн — риск исчезает, поэтому порт принимает сырой JS (это фича, а не брешь).
+- Предыдущие AI-вехи: Make Real, tldraw computer, fairies (harness canvas↔AI), Agent Draw,
+  tldraw MCP App.
+- Файл = приложение: каждый .tldraw может нести собственный скрипт и работать как мини-апп.
+- Движение в сторону «друзей» (multiuser offline, см. анонс v1.12: «and soon your friends»).
+- Версии для проверки: v1.12.1 от 29 июл 2026; changelog обновлять.
+
+⸻
+
+11. ТИПОВОЙ ПОТОК ЗАДАЧИ
+⸻
+
+1. Прочитай этот файл и проверь актуальность: changelog + releases + user manual (раздел 3).
+2. Убедись, что tldraw offline запущен и нужный документ открыт (server.json существует,
+   порт отвечает). Перечитай port+token.
+3. Определи документ: /api/search → api.getFocusedDoc() или api.getDocs() (по имени, если открыто несколько).
+4. Выбери подход:
+   - разовая раскладка/генерация → /exec;
+   - постоянное поведение (кнопки, реакции, авто-обновление) → script/main.js через /script-workspace.
+5. Делай идемпотентно, пиши код, а не фигуры. Проверяй undo (history: 'ignore' для скрипта).
+6. Верифицируй: read-back фигур + скриншот; для UI — симулированный клик через /exec.
+7. Если что-то «не работает» — сначала script-status и errorLogPath, потом выводы.
+8. При изменении версии/эндпоинтов — обнови этот файл (дату в разделе 12).
+
+⸻
+
+12. ДАТА АКТУАЛЬНОСТИ
+⸻
+
+- Составлено: 3 августа 2026 (по материалам 16–31 июля 2026).
+- Последняя проверка: 4 августа 2026.
+- Версия приложения по GitHub Releases: v1.12.1 (29 июл 2026).
+- Changelog и user manual из раздела 3 не открылись через доступный веб-просмотрщик;
+  перед серьёзной работой проверь их вручную и обнови этот раздел.

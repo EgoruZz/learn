@@ -5,7 +5,7 @@
             "label": "C/C++: clang++ сборка активного файла",
             "command": "/usr/bin/clang++",
             "args": [
-                "-std=c++17",  // ← ИЗМЕНИТЬ ЗДЕСЬ
+                "-std=c++17",
                 "-fcolor-diagnostics",
                 "-fansi-escape-codes",
                 "-g",
