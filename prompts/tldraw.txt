@@ -39,9 +39,9 @@ tldraw offline
 - Файл-промт AI Professor: /Users/egorsergeev/learn/prompts/whiteboard.txt
   (обучает через холст: title → problem → intuition → visualization → examples → definition →
   algorithm/proof → complexity → applications → mistakes → connections).
-- Материалы: /Users/egorsergeev/learn/Dsa-notes/ (technique, dynamic, graph, string, struct,
+- Материалы: /Users/egorsergeev/learn/dsa-notes/ (technique, dynamic, graph, string, struct,
   hashing, geometry, analysis, math, number-theory).
-- Холсты: /Users/egorsergeev/learn/tldraw/canvas.tldraw.
+- Холсты: /Users/egorsergeev/learn/tldraw/file1.tldraw.
 - Пример проделанной работы: задача ACMP №47 «Наилучший делитель» нарисована на холсте
   (149 фигур, 11 разделов, проверено через API).
 
