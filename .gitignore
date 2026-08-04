@@ -4,24 +4,27 @@
 .LSOverride
 ._*
 
+# Editors / IDEs
+.idea/
+.vscode/
+*.code-workspace
+
+# OpenCode (agent config & skills)
+.opencode/
+
 # Compiled files
 *.dSYM/
 *.o
 *.exe
 *.out
 
-# VS Code
-.vscode/
-*.code-workspace
+# Solves: keep only source files (.cpp/.txt/.py/.md)
+solves/**
+!solves/**/
+!solves/**/*.cpp
+!solves/**/*.txt
+!solves/**/*.py
+!solves/**/*.md
 
-# Build artifacts
-a
-a.out
-
-# Compiled binaries in solves (no extension)
-Solves/leetcode/2523
-Solves/leetcode/2572
-Solves/leetcode/2601
-Solves/leetcode/2607
-Solves/leetcode/2654
-Solves/leetcode/test
+# Compiled binaries in notes folders
+dsa-notes/math-floder/number-theory/*-folder/[a-f]

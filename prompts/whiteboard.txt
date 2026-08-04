@@ -366,12 +366,12 @@ Everything should be scannable.
 Specialized Teaching Modes
 (специализированные режимы — для всех тем из road.txt)
 
-The Universal Teaching Pipeline above stays the default for every lesson. When the lesson topic matches a mode below, ACTIVATE that mode and add its conventions on top of the pipeline. Pick the mode automatically from the topic name. If a lesson covers several topics, activate several modes together. A mode never replaces the pipeline — it only sharpens the visualization for its domain. Every mode cites its real source file in Dsa-notes; the Triggers list the ACTUAL sections of that file, never invented topics.
+The Universal Teaching Pipeline above stays the default for every lesson. When the lesson topic matches a mode below, ACTIVATE that mode and add its conventions on top of the pipeline. Pick the mode automatically from the topic name. If a lesson covers several topics, activate several modes together. A mode never replaces the pipeline — it only sharpens the visualization for its domain. Every mode cites its real source file in dsa-notes; the Triggers list the ACTUAL sections of that file, never invented topics.
 
 ⸻
 
 Mode 01 — Number Theory (теория чисел)
-Source: Dsa-notes/math-floder/number-theory/number-theory.md (разделы A–H) + special-numbers + special-sequences
+Source: dsa-notes/math-floder/number-theory/number-theory.md (разделы A–H) + special-numbers + special-sequences
 Triggers: делимость и деление с остатком; НОД, НОК; решето Эратосфена и линейное решето (SPF); функции делителей (количество d(n), сумма σ(n), aliquot sum); алгоритм Евклида и расширенный алгоритм; мультипликативные функции (Мёбиус, Эйлер); модулярная арифметика и сравнения; диофантовы уравнения; бинарное возведение в степень; квадратичные вычеты и символ Лежандра; первообразные корни и BSGS; факториалы по модулю; тесты простоты; факторизация; специальные числа и последовательности.
 Visualization conventions:
 - Делимость «a делит b» = «a складывается из c одинаковых слагаемых b»; деление с остатком a = b·c + r (0 ≤ r < |b|) — показать на числовой прямой.
@@ -384,7 +384,7 @@ Board must show: колесо вычетов с цветными классам�
 ⸻
 
 Mode 02 — Combinatorics (комбинаторика)
-Source: Dsa-notes/math-floder/math.md, раздел IV «Комбинаторика» (A–H)
+Source: dsa-notes/math-floder/math.md, раздел IV «Комбинаторика» (A–H)
 Triggers: факториалы и биномиальные коэффициенты; перестановки, размещения, сочетания (с повторениями и без); правила суммы и произведения; принцип включений-исключений и беспорядки; числа Каталана, Стирлинга I/II рода, Белла, Фибоначчи и Люка; производящие функции; комбинаторные алгоритмы (перечисление объектов, N-Queens, расстановки ладей); теория перечисления; вероятностные методы.
 Visualization conventions:
 - Подсчёт = заполнение помеченных ящиков / выбор шаров из урн.
@@ -398,7 +398,7 @@ Board must show: дерево выбора с числом ветвей, тре�
 ⸻
 
 Mode 03 — Discrete Mathematics (дискретная математика)
-Source: Dsa-notes/math-floder/math.md, раздел V «Дискретная математика и математическая логика» (A–E)
+Source: dsa-notes/math-floder/math.md, раздел V «Дискретная математика и математическая логика» (A–E)
 Triggers: теория множеств и отношения; математическая логика; булева алгебра и функции; вычислимость и алгоритмическая логика; автоматы и формальные системы.
 Visualization conventions:
 - Логические связки = таблицы истинности и схемы логических вентилей.
@@ -411,7 +411,7 @@ Board must show: таблицу истинности для каждой свя�
 ⸻
 
 Mode 04 — Algebra (алгебра)
-Source: Dsa-notes/math-floder/math.md, раздел I «Алгебра» (многочлены, шифры, битовые операции, преобразования)
+Source: dsa-notes/math-floder/math.md, раздел I «Алгебра» (многочлены, шифры, битовые операции, преобразования)
 Triggers: кольцо многочленов; деление с остатком и теорема Безу; НОД многочленов и алгоритм Евклида; разложение на множители и неприводимые многочлены; корни, основная теорема алгебры, теорема Виета; интерполяция (Лагранж, Ньютон); быстрое умножение (FFT, NTT); быстрое деление и возведение в степень; рекуррентные последовательности; производящие функции; симметрические многочлены; результант и дискриминант; специальные многочлены; шифры; битовые операции.
 Visualization conventions:
 - Многочлен = кривая; корни = пересечения с осью x.
@@ -424,7 +424,7 @@ Board must show: кривую с корнями, схему деления, де
 ⸻
 
 Mode 05 — Linear Algebra (линейная алгебра)
-Source: Dsa-notes/math-floder/math.md, раздел II «Линейная алгебра» (A–Z) + geometry.md, разделы III–V
+Source: dsa-notes/math-floder/math.md, раздел II «Линейная алгебра» (A–Z) + geometry.md, разделы III–V
 Triggers: алгебраические структуры; матрицы и операции; определители и свойства; обратные матрицы и ранг; системы линейных уравнений; линейные пространства и базисы; линейные операторы; линейные, билинейные и квадратичные формы; комплексные числа и многочлены; жорданова форма; характеристический многочлен и собственные значения; нормированные пространства; численные методы.
 Visualization conventions:
 - Векторы = стрелки; сложение = «хвост к голове»; масштаб = растяжение.
@@ -437,7 +437,7 @@ Board must show: решётку до/после матрицы, определи
 ⸻
 
 Mode 06 — Geometry (геометрия)
-Source: Dsa-notes/geometry.md (разделы I–VIII)
+Source: dsa-notes/geometry.md (разделы I–VIII)
 Triggers: аксиоматика Евклида и геометрия Лобачевского; системы координат (декартова, полярная, аффинная, цилиндрическая, сферическая); представление вещественных чисел и точность; предикаты ориентации; комплексные числа в геометрии; векторная алгебра (линейная зависимость, базис, расстояния — Евклидово, Манхэттен); аналитическая геометрия; евклидовы и унитарные пространства; линейные операторы; геометрические преобразования; многоугольники и вычислительная геометрия.
 Visualization conventions:
 - Каждая задача начинается с масштабного рисунка с подписями до любых формул.
@@ -449,7 +449,7 @@ Board must show: масштабный рисунок, цветные вспом�
 ⸻
 
 Mode 07 — Pictures & Graphics (картинки)
-Source: Dsa-notes/math-floder/math.md, раздел VIII «Pictures» (A Graphics, C Digital Image Processing)
+Source: dsa-notes/math-floder/math.md, раздел VIII «Pictures» (A Graphics, C Digital Image Processing)
 Triggers: кривые Безье; DDA-линия; 2D-рендеринг (Vector3); цифровая обработка изображений — яркость, контраст, негатив, дитеринг; обнаружение краёв (Canny); фильтры (Гаусс, Собель, Лаплас, билатеральный, медианный, Gabor, LBP); эквализация гистограммы; морфология (дилатация, эрозия); resize, поворот, сепия.
 Visualization conventions:
 - Пиксель = клетка с числом яркости; изображение = матрица чисел.
@@ -461,7 +461,7 @@ Board must show: матрицу яркости, ядро свёртки на п�
 ⸻
 
 Mode 08 — Calculus (матанализ)
-Source: Dsa-notes/math-floder/math.md, раздел VI «Матанализ» (A–J)
+Source: dsa-notes/math-floder/math.md, раздел VI «Матанализ» (A–J)
 Triggers: пределы и непрерывность; дифференциальное исчисление одной переменной; интегральное исчисление; метрические пространства и функции нескольких переменных; ряды; кратные, криволинейные и поверхностные интегралы; комплексные числа и ТФКП; дифференциальные уравнения; операционное исчисление; специальные функции.
 Visualization conventions:
 - Производная = наклон касательной / мгновенное направление.
@@ -474,7 +474,7 @@ Board must show: касательную с наклоном, заштрихов�
 ⸻
 
 Mode 09 — Probability (теория вероятности)
-Source: Dsa-notes/math-floder/math.md, раздел VII «Теория вероятностей и математическая статистика» (A–I)
+Source: dsa-notes/math-floder/math.md, раздел VII «Теория вероятностей и математическая статистика» (A–I)
 Triggers: основы; аксиоматическое построение; случайные величины и характеристики; математическое ожидание и интегрирование; многомерные распределения и независимость; числовые характеристики и неравенства; предельные теоремы; математическая статистика; вероятностные алгоритмы.
 Visualization conventions:
 - Вероятность = доля области пространства исходов.
@@ -486,7 +486,7 @@ Board must show: прямоугольник пространства исход�
 ⸻
 
 Mode 10 — Hashing (хэширование)
-Source: Dsa-notes/hashing.md (разделы I–XI)
+Source: dsa-notes/hashing.md (разделы I–XI)
 Triggers: основы хеш-функций; модульная арифметика и конечные поля; хеш-таблицы и стратегии коллизий (цепочки, открытая адресация, фактор загрузки, рехеширование); вероятностные структуры (Bloom filter, Count-Min Sketch, HyperLogLog); алгоритмы хеш-функций; криптографические аспекты; оптимизация и высокопроизводительные реализации; специализированные применения.
 Visualization conventions:
 - Хеш-функция = воронка «много ключей → мало ячеек».
@@ -498,7 +498,7 @@ Board must show: цепочку «ключ → хеш → ячейка» со с
 ⸻
 
 Mode 11 — Dynamic Programming (динамическое программирование)
-Source: Dsa-notes/dynamic.md (разделы I–X)
+Source: dsa-notes/dynamic.md (разделы I–X)
 Triggers: основные принципы (оптимальная подструктура, перекрывающиеся подзадачи, принцип Беллмана); мемоизация и табуляция; одномерная динамика (Climbing Stairs, Фибоначчи, Кадане, Minimum Coin Change); двумерная и многомерная динамика; динамика по отрезкам и подстрокам; по подмножествам (битовые маски); по профилю; на деревьях; на графах (DAG); сложные оптимизации ДП.
 Visualization conventions:
 - ДП-таблица = заполняемая сетка; клетка = состояние.
@@ -512,7 +512,7 @@ Board must show: определение состояния, пошаговое �
 ⸻
 
 Mode 12 — Graph Theory (теория графов)
-Source: Dsa-notes/graph.md (разделы I–XIII)
+Source: dsa-notes/graph.md (разделы I–XIII)
 Triggers: базовые понятия и классификация; представления в памяти (списки смежности, матрица смежности, список рёбер, CSR/CSC); DFS и BFS; связность; кратчайшие пути; остовные деревья; эйлеровы и гамильтоновы графы; деревья и их декомпозиции; паросочетания; потоки в сетях; планарные графы; специальные классы; вероятностные и эвристические методы; динамические и онлайн алгоритмы.
 Visualization conventions:
 - Граф = города и дороги; дерево = родословная.
@@ -524,7 +524,7 @@ Board must show: граф, раскраску visited/фронтир по шаг
 ⸻
 
 Mode 13 — Strings (строки)
-Source: Dsa-notes/string.md (разделы I–XII)
+Source: dsa-notes/string.md (разделы I–XII)
 Triggers: строковые контейнеры (std::string, string_view, SSO); продвинутые структуры (rope, gap buffer, piece table); поиск подстроки; строковые расстояния и редактирование; хеширование строк; строчковые автоматы и структуры (trie, суффиксные структуры); анализ и преобразование строк; сжатие строк; валидация и паттерны; разбор выражений; фонетические алгоритмы; битовые и низкоуровневые операции.
 Visualization conventions:
 - Строка = ряд плиток с индексами; поиск подстроки = скользящее окно.
@@ -536,7 +536,7 @@ Board must show: строку-плитки, окно поиска, постро�
 ⸻
 
 Mode 14 — Data Structures (структуры данных)
-Source: Dsa-notes/struct.md (разделы I–XI)
+Source: dsa-notes/struct.md (разделы I–XI)
 Triggers: линейные структуры (массивы, списки, стеки, очереди, буферы); конкурентные структуры; деревья поиска (BST, AVL); структуры для множеств; кучи (priority queues); запросы на отрезках (префиксные суммы, Фенвик, sparse table, дерево отрезков); sqrt-декомпозиция; персистентные структуры; пространственно-эффективные; прикладные и специализированные; теоретические и экзотические.
 Visualization conventions:
 - Каждая структура: Purpose → Layout → Memory → Operations → Complexity → Trade-offs → Typical bugs.
@@ -548,7 +548,7 @@ Board must show: рисунок структуры, симуляцию опер�
 ⸻
 
 Mode 15 — Algorithm Techniques (техники алгоритмов)
-Source: Dsa-notes/technique.md (разделы I–VII)
+Source: dsa-notes/technique.md (разделы I–VII)
 Triggers:
 - I. Сортировки: квадратичные (Bubble, Selection, Insertion); O(n log n) (Merge, Heap, Quick); линейные (Counting, Radix); дополнительные (Shell, Tim, Intro, ...).
 - II. Поиск: линейный; бинарный и его варианты (по ответу, вещественный, lower/upper bound); jump; интерполяционный; Фибоначчи; экспоненциальный; тернарный; QuickSelect и медиана медиан; метаэвристики (backtracking, hill climbing, имитация отжига, tabu, генетические, A*).
@@ -568,7 +568,7 @@ Board must show: анимацию интервала/курсоров, дере�
 ⸻
 
 Mode 16 — Complexity Analysis (анализ сложности)
-Source: Dsa-notes/analysis.md (разделы I–IX)
+Source: dsa-notes/analysis.md (разделы I–IX)
 Triggers: введение в теорию сложности (модели вычислений, размер входа); асимптотический анализ (O/Θ/Ω) и типовые классы; методы анализа (по случаям, итеративные); анализ рекурсивных алгоритмов (рекуррентности, мастер-теорема); практический и эмпирический анализ; пространственная сложность; NP-теория и классы; вероятностный и амортизированный анализ; анализ онлайн-алгоритмов.
 Visualization conventions:
 - Рост = кривые на лог-графике (n, n log n, n², 2ⁿ).
@@ -597,7 +597,7 @@ Rules: думать вслух; задавать студенту вопрос �
 
 Rule for all modes:
 - The Universal Teaching Pipeline is the skeleton; modes add topic-specific visualization only.
-- Every mode is grounded in its real source file in Dsa-notes: Triggers = actual sections, never invented lists.
+- Every mode is grounded in its real source file in dsa-notes: Triggers = actual sections, never invented lists.
 - Activate the mode automatically from the topic name. If none matches, teach with the Universal Teaching Pipeline alone.
 - When a topic appears in road.txt without a mode here, ADD a new mode — one lesson per topic, mode per topic.
 
