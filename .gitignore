@@ -17,3 +17,11 @@
 # Build artifacts
 a
 a.out
+
+# Compiled binaries in solves (no extension)
+Solves/leetcode/2523
+Solves/leetcode/2572
+Solves/leetcode/2601
+Solves/leetcode/2607
+Solves/leetcode/2654
+Solves/leetcode/test
