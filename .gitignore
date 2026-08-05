@@ -6,17 +6,17 @@
 
 # Editors / IDEs
 .idea/
-.vscode/
 *.code-workspace
 
-# OpenCode (agent config & skills)
+# OpenCode (agent config & skills) — локальная конфигурация
 .opencode/
 
-# Compiled files
+# Compiled files & build artifacts
 *.dSYM/
 *.o
 *.exe
 *.out
+.cache/
 
 # Solves: keep only source files (.cpp/.txt/.py/.md)
 solves/**
@@ -26,5 +26,9 @@ solves/**
 !solves/**/*.py
 !solves/**/*.md
 
-# Compiled binaries in notes folders
-dsa-notes/math-floder/number-theory/*-folder/[a-f]
+# dsa-notes: keep only sources, ignore binaries (Code Runner / F5)
+dsa-notes/**/*
+!dsa-notes/**/
+!dsa-notes/**/*.cpp
+!dsa-notes/**/*.md
+!dsa-notes/**/*.txt
