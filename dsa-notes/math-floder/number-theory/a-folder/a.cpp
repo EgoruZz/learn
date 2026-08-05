@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-#include <numeric>
 #include <cmath>
 #include <algorithm>
 using namespace std;
