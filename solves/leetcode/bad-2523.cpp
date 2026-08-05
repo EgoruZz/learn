@@ -10,7 +10,7 @@ public:
         vector<int> spf = linear_sieve(right);
         vector<int> best = {0, (int) 1e9};
 
-        int ans2 = 0, l = 0, r = 0;
+        int l = 0, r = 0;
         for (int i = left; i <= right; i++) {
             if (spf[i] == i) {
                 l = r, r = i;
@@ -40,5 +40,5 @@ public:
 
 signed main() {
     auto res = Solution().closestPrimes(1, 7);
-    for (int i = 0; i < res.size(); i++) cout << res[i] << ' ';
+    for (int i = 0; i < (int) res.size(); i++) cout << res[i] << ' ';
 }

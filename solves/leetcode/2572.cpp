@@ -7,17 +7,16 @@ using namespace std;
 class Solution {
 public:
     int squareFreeSubsets(vector<int>& nums) {
-        const int PROD_MAX = (int) 3e4;
         vector<int> mu = mobius_sieve(30);
         for (auto elem : mu) cout << elem << ' ';
         cout << '\n';
 
         const int MOD = (int) 1e9 + 7;
         int answer = 0;
-        for (int i = 0; i < nums.size(); i++) {
+        for (int i = 0; i < (int) nums.size(); i++) {
             if (mu[nums[i]] != 0) {
                 int prod = nums[i], cnt = 1;
-                for (int j = i + 1; j < nums.size(); j++) {
+                for (int j = i + 1; j < (int) nums.size(); j++) {
                     if (mu[prod * nums[j]] != 0) prod *= nums[i], cnt++;
                 }
                 answer = (powmod(2, cnt, MOD) - 1 + MOD) % MOD;

@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
 using namespace std;
 
 class Solution {
@@ -25,6 +24,7 @@ public:
                 g = gcd(pref[l - 1], suf[r]);
             }
         }
+        return -1;
     }
 
     int gcd(int a, int b) {

@@ -1,0 +1,10 @@
+{
+    "clangd.arguments": [
+        "--background-index",
+        "--header-insertion=never"
+    ],
+    "code-runner.runInTerminal": true,
+    "code-runner.executorMap": {
+        "cpp": "cd $dir && clang++ -std=c++17 -g $fileName -o $fileNameWithoutExt && ./$fileNameWithoutExt"
+    }
+}

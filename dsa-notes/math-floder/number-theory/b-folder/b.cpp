@@ -54,7 +54,7 @@ int count_in_range(ll L, ll R, ll r, ll m) {
 //   3. Иначе: a' = a/d, b' = b/d, m' = m/d → x ≡ b' · (a')⁻¹ (mod m')
 //
 // Пример: cancel_mod(6, 4, 8) → d=2, a'=3, b'=2, m'=4 → x ≡ 2 (mod 4)
-void cancel_mod(ll a, ll b, ll c, ll m, ll &a1, ll &b1, ll &m1) {
+void cancel_mod(ll a, ll c, ll m, ll &a1, ll &b1, ll &m1) {
     ll d = gcd_mod(a, m);
     if (c % d != 0) { a1 = b1 = m1 = -1; return; }
     a1 = a / d; b1 = c / d; m1 = m / d;
