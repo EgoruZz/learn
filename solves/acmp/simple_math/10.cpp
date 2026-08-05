@@ -13,6 +13,6 @@ signed main() {
     }
 
     for (int i = 0; i < (int) ans.size(); i++) {
-        (i == ans.size() - 1) ? cout << ans[i] : cout << ans[i] << ' ';
+        (i == (int) ans.size() - 1) ? cout << ans[i] : cout << ans[i] << ' ';
     }
 }
