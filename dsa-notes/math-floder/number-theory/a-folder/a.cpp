@@ -1,9 +1,18 @@
+#ifndef NUMBER_THEORY_A_CPP
+#define NUMBER_THEORY_A_CPP
+
 #include <iostream>
 #include <vector>
 #include <unordered_map>
 #include <cmath>
 #include <algorithm>
 using namespace std;
+
+// dk_via_fact использует C(n,k), каноническая реализация которой (C_iter)
+// живёт в combinatorics/a/a.cpp. Включаем combinatorics сюда, чтобы C_iter
+// была видна; собственно struct Combinatorics и подключение number-theory
+// из combinatorics при этом пропускаются (INSIDE_NUMBER_THEORY) — иначе
+// был бы циклический include.
 
 // =============================================================
 // A. ДЕЛИМОСТЬ, НОД, НОК, ФУНКЦИИ ДЕЛИТЕЛЕЙ
@@ -17,7 +26,14 @@ using namespace std;
 //   D. НОК: lcm
 //   E. НОД: gcd_diff, gcd_mod, gcd_mod_rec, stein
 //   F. Мультипликативные: mu, mobius_sieve, liouville, liouville_sieve,
-//      fi, fi_single, euler_sieve, C, dk_via_fact, d, sigma_via_fact, sigma_sieve
+//      fi, fi_single, euler_sieve, dk_via_fact, d, sigma_via_fact, sigma_sieve
+//   (C(n,k) — из combinatorics/a/a.cpp, см. C_iter)
+
+#ifndef INSIDE_NUMBER_THEORY
+#define INSIDE_NUMBER_THEORY
+#include "../../combinatorics/a/a.cpp"
+#undef INSIDE_NUMBER_THEORY
+#endif
 
 struct Divisibility {
 
@@ -400,20 +416,8 @@ vector<int> euler_sieve(int n) {
 // --- F.2.3. Биномиальный коэффициент C(n, k) ---
 // C(n, k) = n! / (k! · (n-k)!) — количество k-элементных подмножеств из n.
 //
-// Вычисляем итеративно: res = res * (n-i) / (i+1)
-// Деление на (i+1) всегда целочисленное, потому что произведение
-// k последовательных чисел делится на k!.
-//
-// Используется в dₖ(n) для подсчёта количества способов
-// разложить степень простого на k множителей.
-long long C(int n, int k) {
-    if (k > n) return 0;
-    if (k == 0 || k == n) return 1;
-    long long res = 1;
-    for (int i = 0; i < k; i++)
-        res = res * (n - i) / (i + 1);
-    return res;
-}
+// Каноническая реализация перенесена в combinatorics/a/a.cpp (C_iter),
+// используется отсюда как свободная функция. См. начало файла.
 
 // --- F.2.4. dₖ(n) для одного числа через факторизацию ---
 // Формула: dₖ(n) = ∏ C(aᵢ + k - 1, k - 1)
@@ -429,7 +433,7 @@ long long dk_via_fact(int n, int k, const vector<int>& spf) {
     auto [primes, powers] = factorize(n, spf);
     long long res = 1;
     for (int p : powers)
-        res *= C(p + k - 1, k - 1);
+        res *= C_iter(p + k - 1, k - 1);
     return res;
 }
 
@@ -589,4 +593,5 @@ signed main() {
     for (int i = 1; i <= 10; i++) cout << "σ₂(" << i << ")=" << sig2[i] << "  ";
     cout << endl;
 }
-#endif
+#endif // DIVISIBILITY_MAIN
+#endif // NUMBER_THEORY_A_CPP

@@ -1,3 +1,6 @@
+#ifndef NUMBER_THEORY_B_CPP
+#define NUMBER_THEORY_B_CPP
+
 #include <iostream>
 #include <vector>
 #include <unordered_map>
@@ -551,4 +554,5 @@ signed main() {
     for (int a = 1; a <= 6; a++)
         cout << a << " — " << (ma.is_quadratic_residue(a, 7) ? "вычет" : "невычет") << endl;
 }
-#endif
+#endif // DISCRETE_LOG_MAIN
+#endif // NUMBER_THEORY_B_CPP
