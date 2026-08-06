@@ -22,7 +22,7 @@ typedef long long ll;
 // Наследует PrimeNumbers из f.cpp (→ ModArithmetic → Divisibility)
 // Из a.cpp: sigma_sum, divide, factorize, linear_sieve, mu
 // Из b.cpp: powmod, modinv
-// Из c.cpp: sum_digits_base (DigitOps)
+// Из c.cpp: sum_digits_base, is_perfect_square (DigitOps)
 // Из f.cpp: is_prime, factorize_rho, lucas_lehmer
 //
 // Содержит:
@@ -328,17 +328,13 @@ struct SpecialNumbers : PrimeNumbers, DigitOps {
     // Треугольное: n = k(k+1)/2 → 8n+1 = (2k+1)²
     bool is_triangular(ll n) {
         if (n <= 0) return false;
-        ll val = 8 * n + 1;
-        ll sq = (ll)round(sqrtl(val));
-        return sq * sq == val;
+        return is_perfect_square(8 * n + 1);
     }
 
     // Проничное: n = k(k+1) → 4n+1 = (2k+1)²
     bool is_pronic(ll n) {
         if (n <= 0) return false;
-        ll val = 4 * n + 1;
-        ll sq = (ll)round(sqrtl(val));
-        return sq * sq == val;
+        return is_perfect_square(4 * n + 1);
     }
 
     // k-е треугольное число
