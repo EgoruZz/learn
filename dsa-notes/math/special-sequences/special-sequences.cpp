@@ -15,7 +15,7 @@ typedef long long ll;
 #define COMBINATORICS_MAIN
 #include "../combinatorics/a/a.cpp"
 
-// Подключаем g.cpp → f.cpp → b.cpp → a.cpp, и g.cpp уже включает c.cpp
+// Подключаем g.cpp → e.cpp → b.cpp → a.cpp, и g.cpp уже включает c.cpp
 #define SPECIAL_NUMBERS_STANDALONE
 #include "../special-numbers/special-numbers.cpp"
 

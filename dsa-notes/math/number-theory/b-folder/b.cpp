@@ -19,7 +19,7 @@ typedef long long ll;
 //               → G. Функции → H. Квадратные вычеты → I. Продвинутые → J. Прикладные
 //
 // Наследует Divisibility из a.cpp (gcd_mod, lcm и т.д.)
-// Используется как базовый класс для расширения (см. d.cpp, f.cpp)
+// Используется как базовый класс для расширения (см. d.cpp, e.cpp)
 //
 // Содержит:
 //   A. Основы + CRT: count_in_range, cancel_mod, crt, crt_general, garner

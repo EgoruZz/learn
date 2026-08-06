@@ -1,7 +1,7 @@
 **G. СПЕЦИАЛЬНЫЕ ЧИСЛА**
 
-> **Архитектура:** `SpecialNumbers` (g.cpp) — наследует `PrimeNumbers` (f.cpp).
-> Из f.cpp: is_prime, sieve, linear_sieve, factorize_rho, lucas_lehmer.
+> **Архитектура:** `SpecialNumbers` (g.cpp) — наследует `PrimeNumbers` (e.cpp).
+> Из e.cpp: is_prime, sieve, linear_sieve, factorize_rho, lucas_lehmer.
 > Из a.cpp: sigma_sum, d_count, divide, factorize, spf, linear_sieve, mu.
 > Из b.cpp: powmod.
 > Из c.cpp: sum_digits_base (DigitOps).
@@ -169,7 +169,7 @@
 * **Определение:** M_p = 2^p - 1, где p — простое (обратное не обязательно)
 * **Примеры:** 3, 7, 31, 127, 8191, 131071, ...
 * **M_p простое ⟺ p простое** (но не наоборот: M₁₁ = 2047 = 23·89)
-* **Тест Люка-Лемера:** (из f.cpp)
+* **Тест Люка-Лемера:** (из e.cpp)
   * s₀ = 4, s_{k+1} = (s_k² - 2) mod M_p
   * M_p простое ⟺ s_{p-2} ≡ 0 (mod M_p)
 * **Известные простые M_p:** 2, 3, 5, 7, 13, 17, 19, 31, 61, 89, 107, 127, ... (51 на 2024)

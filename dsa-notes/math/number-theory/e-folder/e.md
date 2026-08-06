@@ -1,6 +1,6 @@
-**F. ПРОСТЫЕ ЧИСЛА**
+**E. ПРОСТЫЕ ЧИСЛА**
 
-> **Архитектура:** `PrimeNumbers` (f.cpp) — наследует `ModArithmetic` (b.cpp) и `Divisibility` (a.cpp).
+> **Архитектура:** `PrimeNumbers` (e.cpp) — наследует `ModArithmetic` (b.cpp) и `Divisibility` (a.cpp).
 > Из a.cpp: sieve, linear_sieve, factorize, mu, mobius_sieve, euler_sieve, liouville, liouville_sieve.
 > Из b.cpp: powmod, gcd_mod, modinv, jacobi, legendre.
 
