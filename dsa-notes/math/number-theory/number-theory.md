@@ -1,6 +1,6 @@
 # **ТЕОРИЯ ЧИСЕЛ**
 
-> Разделы A–E: `number-theory/a-folder/` ... `number-theory/f-folder/`
+> Разделы A–E: `number-theory/a-folder/` ... `number-theory/e-folder/`
 
 ---
 
@@ -148,7 +148,7 @@
 ---
 
 ## **E. Простые числа**
-> `f-folder/f.md` · `f-folder/f.cpp` · `struct PrimeNumbers : ModArithmetic`
+> `e-folder/e.md` · `e-folder/e.cpp` · `struct PrimeNumbers : ModArithmetic`
 
 ### A. Тесты простоты
 - A.1 Наивный O(√n): для n ≤ 10¹²

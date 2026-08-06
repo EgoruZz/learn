@@ -8,9 +8,9 @@
 using namespace std;
 typedef long long ll;
 
-// Подключаем f.cpp (наследует b.cpp → a.cpp)
+// Подключаем e.cpp (наследует b.cpp → a.cpp)
 #define PRIME_NUMBERS_STANDALONE
-#include "../number-theory/f-folder/f.cpp"
+#include "../number-theory/e-folder/e.cpp"
 
 // Подключаем c.cpp (DigitOps: sum_digits_base и др.)
 #define DIGIT_OPS_MAIN
@@ -19,11 +19,11 @@ typedef long long ll;
 // =============================================================
 // G. СПЕЦИАЛЬНЫЕ ЧИСЛА
 // =============================================================
-// Наследует PrimeNumbers из f.cpp (→ ModArithmetic → Divisibility)
+// Наследует PrimeNumbers из e.cpp (→ ModArithmetic → Divisibility)
 // Из a.cpp: sigma_sum, divide, factorize, linear_sieve, mu
 // Из b.cpp: powmod, modinv
 // Из c.cpp: sum_digits_base, is_perfect_square (DigitOps)
-// Из f.cpp: is_prime, factorize_rho, lucas_lehmer
+// Из e.cpp: is_prime, factorize_rho, lucas_lehmer
 //
 // Содержит:
 //   A. Совершенные, избыточные, недостаточные, странные

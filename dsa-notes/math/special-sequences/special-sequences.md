@@ -5,7 +5,7 @@
 > Из b.cpp: powmod, modinv, egcd, crt
 > Из c.cpp: sum_digits_base, isqrt_newton, digital_root_base
 > Из d.cpp: discrete_log, primitive_root
-> Из f.cpp: is_prime, factorize_rho
+> Из e.cpp: is_prime, factorize_rho
 > Из g.cpp: aliquot_sum, is_perfect, is_triangular, is_pronic
 
 ---
