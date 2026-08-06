@@ -6,9 +6,21 @@
 using namespace std;
 typedef long long ll;
 
+// Сначала включаем конспект комбинаторики (a.cpp) ПОЛНОСТЬЮ — до цепочки
+// number-theory. Иначе a.cpp попадёт только в режиме INSIDE_NUMBER_THEORY
+// (только C_iter, без struct Combinatorics), и c.cpp не сможет наследовать.
+// Дерево Штерна-Броко описано в конспекте комбинаторики (C, c.cpp):
+// реализация уровня дерева — RationalCombinatorics::stern_brocot_level
+// (c.cpp, A.2.3) — здесь заимствуется как факт, а не дублируется.
+#define COMBINATORICS_MAIN
+#include "../combinatorics/a/a.cpp"
+
 // Подключаем g.cpp → f.cpp → b.cpp → a.cpp, и g.cpp уже включает c.cpp
 #define SPECIAL_NUMBERS_STANDALONE
 #include "../special-numbers/special-numbers.cpp"
+
+#define RATIONAL_COMBINATORICS_MAIN
+#include "../combinatorics/c/c.cpp"
 
 // =============================================================
 // H. СПЕЦИАЛЬНЫЕ ПОСЛЕДОВАТЕЛЬНОСТИ
@@ -22,11 +34,16 @@ typedef long long ll;
 //   D. Падован и Перрин            — fast doubling / matrix
 //   E. Каталаны                    — product formula, mod p
 //   F. Мотцкина                    — recurrence O(n)
-//   G. Вайтоф / Бити               — O(1) per query
-//   H. Стерн-Броко / диатомическая — recursive
-//   I. Коллац                      — iteration + memoization
-//   J. Джагглер                    — iteration
-//   K. Силвестер                   — product (limited by overflow)
+//   G. Стирлинга (I и II рода)     — DP O(n·k)
+//   H. Белла                       — треугольник Айткена O(n²)
+//   I. Шрёдера                     — recurrence O(n²)
+//   J. Эйлера (Eulerian)           — DP O(n²)
+//   K. Деланнуа                    — DP O(n·m)
+//   L. Вайтоф / Бити               — O(1) per query
+//   M. Стерн-Броко / диатомическая — recursive
+//   N. Коллац                      — iteration + memoization
+//   O. Джагглер                    — iteration
+//   P. Силвестер                   — product (limited by overflow)
 
 struct SpecialSequences : SpecialNumbers {
 
@@ -152,12 +169,11 @@ struct SpecialSequences : SpecialNumbers {
     // C. ЧИСЛА ЯКОБСТАЛЯ
     // =========================================================
 
-    // J(n) = (2^n - (-1)^n) / 3 — closed form, O(log n)
+    // J(n) = (2^n - (-1)^n) / 3 — closed form
+    // n ≤ 62, чтобы 2^n влезало в long long
     ll jacobsthal(ll n) {
         if (n == 0) return 0;
-        ll pow2 = powmod(2, n, (ll)4e18); // может переполниться
-        // Но на практике n ≤ 60 для long long
-        pow2 = 1LL << min(n, 62LL); // для малых n
+        ll pow2 = 1LL << min(n, 62LL);
         ll sign = (n % 2 == 0) ? 1 : -1;
         return (pow2 + sign) / 3;
     }
@@ -317,7 +333,108 @@ struct SpecialSequences : SpecialNumbers {
     }
 
     // =========================================================
-    // G. МАССИВ ВАЙТОФА И ПОСЛЕДОВАТЕЛЬНОСТЬ БИТИ
+    // G. ЧИСЛА СТИРЛИНГА (I И II РОДА)
+    // =========================================================
+
+    // S(n,k) — II рода: разбиения n-множества на k непустых подмножеств
+    // S(n,k) = S(n-1,k-1) + k·S(n-1,k), O(n·k)
+    ll stirling2(ll n, ll k) {
+        if (n == 0 && k == 0) return 1;
+        if (n == 0 || k == 0) return 0;
+        vector<vector<ll>> S(n + 1, vector<ll>(k + 1));
+        S[0][0] = 1;
+        for (ll i = 1; i <= n; i++)
+            for (ll j = 1; j <= min(i, k); j++)
+                S[i][j] = S[i-1][j-1] + j * S[i-1][j];
+        return S[n][k];
+    }
+
+    // c(n,k) — I рода (без знака): перестановки n ровно из k циклов
+    // c(n,k) = c(n-1,k-1) + (n-1)·c(n-1,k), O(n·k)
+    ll stirling1(ll n, ll k) {
+        if (n == 0 && k == 0) return 1;
+        if (n == 0 || k == 0) return 0;
+        vector<vector<ll>> S(n + 1, vector<ll>(k + 1));
+        S[0][0] = 1;
+        for (ll i = 1; i <= n; i++)
+            for (ll j = 1; j <= min(i, k); j++)
+                S[i][j] = S[i-1][j-1] + (i - 1) * S[i-1][j];
+        return S[n][k];
+    }
+
+    // =========================================================
+    // H. ЧИСЛА БЕЛЛА
+    // =========================================================
+
+    // B(n) — все разбиения n-множества; треугольник Айткена, O(n²)
+    ll bell(ll n) {
+        if (n <= 1) return 1;
+        vector<ll> prev = {1};
+        for (ll i = 1; i < n; i++) {
+            vector<ll> cur(i + 1);
+            cur[0] = prev.back();
+            for (ll j = 1; j <= i; j++)
+                cur[j] = cur[j-1] + prev[j-1];
+            prev = cur;
+        }
+        return prev.back();
+    }
+
+    // =========================================================
+    // I. ЧИСЛА ШРЁДЕРА
+    // =========================================================
+
+    // Большие: S(0) = 1, S(n) = S(n-1) + Σ S(k)·S(n-1-k), O(n²)
+    ll schroder(ll n) {
+        vector<ll> s(n + 1);
+        s[0] = 1;
+        for (ll i = 1; i <= n; i++) {
+            ll cur = s[i-1];
+            for (ll k = 0; k <= i - 1; k++)
+                cur += s[k] * s[i - 1 - k];
+            s[i] = cur;
+        }
+        return s[n];
+    }
+
+    // Малые: s(0) = 1, s(n) = S(n)/2
+    ll schroder_small(ll n) {
+        if (n == 0) return 1;
+        return schroder(n) / 2;
+    }
+
+    // =========================================================
+    // J. ЧИСЛА ЭЙЛЕРА (EULERIAN)
+    // =========================================================
+
+    // A(n,k) — перестановки n с k подъёмами (ascents)
+    // A(n,k) = (k+1)·A(n-1,k) + (n-k)·A(n-1,k-1), O(n²)
+    ll eulerian(ll n, ll k) {
+        if (k < 0 || k >= n) return 0;
+        vector<vector<ll>> E(n + 1, vector<ll>(n + 1));
+        E[0][0] = 1;
+        for (ll i = 1; i <= n; i++)
+            for (ll j = 0; j < i; j++)
+                E[i][j] = (j + 1) * E[i-1][j]
+                        + (j >= 1 ? (i - j) * E[i-1][j-1] : 0);
+        return E[n][k];
+    }
+
+    // =========================================================
+    // K. ЧИСЛА ДЕЛАННУА
+    // =========================================================
+
+    // D(m,n) — пути с шагами (1,0), (0,1), (1,1); D(0,n)=D(m,0)=1, O(m·n)
+    ll delannoy(ll m, ll n) {
+        vector<vector<ll>> D(m + 1, vector<ll>(n + 1, 1));
+        for (ll i = 1; i <= m; i++)
+            for (ll j = 1; j <= n; j++)
+                D[i][j] = D[i-1][j] + D[i][j-1] + D[i-1][j-1];
+        return D[m][n];
+    }
+
+    // =========================================================
+    // L. МАССИВ ВАЙТОФА И ПОСЛЕДОВАТЕЛЬНОСТЬ БИТИ
     // =========================================================
 
     // Золотое сечение (приближение)
@@ -346,7 +463,7 @@ struct SpecialSequences : SpecialNumbers {
     }
 
     // =========================================================
-    // H. ДЕРЕВО СТЕРНА-БРОКО И ПОСЛЕДОВАТЕЛЬНОСТЬ СТЕРНА
+    // M. ДЕРЕВО СТЕРНА-БРОКО И ПОСЛЕДОВАТЕЛЬНОСТЬ СТЕРНА
     // =========================================================
 
     // Диатомическая (последовательность Стерна): s(0)=0, s(1)=1,
@@ -370,23 +487,16 @@ struct SpecialSequences : SpecialNumbers {
         return (n & 1) ? b : a;
     }
 
-    // Рациональные на n-м уровне дерева Стерна-Броко ( breadth-first )
-    // Возвращает вектор пар { числитель, знаменатель }
+    // Рациональные на n-м уровне дерева Стерна-Броко (breadth-first)
+    // Реализация — в конспекте комбинаторики (C, c.cpp, A.2.3):
+    // RationalCombinatorics::stern_brocot_level; здесь — как факт.
     vector<pair<ll,ll>> stern_brocot_level(int n) {
-        vector<pair<ll,ll>> level = {{1, 1}};
-        for (int i = 0; i < n; i++) {
-            vector<pair<ll,ll>> next;
-            for (auto [a, b] : level) {
-                next.push_back({a, a + b});
-                next.push_back({a + b, b});
-            }
-            level = next;
-        }
-        return level;
+        RationalCombinatorics rc;
+        return rc.stern_brocot_level(n);
     }
 
     // =========================================================
-    // I. ПОСЛЕДОВАТЕЛЬНОСТЬ КОЛЛАЦА
+    // N. ПОСЛЕДОВАТЕЛЬНОСТЬ КОЛЛАЦА
     // =========================================================
 
     // Одна итерация: T(n)
@@ -430,7 +540,7 @@ struct SpecialSequences : SpecialNumbers {
     }
 
     // =========================================================
-    // J. ПОСЛЕДОВАТЕЛЬНОСТЬ ДЖАГГЛЕРА
+    // O. ПОСЛЕДОВАТЕЛЬНОСТЬ ДЖАГГЛЕРА
     // =========================================================
 
     // Одна итерация: J(n) = ⌊n^{1/2}⌋ если n чётное, ⌊n^{3/2}⌋ если нечётное
@@ -463,7 +573,7 @@ struct SpecialSequences : SpecialNumbers {
     }
 
     // =========================================================
-    // K. ПОСЛЕДОВАТЕЛЬНОСТЬ СИЛВЕСТЕРА
+    // P. ПОСЛЕДОВАТЕЛЬНОСТЬ СИЛВЕСТЕРА
     // =========================================================
 
     // Первые несколько членов (ограничено overflow)
@@ -553,7 +663,36 @@ signed main() {
     for (int i = 0; i <= 10; i++) cout << ss.motzkin(i) << " ";
     cout << endl;
 
-    cout << "\n=== G. ВАЙТОФ / БИТИ ===" << endl;
+    cout << "\n=== G. ЧИСЛА СТИРЛИНГА ===" << endl;
+    cout << "S(4,2) II рода = " << ss.stirling2(4, 2) << endl;
+    cout << "S(5,2) II рода = " << ss.stirling2(5, 2) << endl;
+    cout << "S(5,3) II рода = " << ss.stirling2(5, 3) << endl;
+    cout << "s(4,2) I рода = " << ss.stirling1(4, 2) << endl;
+    cout << "s(5,2) I рода = " << ss.stirling1(5, 2) << endl;
+
+    cout << "\n=== H. ЧИСЛА БЕЛЛА ===" << endl;
+    cout << "B(0..7): ";
+    for (int i = 0; i <= 7; i++) cout << ss.bell(i) << " ";
+    cout << endl;
+
+    cout << "\n=== I. ЧИСЛА ШРЁДЕРА ===" << endl;
+    cout << "S(0..6) большие: ";
+    for (int i = 0; i <= 6; i++) cout << ss.schroder(i) << " ";
+    cout << endl;
+    cout << "S(0..6) малые: ";
+    for (int i = 0; i <= 6; i++) cout << ss.schroder_small(i) << " ";
+    cout << endl;
+
+    cout << "\n=== J. ЧИСЛА ЭЙЛЕРА ===" << endl;
+    cout << "A(5,k): ";
+    for (int k = 0; k < 5; k++) cout << ss.eulerian(5, k) << " ";
+    cout << endl;
+
+    cout << "\n=== K. ЧИСЛА ДЕЛАННУА ===" << endl;
+    cout << "D(3,3) = " << ss.delannoy(3, 3) << endl;
+    cout << "D(4,4) = " << ss.delannoy(4, 4) << endl;
+
+    cout << "\n=== L. ВАЙТОФ / БИТИ ===" << endl;
     cout << "Wythoff A(0..9): ";
     for (int i = 0; i <= 9; i++) cout << ss.wythoff_a(i) << " ";
     cout << endl;
@@ -564,7 +703,7 @@ signed main() {
     cout << "(3,5) is Wythoff: " << ss.is_wythoff_position(3, 5) << endl;
     cout << "(4,7) is Wythoff: " << ss.is_wythoff_position(4, 7) << endl;
 
-    cout << "\n=== H. СТЕРН-БРОКО ===" << endl;
+    cout << "\n=== M. СТЕРН-БРОКО ===" << endl;
     cout << "Stern diatomic 0..15: ";
     for (int i = 0; i <= 15; i++) cout << ss.stern_diatomic(i) << " ";
     cout << endl;
@@ -572,20 +711,20 @@ signed main() {
     for (auto [a, b] : ss.stern_brocot_level(3)) cout << a << "/" << b << " ";
     cout << endl;
 
-    cout << "\n=== I. КОЛЛАЦ ===" << endl;
+    cout << "\n=== N. КОЛЛАЦ ===" << endl;
     cout << "Collatz orbit 6: ";
     for (ll x : ss.collatz_orbit(6)) cout << x << " ";
     cout << endl;
     auto [maxn, maxs] = ss.collatz_max_stopping(10000);
     cout << "Max stopping time ≤ 10000: n=" << maxn << " steps=" << maxs << endl;
 
-    cout << "\n=== J. ДЖАГГЛЕР ===" << endl;
+    cout << "\n=== O. ДЖАГГЛЕР ===" << endl;
     cout << "Juggler orbit 3: ";
     for (ll x : ss.juggler_orbit(3)) cout << x << " ";
     cout << endl;
     cout << "Juggler stopping time 3: " << ss.juggler_stopping_time(3) << endl;
 
-    cout << "\n=== K. СИЛВЕСТЕР ===" << endl;
+    cout << "\n=== P. СИЛВЕСТЕР ===" << endl;
     auto sylv = ss.sylvester_sequence(7);
     cout << "Sylvester 0..6: ";
     for (ll x : sylv) cout << x << " ";

@@ -52,8 +52,7 @@ git push origin learning
 
 12. Merge через GitHub
 Нажимаешь: “Merge pull request”
-Выбирай: “Create merge commit” (если хочешь видеть историю веток)
-или “Squash and merge” (рекомендую на старте)
+Выбирай: “Create merge commit”
 
 13. Уходишь в другую ветку (необязательный шаг)
 git checkout main
