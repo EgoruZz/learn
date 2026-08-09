@@ -13,14 +13,14 @@ typedef long long ll;
 // реализация уровня дерева — RationalCombinatorics::stern_brocot_level
 // (c.cpp, A.2.3) — здесь заимствуется как факт, а не дублируется.
 #define COMBINATORICS_MAIN
-#include "../combinatorics/a/a.cpp"
+#include "../math/combinatorics/a/a.cpp"
 
 // Подключаем g.cpp → e.cpp → b.cpp → a.cpp, и g.cpp уже включает c.cpp
 #define SPECIAL_NUMBERS_STANDALONE
 #include "../special-numbers/special-numbers.cpp"
 
 #define RATIONAL_COMBINATORICS_MAIN
-#include "../combinatorics/c/c.cpp"
+#include "../math/combinatorics/c/c.cpp"
 
 // =============================================================
 // H. СПЕЦИАЛЬНЫЕ ПОСЛЕДОВАТЕЛЬНОСТИ

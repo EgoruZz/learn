@@ -14,9 +14,11 @@ using namespace std;
 // A. ОСНОВЫ КОМБИНАТОРИКИ И КОМБИНАТОРНЫЕ АЛГОРИТМЫ
 // =============================================================
 // Структура md: A. Факториалы и биномиальные коэффициенты
-//               → B. Включения-исключения
-//               → D. Генерация комбинаторных объектов
-//               → E. Специальные комбинаторные конфигурации
+//               → B. Правила суммы и произведения
+//               → C. Специальные системы счисления
+//               → D. Включения-исключения
+//               → E. Генерация комбинаторных объектов
+//               → F. Специальные комбинаторные конфигурации
 //
 // C_iter — каноническая реализация C(n,k) живёт ЗДЕСЬ (комбинаторика);
 // number-theory (dk_via_fact в Divisibility) использует её через свободную
@@ -45,16 +47,19 @@ using namespace std;
 //      C_rep, arrangements, arrangements_rep, combinations_rec,
 //      combinations_mask, next_comb_gosper, lucas
 //   A. Составной модуль: fact_free, C_mod_ppow, C_composite
-//   A. Системы счисления: to_balanced_ternary, from_balanced_ternary,
+//   C. Системы счисления: to_balanced_ternary, from_balanced_ternary,
 //      to_string_bt, to_factorial_base, from_factorial_base, to_string_fb
-//   B. Включения-исключения: forbidden_positions, words_required,
-//      surjections, derangements, derangements_incl_excl
-//   D. Генерация: all_subsets, submasks_of, gray_encode, gray_decode,
+//   D. Включения-исключения: words_required, surjections
+//   E. Генерация: all_subsets, submasks_of, gray_encode, gray_decode,
 //      gen_parentheses, gen_parentheses_iter, is_valid_parentheses
-//   E. Специальные конфигурации: josephus, josephus_fast, n_queens_count,
+//   F. Специальные конфигурации: n_queens_count,
 //      Sudoku, Crossword, DancingLinks, KnightTour, necklace_count,
-//      bracelet_count, rook_placements, rook_placements_mn,
-//      bishop_ways, bishop_placements
+//      bracelet_count, rook_placements, rook_placements_mn
+//
+// Примечание: ДП-реализации задач (Иосиф Флавия, перестановки с запрещёнными
+// позициями, не бьющие слоны, беспорядки) перенесены в dynamic (динамическое
+// программирование) — там описаны и реализованы их рекуррентности. Теория
+// беспорядков (формула включениями-исключениями, асимптотика) — в a.md, D.3.
 //
 // ВНИМАНИЕ (скрытие имён): fact (n!) и legendre (v_p(n!)) здесь по смыслу
 // ДРУГИЕ функции, чем одноимённые из базы (fact — факторизация числа,
@@ -599,7 +604,7 @@ long long C_composite(long long n, long long k, long long m) {
 // A.4. СПЕЦИАЛЬНЫЕ СИСТЕМЫ СЧИСЛЕНИЯ
 // =============================================================
 
-// --- A.4. Троичная сбалансированная система: цифры T(-1), 0, 1 ---
+// --- C.1. Троичная сбалансированная система: цифры T(-1), 0, 1 ---
 // Каждое целое число имеет единственное представление; знак «встроен»
 // в цифры, отдельного знакового разряда нет.
 // Перевод делением на 3: остаток 2 (−1) → цифра T, перенос +1;
@@ -624,7 +629,7 @@ vector<int> to_balanced_ternary(long long n) {
     return digits;
 }
 
-// --- A.4. Троичная сбалансированная: обратный перевод O(log₃ n) ---
+// --- C.1. Троичная сбалансированная: обратный перевод O(log₃ n) ---
 long long from_balanced_ternary(const vector<int>& digits) {
     long long res = 0, base = 1;
     for (int i = (int)digits.size() - 1; i >= 0; i--) {
@@ -634,14 +639,14 @@ long long from_balanced_ternary(const vector<int>& digits) {
     return res;
 }
 
-// --- A.4. Троичная сбалансированная: вывод в строку (T, 0, 1) ---
+// --- C.1. Троичная сбалансированная: вывод в строку (T, 0, 1) ---
 string to_string_bt(const vector<int>& digits) {
     string s;
     for (int d : digits) s += (d == -1 ? "T" : to_string(d));
     return s;
 }
 
-// --- A.4. Факториальная система счисления: n = Σ dᵢ·i!, dᵢ ∈ [0, i] ---
+// --- C.2. Факториальная система счисления: n = Σ dᵢ·i!, dᵢ ∈ [0, i] ---
 // Каждое неотрицательное целое имеет единственное представление.
 // Перевод делением на 1, 2, 3, ...: остатки — цифры с младшего разряда.
 vector<int> to_factorial_base(long long n) {
@@ -655,7 +660,7 @@ vector<int> to_factorial_base(long long n) {
     return digits;
 }
 
-// --- A.4. Факториальная система: обратный перевод ---
+// --- C.2. Факториальная система: обратный перевод ---
 // Цифры идут от старшего разряда: digits[0] имеет вес size!,
 // digits[1] — (size−1)!, ..., последняя цифра — вес 1!.
 long long from_factorial_base(const vector<int>& digits) {
@@ -667,7 +672,7 @@ long long from_factorial_base(const vector<int>& digits) {
     return res;
 }
 
-// --- A.4. Факториальная система: вывод в строку (цифры через !) ---
+// --- C.2. Факториальная система: вывод в строку (цифры через !) ---
 string to_string_fb(const vector<int>& digits) {
     string s;
     for (int i = 0; i < (int)digits.size(); i++) {
@@ -681,36 +686,7 @@ string to_string_fb(const vector<int>& digits) {
 // B. ВКЛЮЧЕНИЯ-ИСКЛЮЧЕНИЯ
 // =============================================================
 
-// --- B.2. Перестановки с запрещёнными позициями (задача о ладьях) ---
-// Считаем перестановки π, у которых π(i) ∉ forb[i] (битовые маски запретов).
-// Включения-исключения: ответ = Σ (−1)^r · R_r · (n−r)!,
-// где R_r — число способов расставить r не бьющих друг друга ладей на
-// запрещённых клетках. R_r получаем ДП по битовым маскам столбцов.
-// Проверка: forb[i] = {i} даёт беспорядки D(n).
-long long forbidden_positions(int n, const vector<unsigned int>& forb) {
-    vector<long long> dp(1 << n, 0), R(n + 1, 0);
-    dp[0] = 1;
-    for (int row = 0; row < n; row++)
-        for (int mask = 0; mask < (1 << n); mask++)
-            if (dp[mask]) {
-                unsigned int free = forb[row] & ~(unsigned int)mask;
-                while (free) {
-                    int b = (int)(free & -free);
-                    free ^= (unsigned int)b;
-                    dp[mask | b] += dp[mask];
-                }
-            }
-    for (int mask = 0; mask < (1 << n); mask++)
-        R[__builtin_popcount(mask)] += dp[mask];
-    long long res = 0;
-    for (int r = 0; r <= n; r++) {
-        long long term = R[r] * fact(n - r);
-        res += (r & 1) ? -term : term;
-    }
-    return res;
-}
-
-// --- B.2. Слова с обязательными буквами mod p ---
+// --- D.2. Слова с обязательными буквами mod p ---
 // Алфавит размера k, слова длины n, каждая из t «обязательных» букв
 // встретилась хотя бы раз: Σ (−1)^i·C(t,i)·(k−i)ⁿ.
 // t = k — частный случай «использованы все буквы» = сюръекции (см. ниже).
@@ -724,7 +700,7 @@ long long words_required(int n, int k, int t, int mod,
     return res;
 }
 
-// --- B.2. Сюръективные отображения mod p ---
+// --- D.2. Сюръективные отображения mod p ---
 // Σ_{i=0}^{k} (−1)^i·C(k,i)·(k−i)^n — из всех k^n отображений выкидываем
 // те, что не используют какие-то элементы. Нужен k < p для C_mod.
 long long surjections(long long n, long long k, int mod,
@@ -737,39 +713,11 @@ long long surjections(long long n, long long k, int mod,
     return res;
 }
 
-// --- B.3. Беспорядки D(n) mod p O(n) ---
-// D(n) = (n−1)·(D(n−1) + D(n−2)), D(0)=1, D(1)=0, D(2)=1.
-// Почему: элемент 1 отправляем в позицию i (n−1 способов); если элемент i
-// тоже на месте 1 — осталось D(n−2), иначе D(n−1).
-long long derangements(int n, int mod) {
-    if (n == 0) return 1 % mod;
-    long long d0 = 1, d1 = 0;              // D(0)=1, D(1)=0
-    for (int i = 2; i <= n; i++) {
-        long long d = (i - 1) * ((d0 + d1) % mod) % mod;
-        d0 = d1;
-        d1 = d;
-    }
-    return d1;
-}
-
-// --- B.3. Беспорядки включениями-исключениями mod p ---
-// D(n) = n!·Σ_{i=0}^{n} (−1)ⁱ/i! — из n! перестановок вычитаем
-// с одной фиксированной точкой, прибавляем с двумя, и т.д.
-long long derangements_incl_excl(int n, int mod,
-                                 const vector<long long>& fact, const vector<long long>& inv_fact) {
-    long long s = 0;
-    for (int i = 0; i <= n; i++) {
-        long long term = inv_fact[i];
-        s = (s + ((i & 1) ? mod - term : term)) % mod;
-    }
-    return s * fact[n] % mod;
-}
-
 // =============================================================
 // D. ГЕНЕРАЦИЯ КОМБИНАТОРНЫХ ОБЪЕКТОВ
 // =============================================================
 
-// --- D.1. Перебор всех подмножеств битовыми масками O(2ⁿ·n) ---
+// --- E.1. Перебор всех подмножеств битовыми масками O(2ⁿ·n) ---
 void all_subsets(int n) {
     for (int mask = 0; mask < (1 << n); mask++) {
         for (int i = 0; i < n; i++)
@@ -778,7 +726,7 @@ void all_subsets(int n) {
     }
 }
 
-// --- D.1. Все подмаски данной маски ---
+// --- E.1. Все подмаски данной маски ---
 // Приём: for (int sub = mask; ; sub = (sub-1) & mask) { ...; if (sub == 0) break; }
 // Суммарно по всем маскам: Σ 2^popcount(mask) = 3ⁿ — основа ДП по подмножествам.
 vector<unsigned int> submasks_of(unsigned int mask) {
@@ -790,13 +738,13 @@ vector<unsigned int> submasks_of(unsigned int mask) {
     return res;
 }
 
-// --- D.2. Серый код: кодирование ---
+// --- E.2. Серый код: кодирование ---
 // gray(k) = k ^ (k >> 1); соседние коды отличаются ровно в одном бите.
 unsigned int gray_encode(unsigned int k) {
     return k ^ (k >> 1);
 }
 
-// --- D.2. Серый код: декодирование ---
+// --- E.2. Серый код: декодирование ---
 // k = g; k ^= k>>1; k ^= k>>2; k ^= k>>4; ... (степени двойки до 32).
 unsigned int gray_decode(unsigned int g) {
     unsigned int k = g;
@@ -804,7 +752,7 @@ unsigned int gray_decode(unsigned int g) {
     return k;
 }
 
-// --- D.3. Генерация правильных скобочных последовательностей O(C(n)) ---
+// --- E.3. Генерация правильных скобочных последовательностей O(C(n)) ---
 // '(' можно, пока open < n; ')' — пока close < open.
 // Количество: числа Каталана C_n = C(2n,n)/(n+1).
 void gen_parentheses(string& cur, int open, int close, int n) {
@@ -824,7 +772,7 @@ void gen_parentheses(string& cur, int open, int close, int n) {
     }
 }
 
-// --- D.3. Генерация скобок итеративно ---
+// --- E.3. Генерация скобок итеративно ---
 // Начинаем с "(((...)))", применяем next_permutation и фильтруем корректные.
 vector<string> gen_parentheses_iter(int n) {
     vector<string> res;
@@ -836,7 +784,7 @@ vector<string> gen_parentheses_iter(int n) {
     return res;
 }
 
-// --- D.3. Проверка корректности скобочной строки O(n) ---
+// --- E.3. Проверка корректности скобочной строки O(n) ---
 // '(' → +1, ')' → −1; счётчик никогда не уходит в минус и в конце равен 0.
 bool is_valid_parentheses(const string& s) {
     int bal = 0;
@@ -851,40 +799,7 @@ bool is_valid_parentheses(const string& s) {
 // E. СПЕЦИАЛЬНЫЕ КОМБИНАТОРНЫЕ КОНФИГУРАЦИИ
 // =============================================================
 
-// --- E.1. Задача Иосифа Флавия O(n) ---
-// J(1,k)=0; J(i,k) = (J(i−1,k) + k) % i. После удаления позиции k−1
-// круг перенумеровывается, размер уменьшается на 1.
-// Ответ с индексацией с 1: J(n,k) + 1.
-int josephus(int n, int k) {
-    int res = 0;
-    for (int i = 2; i <= n; i++)
-        res = (res + k) % i;
-    return res;
-}
-
-// --- E.1. Иосиф для больших n и малых k O(k·log n) ---
-// Когда k << n, большинство шагов не «заворачивают» по модулю: на каждом
-// шаге res += k, i += 1. Прыгаем сразу на m = (i−res−1)/(k−1) таких шагов,
-// потом делаем один шаг с заворотом res = (res + k) % (i+1).
-long long josephus_fast(long long n, long long k) {
-    if (k == 1) return n - 1;            // каждый k-й — просто последний
-    long long res = 0, i = 1;            // res = J(i, k), i = 1..n
-    while (i < n) {
-        long long m = (i - res - 1) / (k - 1);   // шагов без заворота
-        if (i + m >= n) {                // доходим до n напрямую
-            res += (n - i) * k;
-            i = n;
-            break;
-        }
-        res += m * k;
-        i += m;
-        res = (res + k) % (i + 1);       // один шаг с заворотом
-        i++;
-    }
-    return res % n;
-}
-
-// --- E.2. N-Queens: число расстановок (бэктрекинг с битовыми масками) ---
+// --- F.1. N-Queens: число расстановок (бэктрекинг с битовыми масками) ---
 // cols/ldiag/rdiag — занятые столбцы и две диагональные семьи. Идём по
 // строкам, битовой операцией получаем все доступные клетки строки.
 int n_queens_count(int n) {
@@ -902,7 +817,7 @@ int n_queens_count(int n) {
     return cnt;
 }
 
-// --- E.2. Решатель судоку (backtracking + битовые маски + MRV) ---
+// --- F.1. Решатель судоку (backtracking + битовые маски + MRV) ---
 // rows/cols/boxes хранят битовые маски поставленных цифр (биты 1..9),
 // проверка кандидата за O(1). Каждый ход выбираем клетку с минимальным
 // числом вариантов (MRV — most constrained variable).
@@ -957,7 +872,7 @@ struct Sudoku {
     }
 };
 
-// --- E.2. Кроссворд (backtracking по слотам с MRV) ---
+// --- F.1. Кроссворд (backtracking по слотам с MRV) ---
 // Сетка: '.' — свободная клетка, '#' — стена, буквы — вписанные.
 // Находим слоты (сегменты длиной ≥ 2 по горизонтали/вертикали), для каждого
 // — слова из словаря, совместимые с текущими буквами. Каждый шаг выбираем
@@ -1055,7 +970,7 @@ struct Crossword {
     }
 };
 
-// --- E.2. Алгоритм Кнута X (Dancing Links / DLX) ---
+// --- F.1. Алгоритм Кнута X (Dancing Links / DLX) ---
 // Точное покрытие: дана 0-1 матрица (столбцы — ограничения, строки —
 // варианты), выбрать строки так, чтобы каждый столбец был покрыт ровно
 // один раз.
@@ -1165,7 +1080,7 @@ struct DancingLinks {
     }
 };
 
-// --- E.3. Ход коня: эвристика Варнсдорфа ---
+// --- F.2. Ход коня: эвристика Варнсдорфа ---
 // На каждом шаге идём в клетку с минимальным числом доступных ходов дальше
 // (degree heuristic): сначала закрываем «трудные» клетки, пока они доступны.
 // Без эвристики O(8^(n²)) — нереально; с эвристикой доска 8×8 мгновенно.
@@ -1204,7 +1119,7 @@ struct KnightTour {
     }
 };
 
-// --- E.4. Ожерелья: число орбит под действием поворотов (лемма Бернсайда) ---
+// --- F.3. Ожерелья: число орбит под действием поворотов (лемма Бернсайда) ---
 // N(k,n) = (1/n)·Σ_{d|n} φ(d)·k^{n/d}. Поворот на i позиций оставляет слово
 // неподвижным, если оно периодично с периодом gcd(i,n) — таких k^{gcd(i,n)};
 // среднее число неподвижных точек по всем поворотам и есть ответ.
@@ -1219,7 +1134,7 @@ long long necklace_count(long long k, long long n) {
     return sum / n;
 }
 
-// --- E.4. Браслеты: ожерелья + переворот (группа диэдра D_n) ---
+// --- F.3. Браслеты: ожерелья + переворот (группа диэдра D_n) ---
 // К поворотам добавляются отражения: n·k^((n+1)/2) при нечётном n,
 // (n/2)·(k^(n/2+1) + k^(n/2)) при чётном; усредняем по 2n элементам.
 long long bracelet_count(long long k, long long n) {
@@ -1235,7 +1150,7 @@ long long bracelet_count(long long k, long long n) {
     return (rot + refl) / (2 * n);
 }
 
-// --- E.5. Ладьи: число расстановок k не бьющих ладей ---
+// --- F.4. Ладьи: число расстановок k не бьющих ладей ---
 // k ладей на n×n: C(n,k)²·k! (выбрать k строк, k столбцов, биекция между
 // ними); на доске m×n: C(m,k)·C(n,k)·k!.
 long long rook_placements(int n, int k) {
@@ -1244,39 +1159,6 @@ long long rook_placements(int n, int k) {
 
 long long rook_placements_mn(int m, int n, int k) {
     return C_iter(m, k) * C_iter(n, k) * fact(k);
-}
-
-// --- E.5. Слоны: расстановки k не бьющих слонов ---
-// Клетки одного цвета (r+c mod 2) образуют «лестницу» (доску Феррера):
-// "/"-диагонали — столбцы, "\"-диагонали — строки. Длины диагоналей цвета
-// len(s) = min(s, 2n−2−s)+1 для s ≡ parity (mod 2); сортируем по возрастанию
-// и считаем многочлен ладей на доске Феррера:
-//   dp[i][j] = dp[i−1][j] + dp[i−1][j−1]·(h_i − j + 1)
-// (j-ю ладью в столбец высоты h_i можно поставить h_i − (j−1) способами).
-// Ответ для k слонов = Σ_j ways_even[j]·ways_odd[k−j].
-vector<long long> bishop_ways(int n, int parity) {
-    vector<int> h;
-    for (int s = parity; s <= 2 * n - 2; s += 2)
-        h.push_back(min(s, 2 * n - 2 - s) + 1);
-    sort(h.begin(), h.end());
-    vector<long long> dp(h.size() + 1, 0), ndp;
-    dp[0] = 1;
-    for (int len : h) {
-        ndp = dp;
-        for (int j = 1; j <= (int)h.size(); j++)
-            if (len >= j) ndp[j] += dp[j - 1] * (len - j + 1);
-        dp = ndp;
-    }
-    return dp;
-}
-
-long long bishop_placements(int n, int k) {
-    vector<long long> e = bishop_ways(n, 0), o = bishop_ways(n, 1);
-    long long res = 0;
-    for (int j = 0; j <= k; j++)
-        if (j < (int)e.size() && k - j < (int)o.size())
-            res += e[j] * o[k - j];
-    return res;
 }
 
 }; // конец struct Combinatorics
@@ -1402,15 +1284,10 @@ signed main() {
     cout << "C(100,50) mod 360 = " << c.C_composite(100, 50, 360) << endl;
 
     cout << "\n=== B. Включения-исключения ===" << endl;
-    vector<unsigned int> forb = {1, 2, 4, 8};   // π(i) ≠ i — беспорядки D(4)
-    cout << "Запрещённые позиции D(4) = " << c.forbidden_positions(4, forb)
-         << " (ожидаем 9)" << endl;
     cout << "Слова n=3, алфавит 3, обязательные 2 (a и b): "
          << c.words_required(3, 3, 2, MOD, f, inv_f) << " (ожидаем 12)" << endl;
     cout << "Слова, использующие все 3 буквы (сюръекции n=3,k=3): "
          << c.words_required(3, 3, 3, MOD, f, inv_f) << " (ожидаем 6)" << endl;
-    cout << "D(4) = " << c.derangements(4, MOD) << ", включениями-исключениями = "
-         << c.derangements_incl_excl(4, MOD, f, inv_f) << " (ожидаем 9)" << endl;
 
     cout << "\n=== D. Генерация комбинаторных объектов ===" << endl;
     cout << "Подмаски 0b101: ";
@@ -1424,9 +1301,6 @@ signed main() {
     cout << endl;
 
     cout << "\n=== E. Специальные конфигурации ===" << endl;
-    cout << "Иосиф(7,3) с 1 = " << c.josephus(7, 3) + 1 << " (ожидаем 4)" << endl;
-    cout << "Иосиф быстрый(7,3) = " << c.josephus_fast(7, 3) << endl;
-    cout << "Иосиф быстрый(1e18, 2) = " << c.josephus_fast(1000000000000000000LL, 2) << endl;
     cout << "N-Queens(8) = " << c.n_queens_count(8) << " (ожидаем 92)" << endl;
 
     // Судоку: обычный решатель
@@ -1496,12 +1370,6 @@ signed main() {
          << " (ожидаем 6)" << endl;
     cout << "Ладьи: 2 на 4×4 = " << c.rook_placements(4, 2) << " (ожидаем 72), 3 на 4×5 = "
          << c.rook_placements_mn(4, 5, 3) << " (ожидаем 240)" << endl;
-    cout << "Слоны: 1 на 3×3 = " << c.bishop_placements(3, 1) << " (ожидаем 9), 2 на 3×3 = "
-         << c.bishop_placements(3, 2) << " (ожидаем 26), 4 на 3×3 = " << c.bishop_placements(3, 4)
-         << " (ожидаем 8)" << endl;
-    cout << "Слоны: 2 на 2×2 = " << c.bishop_placements(2, 2) << " (ожидаем 4), 2 на 4×4 = "
-         << c.bishop_placements(4, 2) << " (ожидаем 92), 3 на 4×4 = " << c.bishop_placements(4, 3)
-         << " (ожидаем 232)" << endl;
     cout << "N-Queens(8) = " << c.n_queens_count(8) << " (ожидаем 92), (10) = "
          << c.n_queens_count(10) << " (ожидаем 724)" << endl;
 }
