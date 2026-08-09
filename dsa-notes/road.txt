@@ -1,19 +1,23 @@
-1. math:
-    теория чисел
-    комбинаторика
-    дискретная
-    алгебра
-    линейная алгебра
-    2. geometry
-    матанализ
-    теория вероятности
-    картинки
-    3. hashing
+математические дисциплины:
+    дискретка и логика (math/discrete-and-logic) - complete
+    теория чисел (math/number-theory) - complete
+    комбинаторика (math/combinatorics) - complete
+    алгебра (math/algebra)
+    линейная алгебра (math/linear-algebra)
+    geometry
+    картинки (math/pictures)
+    матанализ (math/analysis)
+    вероятность и статистика (math/prob-and-stats)
+    hashing
 
 чередовать с:
-    4. dynamic
-    5. graph
-    6. string
-    7. struct
-    8. technique
-    9. analysis
+    struct
+    dynamic - complete
+    graph
+    string
+    technique
+    special-numbers
+    special-sequences
+
+в конце:
+    algo-analysis
