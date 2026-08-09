@@ -14,7 +14,7 @@ using namespace std;
 //               → C. Теория Пойа (цикловой индекс, графы)
 //
 // Переиспользуем: powmod, modinv (ModArithmetic), готовые ожерелья
-// necklace_count и браслеты bracelet_count (a.cpp, E.4) — здесь общий
+// necklace_count и браслеты bracelet_count (a.cpp, F.3) — здесь общий
 // механизм Бернсайда-Пойа, воспроизводящий их результаты.
 // Перестановки — 0-based массивы размера n; раскраски по модулю.
 //

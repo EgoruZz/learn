@@ -10,11 +10,11 @@ typedef long long ll;
 
 // Подключаем e.cpp (наследует b.cpp → a.cpp)
 #define PRIME_NUMBERS_STANDALONE
-#include "../number-theory/e-folder/e.cpp"
+#include "../math/number-theory/e-folder/e.cpp"
 
 // Подключаем c.cpp (DigitOps: sum_digits_base и др.)
 #define DIGIT_OPS_MAIN
-#include "../number-theory/c-folder/c.cpp"
+#include "../math/number-theory/c-folder/c.cpp"
 
 // =============================================================
 // G. СПЕЦИАЛЬНЫЕ ЧИСЛА

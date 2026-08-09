@@ -1,4 +1,4 @@
-**H. СПЕЦИАЛЬНЫЕ ПОСЛЕДОВАТЕЛЬНОСТИ**
+# **СПЕЦИАЛЬНЫЕ ПОСЛЕДОВАТЕЛЬНОСТИ**
 
 > **Архитектура:** `SpecialSequences` (h.cpp) — наследует `SpecialNumbers` (g.cpp), `DigitOps` (c.cpp).
 > Из a.cpp: sigma_sum, divide, factorize, linear_sieve, mu, gcd, lcm

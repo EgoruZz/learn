@@ -1,4 +1,4 @@
-**G. СПЕЦИАЛЬНЫЕ ЧИСЛА**
+# **СПЕЦИАЛЬНЫЕ ЧИСЛА**
 
 > **Архитектура:** `SpecialNumbers` (g.cpp) — наследует `PrimeNumbers` (e.cpp).
 > Из e.cpp: is_prime, sieve, linear_sieve, factorize_rho, lucas_lehmer.
