@@ -293,8 +293,10 @@ void ant_step(vector<vector<int>>& grid, int& x, int& y, int& dir,
 }
 
 // --- B.3.1. Выполнение муравья: траектория с ростом сетки ---
-// Сетка растёт при выходе за края (координаты — мировые, могут
-// быть отрицательными); возвращает путь и финальное состояние.
+// (x, y) муравья внутри ant_run — индексы сетки (0 ≤ x < cols,
+// 0 ≤ y < rows): ant_step индексирует grid[y][x] корректно всегда.
+// Сетка растёт при выходе за края; мировые координаты = индексы +
+// сдвиг начала (ox, oy) — их ant_run возвращает в path и AntResult.
 struct AntResult {
     vector<pair<int, int>> path;
     int x, y, dir;
@@ -303,25 +305,25 @@ struct AntResult {
 AntResult ant_run(vector<vector<int>>& grid, int x, int y, int dir,
                   const vector<pair<int, int>>& rule, int steps) {
     vector<pair<int, int>> path;
-    int ox = 0, oy = 0; // grid[0][0] ↔ мировые (ox, oy)
+    int ox = 0, oy = 0; // мировые координаты клетки grid[0][0]
     for (int s = 0; s < steps; s++) {
-        path.push_back({x, y});
+        path.push_back({x + ox, y + oy});
         ant_step(grid, x, y, dir, rule);
-        if (y < oy) {
+        if (y < 0) {                        // выше верхнего края
             grid.insert(grid.begin(), vector<int>(grid[0].size(), 0));
+            y++;
             oy--;
-        }
-        if (y >= oy + (int)grid.size())
+        } else if (y >= (int)grid.size())
             grid.push_back(vector<int>(grid[0].size(), 0));
-        if (x < ox) {
+        if (x < 0) {                        // левее левого края
             for (auto& row : grid) row.insert(row.begin(), 0);
+            x++;
             ox--;
-        }
-        if (x >= ox + (int)grid[0].size())
+        } else if (x >= (int)grid[0].size())
             for (auto& row : grid) row.push_back(0);
     }
-    path.push_back({x, y});
-    return {path, x, y, dir};
+    path.push_back({x + ox, y + oy});
+    return {path, x + ox, y + oy, dir};
 }
 
 // =============================================================
