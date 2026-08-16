@@ -1,41 +1,27 @@
-# Содержание
-- [Структуры данных](#структуры-данных)
-  - [I. Линейные структуры](#i-линейные-структуры)
-    - [A. Массивы и последовательные контейнеры](#a-массивы-и-последовательные-контейнеры)
-    - [B. Списки и цепочки](#b-списки-и-цепочки)
-    - [C. Стеки (LIFO - Last In, First Out)](#c-стеки-lifo---last-in-first-out)
-    - [D. Очереди (FIFO - First In, First Out)](#d-очереди-fifo---first-in-first-out)
-    - [E. Специализированные буферы](#e-специализированные-буферы)
-    - [F. Гибридные, функциональные и ленивые структуры](#f-гибридные-функциональные-и-ленивые-структуры)
-  - [II. Конкурентные (параллельные) структуры](#ii-конкурентные-параллельные-структуры)
-  - [III. Деревья поиска](#iii-деревья-поиска)
-  - [IV. Структуры для множеств](#iv-структуры-для-множеств)
-  - [V. Кучи (Priority Queues)](#v-кучи-priority-queues)
-  - [VI. Структуры для запросов на отрезках](#vi-структуры-для-запросов-на-отрезках)
-    - [A. Префиксные суммы](#a-префиксные-суммы)
-    - [B. Дерево Фенвика (Fenwick Tree / Binary Indexed Tree)](#b-дерево-фенвика-fenwick-tree--binary-indexed-tree)
-    - [C. Разреженная таблица (Sparse Table)](#c-разреженная-таблица-sparse-table)
-    - [D. Дерево отрезков (Segment Tree)](#d-дерево-отрезков-segment-tree)
-    - [E. Деревья разбора и синтаксические структуры](#e-деревья-разбора-и-синтаксические-структуры)
-    - [F. Продвинутые деревья](#f-продвинутые-деревья)
-  - [VII. Корневые структуры (Sqrt Decomposition)](#vii-корневые-структуры-sqrt-decomposition)
-  - [VIII. Персистентные структуры](#viii-персистентные-структуры)
-  - [IX. Пространственно-эффективные структуры](#ix-пространственно-эффективные-структуры)
-  - [X. Прикладные и специализированные структуры](#x-прикладные-и-специализированные-структуры)
-  - [XI. Теоретические и экзотические структуры](#xi-теоретические-и-экзотические-структуры)
-
 # **СТРУКТУРЫ ДАННЫХ**
 
+> Разделы I–XI: `struct/a/` ... `struct/k/` — каждый раздел — конспект `X.md` + реализация `X.cpp`. Классы образуют цепочку наследования: `LinearStructures` (a.cpp) ← `SearchTrees` (b.cpp) ← `SetStructures` (c.cpp) ← `Heaps` (d.cpp) ← `RangeQueries` (e.cpp) ← `SqrtStructures` (f.cpp) ← `PersistentStructures` (g.cpp) ← `ConcurrentStructures` (h.cpp) ← `SyntaxStructures` (i.cpp) ← `CachingStructures` (j.cpp) ← `TheoreticalStructures` (k.cpp): каждый конспект использует материал предыдущих (арены и курсоры из I, представления деревьев из II, амортизационный анализ из V и analysis.md). Имена классов финализируются при написании каждого конспекта.
+>
+> **Связи с другими ветками:** хеш-таблицы и Bloom Filter — `hashing.md`; строковые контейнеры, rope, trie, суффиксные структуры, парсеры строк — `string.md`; представления графов (Adjacency, CSR, Forward Star), Incidence Matrix, структуры динамической связности — `graph.md`; пространственные структуры (R-Tree, KD-Tree, QuadTree/Octree) — `geometry.md`; монотонная очередь и оптимизации ДП — `dynamic.md` (J); амортизированный анализ, массив с удвоением — `analysis.md`; бинарный поиск как приём над структурами — `technique.md`; структуры на числовых множествах (решёта, факторизация) — `math/number-theory`.
+
+---
+
 ## **I. ЛИНЕЙНЫЕ СТРУКТУРЫ**
+> `a/a.md` · `a/a.cpp` · `struct LinearStructures` — базовый класс всей ветки struct
+
 ### **A. МАССИВЫ И ПОСЛЕДОВАТЕЛЬНЫЕ КОНТЕЙНЕРЫ**
 *   **МАССИВЫ (ARRAYS)**
     *   **Статические массивы**
         *   C-style arrays
         *   `std::array` (фиксированный размер)
     *   **Динамические массивы**
-        *   `std::vector` - амортизированный анализ, управление capacity
+        *   `std::vector` - амортизированный анализ, управление capacity, рост (фактор роста `2`/`1.5` — выбор компромисса память/скорость); амортизация `push_back` — связь `analysis.md`
         *   Small Vector Optimization (SSO для векторов)
-    *   **Алгоритмы на массивах:**
+        *   `std::string` как динамический массив символов, SSO — связь `string.md`
+    *   **Порядок и память**
+        *   Row-major / column-major: индексация многомерных массивов, кэш-локализация
+        *   Аллокация пулом страниц / расположение в памяти (locality of reference)
+    *   **Алгоритмы на массивах** (с сохранением стиля «одна задача — один обобщённый метод»):
         *   Equilibrium Index In Array
         *   Find Triplets With 0 Sum
         *   Index 2D Array In 1D
@@ -55,8 +41,8 @@
             *   Sliding Window Maximum
             *   Rain Water Trapping
 *   **BIT BOARD**
-    *   Для игровых движков (шахматы, шашки)
-    *   Побитовые операции над состояниями
+    *   Для игровых движков (шахматы, шашки): доска фиксированного размера `n×n` как последовательность машинных слов
+    *   Побитовые операции над состояниями: сдвиги, маски, `popcount`, атаки/перемещения как битовые операции; обобщение на произвольный размер поля `n` и число битов на клетку `b` (не только 1)
 
 ### **B. СПИСКИ И ЦЕПОЧКИ**
 *   **LINKED LIST:**
@@ -74,9 +60,13 @@
         *   `std::list`
     *   **Кольцевые списки:**
         *   Circular Linked List
+        *   Список с хвостовым указателем (`tail`): константные `push_back` и `append` — базовая оптимизация
     *   **Оптимизированные списки:**
         *   XOR Linked List - память-эффективная версия
-        *   Unrolled Linked List - кэш-эффективная версия
+        *   Unrolled Linked List - кэш-эффективная версия (блок размера `B` вместо одного узла; выбор `B` как параметр)
+    *   **Курсорные списки (арена-память):**
+        *   Cursor Linked List: узлы в массиве, ссылки — индексы (а не указатели) — компактность, сериализуемость, никапсуляция в один вектор
+        *   Пул/арена аллокации узлов (pool allocator) как общий приём для всех структур с указателями (мост в II, IV)
     *   **Сложные операции:**
         *   Merge Two Lists
         *   Is Palindrome
@@ -84,7 +74,7 @@
         *   Rotate To The Right
         *   Swap Nodes
     *   **Продвинутые структуры:**
-        *   Skip List (вероятностная структура)
+        *   Skip List (вероятностная структура — см. `hashing.md` IV, базовые операции здесь не дублируются)
         *   Self-Organizing List (перемещение к началу/транспозиция)
 
 ### **C. СТЕКИ (LIFO - LAST IN, FIRST OUT)**
@@ -92,6 +82,7 @@
     *   Stack
     *   Stack With Singly Linked List
     *   Stack With Doubly Linked List
+    *   Стек на общем массиве (two stacks in one array) — торговля памятью между независимыми стеками
 *   **Реализации через другие структуры:**
     *   Stack Using Two Queues
     *   Stack On Pseudo Stack
@@ -99,9 +90,14 @@
     *   Min-Stack (поддержка минимума за O(1))
     *   Max-Stack (поддержка максимума за O(1))
     *   All-Operations-Stack (все операции за O(1))
-    *   Persistent Stack (версионный стек)
+    *   Persistent Stack (версионный стек — см. раздел VII)
+*   **Монотонный стек:**
+    *   Идея: стек, где элементы строго монотонны по ключу; каждый элемент входит и выходит ровно один раз — суммарно O(n)
+    *   Следующий меньший/больший элемент, предыдущие меньшие/большие (обобщение на произвольный предикат сравнения)
+    *   Largest Rectangle Histogram (мост: координатная полоса, `n` произвольное)
+    *   Stock Span Problem (глубина стека как метрика)
 *   **Алгоритмы на стеке:**
-    *   Balanced Parentheses
+    *   Balanced Parentheses (обобщение на `k` типов скобок)
     *   Infix To Postfix Conversion
     *   Infix To Prefix Conversion
     *   Postfix Evaluation
@@ -115,7 +111,7 @@
     *   Call Stack (рекурсия)
     *   Undo/Redo в редакторах
     *   Backtracking алгоритмы
-    *   Depth-First Search (DFS)
+    *   Depth-First Search (DFS) — связь `graph.md`
 
 ### **D. ОЧЕРЕДИ (FIFO - FIRST IN, FIRST OUT)**
 *   **Базовые реализации очереди:**
@@ -129,11 +125,11 @@
     *   Queue On Pseudo Stack
 *   **Приоритетные очереди:**
     *   Priority Queue Using List
-    *   *(более полные реализации в разделе V. КУЧИ)*
+    *   *(более полные реализации в разделе IV. КУЧИ)*
 *   **Двусторонние очереди (DEQUE):**
     *   Double Ended Queue
     *   Deque Doubly
-    *   `std::deque`
+    *   `std::deque` — устройство: карта блоков + блоки фиксированной длины (амортизация и кэш-локализация)
     *   Array-based Deque
     *   Circular Deque
     *   Catenable Deque
@@ -141,11 +137,15 @@
 *   **Стеко-очереди (STEQUE):**
     *   Stack-ended Queue
     *   Комбинация стека и очереди
+*   **Монотонная очередь:**
+    *   Идея: deque с убывающим/возрастающим порядком значений; каждый элемент входит/выходит один раз — O(n)
+    *   Скользящее окно максимума/минимума (обобщение Sliding Window Maximum из II.A на направление и длину окна `k`)
+    *   Оптимизация интервального ДП (размен, jump game с окном) — связь `dynamic.md` (раздел J)
 *   **Специализированные очереди:**
     *   Catenable Queue (эффективное объединение)
     *   Calendar Queue (для дискретных событий)
-    *   Bucket Queue (ограниченные диапазоны приоритетов)
-    *   Banker's Queue / Physicist's Queue:
+    *   Bucket Queue (ограниченные диапазоны приоритетов — мост в IV)
+    *   Banker's Queue / Physicist's Queue
     *   Hood-Melville Queue
     *   Bootstrapped Queue
 
@@ -153,27 +153,28 @@
 *   **Кольцевые буферы (RING/CIRCULAR BUFFERS):**
     *   Fixed-size circular buffer
     *   Overwriting circular buffer
-    *   Producer-Consumer паттерны
+    *   Producer-Consumer паттерны (мост в `hashing.md` IV — конкурентные)
 *   **Буферы скользящего окна:**
     *   Time-based sliding windows
     *   Count-based sliding windows
-    *   Moving Average вычисления
+    *   Moving Average вычисления (скользящее среднее, экспоненциальное сглаживание)
 *   **Буферы для потоков данных:**
-    *   Reservoir Sampling (случайная выборка из потока)
-    *   Bloom Filter (в разделе хэширования)
+    *   Reservoir Sampling (случайная выборка из потока — см. `hashing.md` IV)
+    *   Bloom Filter (см. `hashing.md` IV)
 
 ### **F. ГИБРИДНЫЕ, ФУНКЦИОНАЛЬНЫЕ И ЛЕНИВЫЕ СТРУКТУРЫ**
 *   **Finger Tree:**
-    *   Обобщенные последовательности
-    *   Поддержка конкатенации, разделения, индексации
+    *   Обобщённые последовательности
+    *   Поддержка конкатенации, разделения, индексации (амортизированно O(log n))
 *   **RRB-Vector (Relaxed Radix Balanced Vector):**
     *   Персистентные векторы
-    *   Эффективное копирование с изменением
+    *   Эффективное копирование с изменением (мост в раздел VII — персистентность)
 *   **Zipper:**
     *   Функциональные структуры данных
-    *   "Фокус" на элементе с доступом к контексту
+    *   "Фокус" на элементе с доступом к контексту (обобщение: зиппер на дереве и на списке)
 *   **Chunked Sequence:**
     *   Блочное хранение для лучшей кэш-локализации
+    *   Обобщение на двунаправленную и произвольную вставку (rope — см. `string.md`)
 *   **Ленивые вычисления** (Lazy Evaluation)
     *   **Thunk** - отложенное вычисление
     *   **Promise** - обещание значения
@@ -182,141 +183,176 @@
     *   **Memoization деревья** - кэширование результатов функций
     *   **Таблицы динамического программирования** как деревья
 
-## **II. КОНКУРЕНТНЫЕ (ПАРАЛЛЕЛЬНЫЕ) СТРУКТУРЫ**
-*   **Lock-based структуры:**
-    *   Mutex-protected Queue/Stack
-    *   Reader-Writer Lock структуры
-    *   Condition Variable очереди
-*   **Lock-free структуры:**
-    *   Lock-free Stack (Treiber)
-    *   Lock-free Queue (Michael-Scott)
-    *   Lock-free Deque
-    *   Atomic операции, memory ordering
-*   **Wait-free структуры:**
-    *   Wait-free Queue
-    *   Wait-free Stack
-*   **Concurrent Containers:**
-    *   `concurrent_queue`, `concurrent_stack`
-    *   `concurrent_vector`, `concurrent_hash_map`
+---
 
-## **III. ДЕРЕВЬЯ ПОИСКА**
-*   **Базовые бинарные деревья:**
-    *   Basic Binary Tree
-    *   Binary Tree Traversals:
-        *   Inorder, Preorder, Postorder
-        *   Level-order (BFS)
-        *   Inorder Tree Traversal 2022
-    *   Binary Tree Mirror
-    *   Symmetric Tree
-    *   Diameter Of Binary Tree
-    *   Binary Tree Node Sum
-    *   Binary Tree Path Sum
-    *   Distribute Coins
-    *   Lowest Common Ancestor
-    *   Serialize Deserialize Binary Tree
-    *   Merge Two Binary Trees
-*   **Бинарные деревья поиска (BST):**
-    *   Binary Search Tree
-    *   Binary Search Tree Recursive
-    *   Floor And Ceiling
-    *   Is Sorted
-    *   Is Sum Tree
-    *   Maximum Sum Bst
-*   **Сбалансированные деревья:**
-    *   AVL-дерево
-    *   Красно-черное дерево
-    *   Splay-дерево
-    *   AA-дерево
-    *   Scapegoat Tree
-*   **Многопутевые деревья:**
-    *   B-дерево
-    *   B+-дерево
-    *   B*-дерево
-    *   2-3 Tree
-    *   2-3-4 Tree
-*   **Специализированные деревья:**
-    *   Декартово дерево (Treap):
-        *   Обычный Treap - BST + Куча
-        *   Неявный ключ (implicit key)
-        *   Операция `reverse` на отрезке
-    *   Wavelet Tree
-    *   Fenwick Tree (в разделе VI)
-    *   Segment Tree (в разделе VI)
-*   **Деревья в STL:**
-    *   `std::map` (красно-черное дерево)
-    *   `std::set`, `std::multiset`
-    *   `std::multimap`
+## **II. ДЕРЕВЬЯ ПОИСКА**
+> `b/b.md` · `b/b.cpp` · `struct SearchTrees : LinearStructures`
 
-## **IV. СТРУКТУРЫ ДЛЯ МНОЖЕСТВ**
-*   **Система непересекающихся множеств (DSU/Union-Find):**
-    *   Disjoint Set
-    *   Alternate Disjoint Set
-    *   **Оптимизации:**
-        *   Union by Rank/Size
-        *   Path Compression
-        *   Persistent DSU
-        *   Rollback DSU
-    *   **Варианты:**
-        *   Partially Persistent DSU
-        *   Dynamic Connectivity
-*   **Битсеты:**
-    *   `std::bitset`
-    *   Dynamic Bitset
-    *   **Операции:**
-        *   Bit manipulation
-        *   Set operations (union, intersection, difference)
-        *   Bit Count (popcount)
+### **A. ПРЕДСТАВЛЕНИЯ ДЕРЕВЬЕВ В ПАМЯТИ**
+*   Узлы с указателями (динамическая память) и арены/пулы узлов (фиксированный массив узлов, индексы вместо указателей) — мост из I.B
+*   Parent Array: хранение родителей в массиве — для подъёмов, LCA-заделов
+*   First-child / next-sibling представление для n-арных деревьев
+*   Представление полного бинарного дерева массивом (куча-индексация `i → 2i, 2i+1`) — мост в IV и V (Segment Tree)
+*   Нитяные деревья (Threaded Binary Trees): ссылки на inorder-предшественника/преемника в «пустых» указателях — обход без стека
+*   Morris Traversal: обход бинарного дерева за O(n) времени и O(1) памяти (временная нить)
+*   Выбор представления как параметр задачи: статика (массивы) против динамики (указатели)
 
-## **V. КУЧИ (PRIORITY QUEUES)**
+### **B. БАЗОВЫЕ БИНАРНЫЕ ДЕРЕВЬЯ**
+*   Basic Binary Tree
+*   Binary Tree Traversals:
+    *   Inorder, Preorder, Postorder (рекурсивно/итеративно со стеком, Morris)
+    *   Level-order (BFS)
+    *   Inorder Tree Traversal 2022
+*   Binary Tree Mirror
+*   Symmetric Tree
+*   Diameter Of Binary Tree
+*   Binary Tree Node Sum
+*   Binary Tree Path Sum
+*   Distribute Coins
+*   Lowest Common Ancestor (подходы: подъёмы, двоичные подъёмы — задел под `graph.md`)
+*   Serialize Deserialize Binary Tree
+*   Merge Two Binary Trees
+
+### **C. БИНАРНЫЕ ДЕРЕВЬЯ ПОИСКА (BST)**
+*   Binary Search Tree
+*   Binary Search Tree Recursive
+*   Floor And Ceiling
+*   Is Sorted
+*   Is Sum Tree
+*   Maximum Sum Bst
+*   Операции: поиск, вставка, удаление (случаи 0/1/2 детей), обход `rotate` как примитив (задел на D)
+
+### **D. СБАЛАНСИРОВАННЫЕ ДЕРЕВЬЯ**
+*   AVL-дерево (баланс-фактор, повороты LL/RR/LR/RL, высота сбалансированного дерева `O(log n)`)
+*   Красно-черное дерево (инварианты, вставка/удаление по случаям, сравнение с AVL на практике)
+*   Splay-дерево (амортизация через splay-операцию, кэш-локальность обращения)
+*   AA-дерево
+*   Scapegoat Tree (простота: перестройка при нарушении α-баланса)
+*   Общее: параметр баланса, повороты как примитив, доказательство высоты через рекуррентность (`h = φ`-границы)
+
+### **E. МНОГОПУТЕВЫЕ ДЕРЕВЬЯ**
+*   B-дерево (порядок `t`: узлы от `t−1` до `2t−1` ключей, рост наверх, высота `O(log_t n)`)
+*   B+-дерево (данные в листьях, связанные листья — база индексов БД, мост в X)
+*   B*-дерево
+*   2-3 Tree
+*   2-3-4 Tree (эквивалент красно-черного, обобщение до B-дерева произвольного порядка)
+
+### **F. ДЕКАРТОВЫ И РАНДОМИЗИРОВАННЫЕ ДЕРЕВЬЯ**
+*   Декартово дерево (Treap): BST + Куча (приоритеты)
+    *   Обычный Treap - BST + Куча
+    *   Неявный Treap (implicit key) - позиция в последовательности как ключ, операции над отрезками (split по размеру + merge)
+    *   Операция `reverse` на отрезке
+    *   Декомпозиция/merge/split как фундаментальные примитивы (мост в VII — персистентный treap)
+*   Randomized Binary Search Tree (рандомизированная вставка по весам)
+
+### **G. СПЕЦИАЛИЗИРОВАННЫЕ ДЕРЕВЬЯ**
+*   Wavelet Tree (дерево по битам значений: запросы k-ой статистики и частот на отрезке за O(log σ))
+*   Wavelet Matrix (сукцинктный аналог Wavelet Tree: поразрядные битовые векторы с rank/select из III.B — та же k-я статистика при памяти ≈ n·log σ бит)
+*   Fenwick Tree (см. раздел V.B)
+*   Segment Tree (см. раздел V.D)
+*   Order-Statistic Tree: дерево с размерами поддеревьев (select/rank — `std::pb_ds` tree_order_statistics, мост в E и F)
+
+### **H. ДЕРЕВЬЯ В STL**
+*   `std::map` (красно-черное дерево)
+*   `std::set`, `std::multiset`
+*   `std::multimap`
+*   `std::priority_queue` — см. IV
+
+---
+
+## **III. СТРУКТУРЫ ДЛЯ МНОЖЕСТВ**
+> `c/c.md` · `c/c.cpp` · `struct SetStructures : SearchTrees`
+
+### **A. СИСТЕМА НЕПЕРЕСЕКАЮЩИХСЯ МНОЖЕСТВ (DSU/UNION-FIND)**
+*   Disjoint Set
+*   Alternate Disjoint Set
+*   **Оптимизации:**
+    *   Union by Rank/Size
+    *   Path Compression
+    *   Persistent DSU (мост в VII)
+    *   Rollback DSU (откат объединений со стеком изменений — мост в VII)
+*   **Варианты:**
+    *   Partially Persistent DSU
+    *   Dynamic Connectivity (мост в XI)
+    *   DSU с данными в компоненте: размер, сумма/произведение, экстремумы — переносимые инварианты
+    *   DSU с модификацией весов (weighted union-find: потенциалы к корню)
+    *   DSU оффлайн с временными метками рёбер (параллельные запросы по времени)
+
+### **B. БИТСЕТЫ**
+*   `std::bitset`
+*   Dynamic Bitset
+*   **Операции:**
+    *   Bit manipulation (установка/сброс/инверсия бита — машинное слово и границы `n ≤ 64·k`)
+    *   Set operations (union, intersection, difference — по словам)
+    *   Bit Count (popcount, `__builtin_popcountll`, префиксные суммы битов — rank)
+    *   Перебор единиц/нулей (следующий установленный бит за `O(1)` словом)
+    *   **Rank/Select** (сукцинктное хранение битового вектора): `rank(i)` — число единиц в префиксе (префиксные блоки/суперблоки + `popcount` слова, O(1) на запрос); `select(k)` — позиция k-й единицы (по суперблокам с указателями + двоичный поиск); обобщение: мультиплексируемые слова, `popcount`-примитивы
+    *   **FID (Fully Indexable Dictionary)** — битовый вектор с rank/select как базовый примитив сукцинктных структур; принцип: память ≈ информации (энтропия данных), оценка в битах на элемент
+*   Применение: сжатие множеств, динамические булевы маски, рюкзак через `dp |= dp << x` (связь `dynamic.md` J.2)
+
+---
+
+## **IV. КУЧИ (PRIORITY QUEUES)**
+> `d/d.md` · `d/d.cpp` · `struct Heaps : SetStructures`
+
 *   **Бинарная куча:**
-    *   Heap
+    *   Heap (массив + индексная арифметика, sift-up/sift-down)
+    *   Построение кучи за O(n) (снизу вверх по уровням) — амортизация и суммарная оценка
     *   Heap Generic
-    *   Max Heap
-    *   Min Heap
+    *   Max Heap / Min Heap (параметризация компаратора — произвольный ключ и приоритет)
+    *   Куча с позиционным массивом (index heap): decrease-key/increase-key за O(log n) — для Дейкстры/Прима (связь `graph.md`)
     *   `std::priority_queue`
 *   **Биномиальная куча:**
-    *   Binomial Heap
+    *   Binomial Heap (лес биномиальных деревьев, слияние O(log n), бинарное представление размера)
 *   **Фибоначчиева куча:**
-    *   Fibbonaci Heap
-*   **Парная куча (Pairing Heap)**
-*   **Левосторонняя куча (Leftist Heap)**
+    *   Fibbonaci Heap (каскадное сокращение, decrease-key O(1) амортизированно; потенциальная функция — связь `analysis.md`)
+*   **Парная куча (Pairing Heap)** — практическая альтернатива Фибоначчиевой
+*   **Левосторонняя куча (Leftist Heap)** — merge за O(log n), ранг по правому пути
 *   **Косая куча (Skew Heap):**
-    *   Skew Heap
+    *   Skew Heap (амортизированный merge, обмен правого/левого на каждом шаге)
 *   **Рандомизированная куча:**
-    *   Randomized Heap
+    *   Randomized Heap (merge с монеткой приоритетов — мост в `hashing.md` IV)
 *   **Для целочисленных ключей (Radix Heap):**
+    *   Radix Heap / Bucket Heap: приоритеты из малого диапазона — O(1) амортизированно (мост из I.D Bucket Queue)
 *   **Двусторонняя куча (Double-ended Priority Queue):**
     *   Min-Max Heap
     *   Interval Heap
     *   Deap
+*   Общее: операции (insert/extract/merge/decrease-key), представление (массив/указатели/индексы), амортизированные оценки, применимость по типам ключей
 
-## **VI. СТРУКТУРЫ ДЛЯ ЗАПРОСОВ НА ОТРЕЗКАХ**
+---
+
+## **V. СТРУКТУРЫ ДЛЯ ЗАПРОСОВ НА ОТРЕЗКАХ**
+> `e/e.md` · `e/e.cpp` · `struct RangeQueries : Heaps`
+
 ### **A. ПРЕФИКСНЫЕ СУММЫ**
 *   Prefix Sum (1D)
-*   2D Prefix Sum
-*   3D Prefix Sum
-*   Difference Array (разностный массив)
-*   Prefix Sum with Updates
+*   2D Prefix Sum (включения-исключения прямоугольника)
+*   3D Prefix Sum (обобщение на `k` измерений: включения-исключения по `2^k` слагаемых)
+*   Difference Array (разностный массив: точечный запрос = префикс; отрезковые обновления за O(1))
+*   Prefix Sum with Updates (обновления + запросы — переход к Fenwick V.B)
 
 ### **B. ДЕРЕВО ФЕНВИКА (FENWICK TREE / BINARY INDEXED TREE)**
 *   Standard Fenwick Tree
 *   Maximum Fenwick Tree
 *   Minimum Fenwick Tree
 *   **Варианты:**
-    *   2D Fenwick Tree
+    *   2D Fenwick Tree (вложенные деревья, обобщение на `k` измерений)
     *   Fenwick Tree with Range Updates
     *   Fenwick Tree on Fenwick Tree
 *   **Операции:**
     *   Point Update, Range Query
     *   Range Update, Point Query
     *   Range Update, Range Query
+*   Поиск k-го по сумме за O(log n) (спуск по степеням двойки)
 
 ### **C. РАЗРЕЖЕННАЯ ТАБЛИЦА (SPARSE TABLE)**
 *   Sparse Table для RMQ (Range Minimum Query)
 *   Sparse Table для GCD
-*   Sparse Table для любых идемпотентных операций
+*   Sparse Table для любых идемпотентных операций (параметризация операции `f` и требования ассоциативность + идемпотентность)
 *   Двумерная Sparse Table
-*   Disjoint Sparse Table
+*   Disjoint Sparse Table (и неидемпотентные операции)
+*   Sparse Table с координатным сжатием (для разреженных точек: сжатие координат сводит таблицу к числу уникальных позиций)
 
 ### **D. ДЕРЕВО ОТРЕЗКОВ (SEGMENT TREE)**
 *   **Базовые реализации:**
@@ -324,13 +360,15 @@
     *   Segment Tree (на указателях)
     *   Non Recursive Segment Tree
     *   Segment Tree Other
+    *   Динамическое дерево отрезков (по указателям, вершины создаются по требованию — без координатного сжатия, мост в VII)
+    *   Сжатое по координатам дерево отрезков (coordinate compression: сортировка уникальных координат + индексация — статический аналог динамического, мост в VII)
 *   **Отложенные операции (Lazy Propagation):**
     *   Add on segment, sum on segment
     *   Assign on segment
     *   Add and Assign combination
 *   **Массовые операции:**
     *   Range updates
-    *   Range queries (sum, min, max, gcd)
+    *   Range queries (sum, min, max, gcd) — параметризация нейтрального элемента и операции свертки
 *   **Segment Tree Beats:**
     *   `min=` operation
     *   `max=` operation
@@ -339,13 +377,104 @@
     *   Bitwise operations (AND, OR, XOR)
 *   **Персистентное дерево отрезков:**
     *   Persistent Segment Tree
-    *   Внешнеплоское дерево (PST)
+    *   Внешнеплоское дерево (PST) (мост в VII)
 *   **Segment Tree с комбинированными обновлениями**
     *   Поддержка `add` и `set` одновременно
     *   Приоритет операций (например, `set` перекрывает `add`)
-    *   **Операции с историей** - отслеживание изменений
+    *   **Операции с историей** - отслеживание изменений (мост в VII — персистентность)
+*   2D Segment Tree (дерево деревьев, запросы по прямоугольнику)
 
-### **E. ДЕРЕВЬЯ РАЗБОРА И СИНТАКСИЧЕСКИЕ СТРУКТУРЫ**
+### **E. ПРОДВИНУТЫЕ ДЕРЕВЬЯ:**
+*   **Range Tree:**
+    *   1D Range Tree
+    *   2D Range Tree
+    *   Для многомерных запросов (обобщение до `k` измерений: `O(log^k n)`)
+*   **Interval Tree:**
+    *   Для работы с интервалами
+    *   Статические и динамические интервалы
+*   **Segment Tree with Fractional Cascading** (ускорение спуска по деревьям)
+*   **Li Chao Tree** (для линейных функций: вставка прямой, максимум/минимум в точке)
+*   **Merge Sort Tree** (для запросов k-той статистики, через слияние отсортированных пунктов)
+
+---
+
+## **VI. КОРНЕВЫЕ СТРУКТУРЫ (SQRT DECOMPOSITION)**
+> `f/f.md` · `f/f.cpp` · `struct SqrtStructures : RangeQueries`
+
+*   **Корневая декомпозиция:**
+    *   Блоки фиксированного размера (`B = ⌈√n⌉` как параметр, настраиваемый под тип операций)
+    *   Оптимальный размер блока: `√n` для расщепления (обновление+запрос поровну), иное при асимметрии
+    *   Отрезковые запросы: полные блоки целиком + хвосты поштучно — суммарно `O(√n)`
+*   **Алгоритм Мо (Mo's Algorithm):**
+    *   Стандартный алгоритм Мо (сортировка запросов по блокам левого конца, два указателя)
+    *   Алгоритм Мо с обновлениями (Mo with updates) — третья координата времени
+    *   Алгоритм Мо на деревьях (эйлеров порядок + LCA-обработка)
+    *   Обобщение: функция add/remove как параметр (инвариант окна)
+*   **Дерево отрезков с корневой декомпозицией:**
+    *   Segment Tree + Sqrt Decomposition
+    *   Оптимизация для смешанных запросов
+*   **Sqrt Decomposition по блокам:**
+    *   Разбиение на тяжелые и легкие вершины (heavy/light: тяжелых ≤ `2·√m`)
+    *   Heavy-Light Decomposition (HLD): пути в графе за `O(log² n)` — мост в `graph.md`
+
+---
+
+## **VII. ПЕРСИСТЕНТНЫЕ СТРУКТУРЫ**
+> `g/g.md` · `g/g.cpp` · `struct PersistentStructures : SqrtStructures`
+
+*   **Основы персистентности:**
+    *   Классификация: частичная (чтение старых версий), полная (модификация любой версии), конфлюэнтная (слияние версий)
+    *   Persistent Array: двоичное дерево версий (`path copying`) — базовый примитив всех персистентных структур
+    *   Path Copying против Fat Node: обмен памяти и сложности
+*   **Персистентное дерево отрезков:**
+    *   Persistent Segment Tree (копирование пути при каждом обновлении, `O(log n)` новых вершин)
+    *   Приложения: k-я порядковая статистика на отрезке, запросы по истории
+*   **Персистентное декартово дерево:**
+    *   Persistent Treap (split/merge без модификации старых вершин)
+*   **Структуры с откатами:**
+    *   Rollback DSU (стек изменений + откат)
+    *   Persistent Stack (списки версий)
+    *   Persistent Queue (реализация на двух стеках)
+*   **Fully Persistent структуры:**
+    *   Любая версия доступна для модификации
+*   **Confluently Persistent структуры:**
+    *   Слияние версий
+*   **Functional структуры:**
+    *   Persistent Vector (RRB-родственный — мост из I.F)
+    *   Persistent Map/Set (персистентный treap / красно-черный с path copying)
+    *   Persistent Queue (реализация на двух стеках)
+
+---
+
+## **VIII. КОНКУРЕНТНЫЕ (ПАРАЛЛЕЛЬНЫЕ) СТРУКТУРЫ**
+> `h/h.md` · `h/h.cpp` · `struct ConcurrentStructures : PersistentStructures`
+
+*   **Lock-based структуры:**
+    *   Mutex-protected Queue/Stack
+    *   Reader-Writer Lock структуры
+    *   Condition Variable очереди
+    *   Спинлоки (backoff), блокирующие vs неблокирующие примитивы
+*   **Lock-free структуры:**
+    *   Lock-free Stack (Treiber)
+    *   Lock-free Queue (Michael-Scott)
+    *   Lock-free Deque
+    *   Atomic операции, memory ordering (acquire/release/seq_cst), CAS-циклы
+    *   ABA-проблема и её решения (tagged pointers, hazard pointers, epoch-based reclamation)
+*   **Wait-free структуры:**
+    *   Wait-free Queue
+    *   Wait-free Stack
+*   **Concurrent Containers:**
+    *   `concurrent_queue`, `concurrent_stack`
+    *   `concurrent_vector`, `concurrent_hash_map`
+*   **Специальные примитивы:**
+    *   Seqlock (write-lock + версия), RCU (Read-Copy-Update)
+    *   Lock-free Skip List (мост из `hashing.md` IV)
+
+---
+
+## **IX. СИНТАКСИЧЕСКИЕ СТРУКТУРЫ (ДЕРЕВЬЯ РАЗБОРА)**
+> `i/i.md` · `i/i.cpp` · `struct SyntaxStructures : ConcurrentStructures`
+
 *   **AST (Abstract Syntax Tree - Абстрактное синтаксическое дерево)**
     *   **Бинарные AST** - для арифметических выражений
     *   **N-арные AST** - для сложных конструкций
@@ -365,7 +494,7 @@
     *   **Рекурсивный спуск** (Recursive Descent Parser)
     *   **LL-парсеры** - Left-to-right, Leftmost derivation
     *   **LR-парсеры** - Left-to-right, Rightmost derivation
-    *   **Shift-Reduce парсеры**
+    *   **Shift-Reduce парсеры** (стек как рабочая память — мост из I.C)
     *   **Операторный парсер** (Pratt Parser) - для разных приоритетов
 *   **Трансформации и вычисления**
     *   **Visitor Pattern** для обхода AST
@@ -390,98 +519,63 @@
     *   **Доменно-специфичные языки** (DSL)
     *   **Конфигурационные языки** (JSON, YAML, XML парсеры)
 
-### **F. ПРОДВИНУТЫЕ ДЕРЕВЬЯ:**
-*   **Range Tree:**
-    *   1D Range Tree
-    *   2D Range Tree
-    *   Для многомерных запросов
-*   **Interval Tree:**
-    *   Для работы с интервалами
-    *   Статические и динамические интервалы
-*   **Segment Tree with Fractional Cascading**
-*   **Li Chao Tree** (для линейных функций)
-*   **Merge Sort Tree** (для запросов k-той статистики)
+---
 
-## **VII. КОРНЕВЫЕ СТРУКТУРЫ (SQRT DECOMPOSITION)**
-*   **Корневая декомпозиция:**
-    *   Блоки фиксированного размера
-    *   Оптимальный размер блока (√n)
-*   **Алгоритм Мо (Mo's Algorithm):**
-    *   Стандартный алгоритм Мо
-    *   Алгоритм Мо с обновлениями (Mo with updates)
-    *   Алгоритм Мо на деревьях
-*   **Дерево отрезков с корневой декомпозицией:**
-    *   Segment Tree + Sqrt Decomposition
-    *   Оптимизация для смешанных запросов
-*   **Sqrt Decomposition по блокам:**
-    *   Разбиение на тяжелые и легкие вершины
-    *   Heavy-Light Decomposition (HLD)
+## **X. СТРУКТУРЫ ДЛЯ КЭШИРОВАНИЯ**
+> `j/j.md` · `j/j.cpp` · `struct CachingStructures : SyntaxStructures`
 
-## **VIII. ПЕРСИСТЕНТНЫЕ СТРУКТУРЫ**
-*   **Персистентное дерево отрезков:**
-    *   Persistent Segment Tree
-*   **Персистентное декартово дерево:**
-    *   Persistent Treap
-*   **Структуры с откатами:**
-    *   Rollback DSU
-    *   Persistent Stack
-    *   Persistent Queue
-*   **Fully Persistent структуры:**
-    *   Любая версия доступна для модификации
-*   **Confluently Persistent структуры:**
-    *   Слияние версий
-*   **Functional структуры:**
-    *   Persistent Vector
-    *   Persistent Map/Set
-    *   Persistent Queue (реализация на двух стеках)
+*   **Постановка задачи кэширования:**
+    *   Кэш размера `k`, поток запросов к элементам из универсума `U`; попадание/промах; цель — максимизировать число попаданий
+    *   Классификация политик: детерминированные/рандомизированные, онлайн/оффлайн
+    *   Оптимальная оффлайн-политика: алгоритм Белади (Belady) — выброс элемента, следующий запрос к которому дальше всего (доказательство через обмен)
+    *   Конкурентное соотношение: для любой онлайн-политики `≥ k/(k+1)` от оффлайн-оптимума; LRU и FIFO — `k`-конкурентны
+*   **LRU Cache (Least Recently Used):**
+    *   Реализация: хеш-таблица + двусвязный список (чтобы `get`/`put` за O(1)), параметризация размера и узла
+    *   Варианты: LRU с батчами, `k`-LRU, приближения (Clock)
+*   **LFU Cache (Least Frequently Used):**
+    *   Счётчики частот, поддержка минимума частоты (бакеты частот или heap + позиции)
+    *   Устаревание частот (память о прошлом), сравнение с LRU на реальных последовательностях
+*   **ARC Cache (Adaptive Replacement Cache):**
+    *   Два списка T1/T2 с адаптивной настройкой (адаптивный параметр `p`)
+    *   Отслеживание «истории» вытесненных элементов (B1/B2)
+*   **LIRS Cache:**
+    *   Признак «текущей рекурсии» (recency) против частоты: два уровня (HIR/LIR)
+    *   Сравнение устойчивости к сканам (однократному чтению большого объёма)
+*   **Другие политики (карта, без дублирования):**
+    *   FIFO/MRU (простейшие), Clock/Second-Chance (приближение LRU для аппаратуры), 2Q (две очереди: «потенциальные» и «долгожители»)
+    *   TTL-кэши (срок жизни записи), размерные кэши (политика «вместимость против ценности» — knapsack-идея)
+    *   Write-back / write-through (политики записи, называют кэш-когерентность — мост в VIII)
+*   **Применения:**
+    *   Кэши в ОС (страницы, TLB), СУБД (буфер-пул страниц), CPU (аппаратные кэши — мост в XI cache-oblivious)
+    *   Кэши вычислений: мемоизация (мост из I.F), кэши результатов функций (веб-кэши)
+    *   Скользящие кэши в потоковой обработке — связь `hashing.md` (вероятностные счётчики)
 
-## **IX. ПРОСТРАНСТВЕННО-ЭФФЕКТИВНЫЕ СТРУКТУРЫ**
-*   **Succinct Data Structures:**
-    *   Суффиксный массив + LCP
-    *   Wavelet Matrix
-    *   Fully Indexable Dictionary (FID)
-    *   Rank/Select структуры
-*   **Compressed Data Structures:**
-    *   Compressed Segment Tree
-    *   Sparse Table with compression
-*   **Implicit Data Structures:**
-    *   Implicit Treap
-    *   Implicit Cartesian Tree
-
-## **X. ПРИКЛАДНЫЕ И СПЕЦИАЛИЗИРОВАННЫЕ СТРУКТУРЫ**
-*   **Для потоков данных:**
-    *   **Count-Min Sketch**
-    *   **HyperLogLog**
-    *   **Bloom Filter** (в разделе хэширования)
-    *   **Reservoir Sampling**
-*   **Для кэширования:**
-    *   LRU Cache (Least Recently Used)
-    *   LFU Cache (Least Frequently Used)
-    *   ARC Cache (Adaptive Replacement Cache)
-    *   LIRS Cache
-*   **Для графов:**
-    *   Adjacency Matrix
-    *   Adjacency List
-    *   Incidence Matrix
-    *   CSR (Compressed Sparse Row)
-    *   Forward Star
-*   **Для баз данных:**
-    *   B+Tree (индексы)
-    *   Hash Index
-    *   Bitmap Index
-    *   R-Tree (для пространственных данных)
-    *   GiST (Generalized Search Tree)
+---
 
 ## **XI. ТЕОРЕТИЧЕСКИЕ И ЭКЗОТИЧЕСКИЕ СТРУКТУРЫ**
-*   **VEB-Tree (van Emde Boas Tree):**
-    *   Для целых чисел из ограниченного универсума
-    *   Все операции за O(log log U)
-*   **Y-Fast Trie**
-*   **X-Fast Trie**
-*   **Fusion Tree:**
-    *   Для целых чисел, операции за O(log_w n)
-*   **Dynamic Connectivity структуры:**
-    *   Holm-de Lichtenberg-Thorup
-    *   ETT (Euler Tour Tree)
-*   **Retroactive Data Structures:**
-    *   Поддержка операций во времени
+> `k/k.md` · `k/k.cpp` · `struct TheoreticalStructures : CachingStructures`
+
+*   **Малый универсум: битовые трюки (A):**
+    *   Универсум `U` мал, ключ влезает в машинное слово: сравнение ключей заменяется доступом к биту
+    *   Битовое множество и сортировка за `O(n + U/w)` (слово обрабатывается за `O(1)`); битовый слой — `DynamicBitset` (III.B)
+*   **VEB-Tree (van Emde Boas Tree, B):**
+    *   Для целых чисел из ограниченного универсума `U`
+    *   Все операции за O(log log U): суммарные кластеры + минимум/максимум
+    *   Нижний уровень — компактный битовый блок; vEB-раскладка массивов (cache-oblivious переиспользование рекурсии, мост в III.B и H)
+*   **X-Fast Trie (C):** двоичное trie по битам ключа, уровневые хеши; `next`/`prev` за `O(log log U)` бинарным поиском по уровням; память `O(n log U)`
+*   **Y-Fast Trie (D):** X-fast над представителями бакетов + Treap внутри бакета; `O(log log U)` ожидаемо (наводка X-fast + ранг в Treap), память `O(n)`; размер бакета `Θ(log U)` — параметр
+*   **Fusion Tree (E):**
+    *   Для целых чисел, операции за O(log_w n) (word-level parallelism)
+    *   Модель Word-RAM: битовая параллельность, sketch-сжатие ключей, константы предвычислений per word
+*   **Структуры динамической связности (F):**
+    *   Оффлайн: дерево по времени + Rollback-DSU (мост III.A.6)
+    *   ETT (Euler Tour Tree) — путь в эйлеровом обходе, как динамическое дерево
+    *   Link-Cut Tree (разрез/сшивание, акцесс-операция, применение: динамические минимумы на путях) — связь `graph.md`
+    *   Holm-de Lichtenberg-Thorup (амортизированный `O(log² n)` per update)
+    *   Top Tree / Sleator-Tarjan (общий каркас) — упоминание
+*   **Retroactive Data Structures (G):**
+    *   Поддержка операций во времени (вставка/удаление операций в прошлом)
+    *   Частичные (приоритетная очередь) и полные (стек) ретроактивные структуры
+*   **Cache-oblivious структуры (H):**
+    *   Принцип: алгоритм без знания размера кэша; оценка через идеальную модель кэша
+    *   vEB-раскладка массива и рекурсивный поиск; cache-oblivious B-дерево
