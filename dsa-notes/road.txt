@@ -11,7 +11,7 @@
     hashing
 
 чередовать с:
-    struct
+    struct - complete
     dynamic - complete
     graph
     string
