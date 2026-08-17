@@ -339,9 +339,132 @@ long long coin_change_ways(const vector<long long>& coins, long long n,
     return dp[n];
 }
 
+// =============================================================
+// D. МЕТОД КОЭФФИЦИЕНТОВ И ИЗВЛЕЧЕНИЕ [xⁿ]
+// =============================================================
+
+// --- D.2. Извлечение [xⁿ] для рациональной P(x)/Q(x) ---
+// Частные дроби: если Q(x) = ∏(1 − αᵢx), все корни простые,
+// то aₙ = Σ cᵢ·αᵢⁿ, где cᵢ = P(1/αᵢ) / Q'(1/αᵢ)·(−αᵢ).
+// Возвращает первые n коэффициентов ряда P/Q.
+vector<long long> rational_coeff_extract(const vector<long long>& P,
+                                          const vector<long long>& Q,
+                                          int n, long long mod) {
+    // Наивное: полиномиальное деление P/Q
+    vector<long long> result(n, 0);
+    vector<long long> rem = P;
+    rem.resize(n + Q.size(), 0);
+    for (int i = 0; i < n; i++) {
+        if ((int)rem.size() <= i) break;
+        result[i] = rem[i];
+        for (int j = 0; j < (int)Q.size(); j++)
+            if (i + j < (int)rem.size())
+                rem[i + j] = (rem[i + j] - result[i] * Q[j] % mod + mod) % mod;
+    }
+    return result;
+}
+
+// =============================================================
+// E. DP ЧЕРЕЗ ПРОИЗВОДЯЩИЕ ФУНКЦИИ
+// =============================================================
+
+// --- E.1. Решение D = 1 + F·D: D(x) = 1/(1 − F(x)) ---
+// Если dp[n] = Σ f[k]·dp[n−1−k], dp[0] = 1, то D = 1/(1 − F).
+// Возвращает dp[0..n-1].
+vector<long long> ogf_rational_inverse(const vector<long long>& F, int n, long long mod) {
+    // D = 1/(1 − F) → poly_inv(1 − F)
+    vector<long long> one_minus_F(n, 0);
+    one_minus_F[0] = 1;
+    for (int i = 0; i < (int)F.size() && i < n; i++)
+        one_minus_F[i] = (one_minus_F[i] - F[i] + mod) % mod;
+    return poly_inv(one_minus_F, n, mod);
+}
+
+// =============================================================
+// F. ДЕРЕВЬЯ И СТРУКТУРЫ ЧЕРЕЗ OGF
+// =============================================================
+
+// --- F.1. Бинарные деревья: B(x) = 1 + x·B(x)² → Bₙ = C(n) ---
+// Решаем итеративно: B₀ = 1, Bₙ₊₁ = 1 + x·Bₙ² (mod xⁿ).
+vector<long long> binary_trees_ogf(int n, long long mod) {
+    vector<long long> B(1, 1); // B₀ = 1
+    for (int iter = 0; iter < n; iter++) {
+        int m = min((int)B.size() * 2, n);
+        vector<long long> B2 = poly_mul(B, B, mod);
+        B2.resize(m, 0);
+        vector<long long> Bnew(m, 0);
+        Bnew[0] = 1; // +1
+        for (int i = 1; i < m; i++)
+            Bnew[i] = B2[i - 1]; // x·B²: сдвиг на 1
+        B = Bnew;
+    }
+    B.resize(n);
+    return B;
+}
+
+// --- F.2. Catalan через формулу: C(n) = C(2n,n)/(n+1) ---
+vector<long long> catalan_from_equation(int n, long long mod,
+                                         const vector<long long>& fact,
+                                         const vector<long long>& inv_fact) {
+    vector<long long> c(n, 0);
+    for (int i = 0; i < n; i++) {
+        // C(2i,i) / (i+1)
+        long long comb = fact[2 * i] % mod * inv_fact[i] % mod * inv_fact[i] % mod;
+        c[i] = comb * modinv(i + 1, mod) % mod;
+    }
+    return c;
+}
+
+// =============================================================
+// G. ВЕРОЯТНОСТНЫЕ ПРОИЗВОДЯЩИЕ ФУНКЦИИ (PGF)
+// =============================================================
+
+// --- G.2. Математическое ожидание через PGF: E[X] = G'(1) ---
+// PGF задана коэффициентами gₖ = P(X=k) (gₖ ≥ 0, Σ gₖ = 1).
+long long pgf_expectation(const vector<long long>& pgf, long long mod) {
+    // G'(1) = Σ k·gₖ
+    long long result = 0;
+    for (int k = 0; k < (int)pgf.size(); k++)
+        result = (result + k * pgf[k]) % mod;
+    return result;
+}
+
+// --- G.2. Дисперсия: D[X] = G''(1) + G'(1) − (G'(1))² ---
+long long pgf_variance(const vector<long long>& pgf, long long mod) {
+    long long E = pgf_expectation(pgf, mod);
+    long long E2 = 0;
+    for (int k = 0; k < (int)pgf.size(); k++)
+        E2 = (E2 + (long long)k * k % mod * pgf[k]) % mod;
+    return (E2 - E * E % mod + mod) % mod;
+}
+
+// --- G.3. PGF для суммы независимых: G_{X+Y} = G_X · G_Y ---
+vector<long long> pgf_sum_independent(const vector<long long>& gx,
+                                       const vector<long long>& gy,
+                                       long long mod) {
+    return poly_mul(gx, gy, mod);
+}
+
+// --- G.4. PGF для биномиального: G(t) = (1−p+pt)ⁿ ---
+vector<long long> pgf_binomial(int n, long long p, long long q_inv, int sz, long long mod) {
+    // (1−p + p·t)ⁿ через бином Ньютона
+    vector<long long> base = { (1 - p + mod) % mod, p };
+    vector<long long> result = { 1 };
+    // Бинарное возведение
+    vector<long long> b = base;
+    int exp = n;
+    while (exp > 0) {
+        if (exp & 1) result = poly_mul(result, b, mod);
+        b = poly_mul(b, b, mod);
+        exp >>= 1;
+    }
+    result.resize(sz);
+    return result;
+}
+
 }; // конец struct GeneratingFunctions
 
-#ifndef GENERATING_FUNCTIONS_MAIN
+#ifdef GENERATING_FUNCTIONS_MAIN
 signed main() {
     GeneratingFunctions gf;
     const long long MOD = 1000000007;
@@ -425,6 +548,33 @@ signed main() {
     cout << "coin_change({1,5,10,25}, 10) = " << gf.coin_change_ways({1, 5, 10, 25}, 10, MOD)
          << " (ожид. 4), ({2,3}, 6) = " << gf.coin_change_ways({2, 3}, 6, MOD)
          << " (ожид. 2)" << endl;
+
+    cout << "\n=== D. Метод коэффициентов ===" << endl;
+    // 1/(1−x) = 1 + x + x² + x³ + ...: P={1}, Q={1,-1}
+    auto rc = gf.rational_coeff_extract({1}, {1, MOD - 1}, 5, MOD);
+    cout << "1/(1−x) coeffs: ";
+    for (long long x : rc) cout << x << ' ';
+    cout << " (ожид. 1 1 1 1 1)" << endl;
+
+    cout << "\n=== F. Деревья через OGF ===" << endl;
+    // Бинарные деревья: Bₙ = C(n) = 1 1 2 5 14 42
+    auto bt = gf.binary_trees_ogf(6, MOD);
+    cout << "binary_trees(0..5) = ";
+    for (long long x : bt) cout << x << ' ';
+    cout << " (ожид. 1 1 2 5 14 42)" << endl;
+    // Catalan через формулу: C(n) = C(2n,n)/(n+1)
+    auto cat = gf.catalan_from_equation(6, MOD, fact, inv_fact);
+    cout << "catalan(0..5) = ";
+    for (long long x : cat) cout << x << ' ';
+    cout << " (ожид. 1 1 2 5 14 42)" << endl;
+
+    cout << "\n=== G. PGF ===" << endl;
+    // Бернуллиевская: X ~ Ber(p=1/2), PGF = (1+p·t)/2 = 0.5 + 0.5t
+    vector<long long> ber = {500000004, 500000004}; // mod inverse of 2
+    cout << "E[Ber(1/2)] = " << gf.pgf_expectation(ber, MOD)
+         << " (ожид. 500000004 = 1/2)" << endl;
+    cout << "D[Ber(1/2)] = " << gf.pgf_variance(ber, MOD)
+         << " (ожид. 250000002 = 1/4)" << endl;
 }
 #endif // GENERATING_FUNCTIONS_MAIN
 #endif // COMBINATORICS_B_CPP
