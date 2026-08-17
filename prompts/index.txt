@@ -37,7 +37,35 @@ workflow.txt — контроль версий написанного матер
 
 ⸻
 
-2. КОНВЕЙЕР И ПОРЯДОК РАБОТЫ
+2. OPENCODE SKILLS (автозагрузка агентом)
+⸻
+
+Два skill'а подхватываются OpenCode (tool `skill`). Они не заменяют файлы выше —
+оркестрируют их чтение и работу с API. Активация — словами в запросе
+(«нарисуй конспект по X», «разбери задачу Y»); отдельных команд/кнопок нет.
+
+cs-whiteboard
+- Когда: конспект, урок, разбор задачи на доске, «AI Professor».
+- Делает: pipeline warm_up → tldraw → whiteboard → canvas; методика + verify.
+- Пути:
+  ~/.config/opencode/skills/cs-whiteboard/SKILL.md
+  .opencode/skills/cs-whiteboard/SKILL.md  (в этом репо)
+  ~/.claude/skills/cs-whiteboard/SKILL.md
+
+tldraw-offline
+- Когда: любой inspect/edit/script живого tldraw offline холста.
+- Делает: Local Canvas API, tq helper, exec/scripts/recipes.
+- Пути:
+  ~/skills/tldraw-offline/          (канон: SKILL.md + tq)
+  ~/.config/opencode/skills/tldraw-offline/
+  .opencode/skills/tldraw-offline/
+  ~/.claude/skills/tldraw-offline/
+
+Агент при уроке: skill(cs-whiteboard) → skill(tldraw-offline) → читать prompts/* → рисовать.
+
+⸻
+
+3. КОНВЕЙЕР И ПОРЯДОК РАБОТЫ
 ⸻
 
 1. warm_up.txt — определить/проверить список тем.
@@ -48,13 +76,15 @@ workflow.txt — контроль версий написанного матер
 
 Любая задача может начинаться с любого этапа, но при касании холста
 порядок «прочитать tldraw.txt → обновить → работать» не нарушается.
+Для OpenCode предпочтительно стартовать через skill `cs-whiteboard`.
 
 ⸻
 
-3. ПРАВИЛА САМОГО index.txt
+4. ПРАВИЛА САМОГО index.txt
 ⸻
 
 - Если добавляется новый промт в папку prompts — сначала описать его здесь,
   потом создавать файл.
 - Если меняется назначение промта — обновлять описание здесь.
 - Этот файл читается первым, поэтому описания должны оставаться краткими.
+- Если добавляется/меняется skill — обновить §2.
