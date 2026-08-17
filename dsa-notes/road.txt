@@ -2,7 +2,7 @@
     дискретка и логика (math/discrete-and-logic) - complete
     теория чисел (math/number-theory) - complete
     комбинаторика (math/combinatorics) - complete
-    алгебра (math/algebra)
+    алгебра (math/algebra) - complete
     линейная алгебра (math/linear-algebra)
     geometry
     картинки (math/pictures)
@@ -13,9 +13,9 @@
 чередовать с:
     struct - complete
     dynamic - complete
-    graph
-    string
-    technique
+    graph - complete
+    string - complete
+    technique - complete
     special-numbers
     special-sequences
 
