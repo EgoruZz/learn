@@ -6,7 +6,7 @@
     линейная алгебра (math/linear-algebra) - complete
     geometry - complete
     картинки (math/pictures)
-    матанализ (math/analysis)
+    матанализ (math/analysis) - complete
     вероятность и статистика (math/prob-and-stats)
     hashing
 
