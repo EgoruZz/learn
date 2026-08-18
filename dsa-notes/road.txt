@@ -3,7 +3,7 @@
     теория чисел (math/number-theory) - complete
     комбинаторика (math/combinatorics) - complete
     алгебра (math/algebra) - complete
-    линейная алгебра (math/linear-algebra)
+    линейная алгебра (math/linear-algebra) - complete
     geometry
     картинки (math/pictures)
     матанализ (math/analysis)
