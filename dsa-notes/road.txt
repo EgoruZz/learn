@@ -4,7 +4,7 @@
     комбинаторика (math/combinatorics) - complete
     алгебра (math/algebra) - complete
     линейная алгебра (math/linear-algebra) - complete
-    geometry
+    geometry - complete
     картинки (math/pictures)
     матанализ (math/analysis)
     вероятность и статистика (math/prob-and-stats)
