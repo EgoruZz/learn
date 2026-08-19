@@ -7,7 +7,7 @@
     geometry - complete
     картинки (math/pictures)
     матанализ (math/analysis) - complete
-    вероятность и статистика (math/prob-and-stats)
+    вероятность и статистика (math/prob-and-stats) - complete
     hashing
 
 чередовать с:
