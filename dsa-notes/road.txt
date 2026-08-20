@@ -5,7 +5,7 @@
     алгебра (math/algebra) - complete
     линейная алгебра (math/linear-algebra) - complete
     geometry - complete
-    картинки (math/pictures)
+    картинки (math/pictures) - complete
     матанализ (math/analysis) - complete
     вероятность и статистика (math/prob-and-stats) - complete
     hashing - complete
