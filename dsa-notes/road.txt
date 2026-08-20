@@ -8,7 +8,7 @@
     картинки (math/pictures)
     матанализ (math/analysis) - complete
     вероятность и статистика (math/prob-and-stats) - complete
-    hashing
+    hashing - complete
 
 чередовать с:
     struct - complete
@@ -16,8 +16,8 @@
     graph - complete
     string - complete
     technique - complete
-    special-numbers
-    special-sequences
+    special-numbers - complete
+    special-sequences - complete
 
 в конце:
-    algo-analysis
+    algo-analysis - complete
