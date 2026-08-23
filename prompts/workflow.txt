@@ -30,7 +30,7 @@ git rebase origin/main
 8. Отправляешь ветку в GitHub
 git push origin learning
 
-9. Создаешь Pull Request (GitHub UI)
+9. Создаешь Pull Request (gh есть)
 * base: main
 * compare: learning
 
@@ -44,17 +44,17 @@ git push origin learning
 ## Notes
 - ...
 
-11. Review (даже если ты один)
+11. Review (обязательно)
 Перед merge проверь:
 * нет ли мусора
 * логично ли разбиты изменения
 * нет ли лишних файлов
 
-12. Merge через GitHub
+12. Merge через GitHub (gh есть)
 Нажимаешь: “Merge pull request”
 Выбирай: “Create merge commit”
 
-13. Уходишь в другую ветку (необязательный шаг)
+13. Уходишь в другую ветку
 git checkout main
 git pull origin main
 
