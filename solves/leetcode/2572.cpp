@@ -1,66 +1,50 @@
 #include <iostream>
 #include <vector>
-#include <unordered_map>
-#include <unordered_set>
 using namespace std;
 
 class Solution {
 public:
     int squareFreeSubsets(vector<int>& nums) {
-        vector<int> mu = mobius_sieve(30);
-        for (auto elem : mu) cout << elem << ' ';
-        cout << '\n';
+        vector<int> count(30 + 1, 0);
+        for (auto elem : nums) count[elem]++;
 
-        const int MOD = (int) 1e9 + 7;
-        int answer = 0;
-        for (int i = 0; i < (int) nums.size(); i++) {
-            if (mu[nums[i]] != 0) {
-                int prod = nums[i], cnt = 1;
-                for (int j = i + 1; j < (int) nums.size(); j++) {
-                    if (mu[prod * nums[j]] != 0) prod *= nums[i], cnt++;
+        vector<int> dp(1024, 0);
+        dp[0] = 1;
+        vector<int> primes = {2,3,5,7,11,13,17,19,23,29};
+        const int MOD = 1e9 + 7;
+
+        for (int elem = 2; elem <= 30; elem++) {
+            if (count[elem] == 0) continue;
+            int num_mask = 0;
+            bool is_square_free = true;
+            
+            for (int i = 9; i >= 0; i--) {
+                if (elem % (primes[i] * primes[i]) == 0) {
+                    is_square_free = false;
+                    break;
                 }
-                answer = (powmod(2, cnt, MOD) - 1 + MOD) % MOD;
-                break;
+                if (elem % primes[i] == 0) num_mask |= (1 << i);
+            }
+            if (!is_square_free) continue;
+
+            for (int mask = 1023; mask >= 0; mask--) {
+                if ((mask & num_mask) == 0) {
+                    dp[mask | num_mask] = (1LL * dp[mask | num_mask] + (1LL * dp[mask] * count[elem])) % MOD;
+                }
             }
         }
 
-        return answer;
-    }
+        int ans = 0;
+        for (int i = 0; i < 1024; i++) ans = (ans + dp[i]) % MOD;
+        for (int i = 0; i < count[1]; i++) ans = (ans * 2) % MOD;
+        ans = (ans - 1 + MOD) % MOD;
 
-    int powmod(int a, int exp, int mod) {
-        a %= mod;
-        int result = 1;
-        while (exp > 0) {
-            if (exp & 1) result = result * a % mod;
-            a = a * a % mod;
-            exp >>= 1;
-        }
-        return result;
-    }
-
-    vector<int> mobius_sieve(int n) {
-        vector<int> spf(n + 1, 0), mu(n + 1, 0);
-        vector<int> primes;
-        mu[1] = 1;
-        for (int i = 2; i <= n; i++) {
-            if (spf[i] == 0) {
-                spf[i] = i;
-                primes.push_back(i);
-                mu[i] = -1;
-            }
-            for (int j = 0; j < (int) primes.size() && primes[j] < spf[i] && i * primes[j] <= n; j++) {
-                int ip = i * primes[j];
-                spf[ip] = primes[j];
-                if (spf[i] == primes[j]) mu[ip] = 0;
-                else mu[ip] = -mu[i];
-            }
-        }
-        return mu;
+        return ans;
     }
 };
 
 signed main() {
-    vector<int> v = {3, 7, 12, 14};
+    vector<int> v = {3, 4, 4, 5}; //{3, 7, 12, 14};
     auto res = Solution().squareFreeSubsets(v);
     cout << res << '\n';
 }
