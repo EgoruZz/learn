@@ -30,9 +30,7 @@ using namespace std;
 //               → E. Специальные примитивы
 //
 // ConcurrentStructures наследует PersistentStructures (g.cpp).
-// Идея уровней Skip List (hashing.md IV) — основа LockFreeSkipList
-// (E.3); mt19937 — приоритеты уровней (E.3); приёмы вероятностных
-// структур — hashing.md IV.
+// mt19937 — для тестов.
 //
 // Примитивы — стандартная библиотека (C++11/17): mutex,
 // condition_variable, atomic, thread.
@@ -573,71 +571,6 @@ struct RCUStore {
     }
 };
 
-// --- E.3. Lock-free Skip List (упрощённый, без удаления) ---
-// Skip List (hashing.md IV) с атомарными указателями уровней:
-// вставка — CAS снизу вверх; неудача CAS верхнего уровня не ломает
-// список (уровень 0 обязателен). Удаление (Harris-маркировка) — анализ.
-struct LockFreeSkipList {
-    static const int L = 8;
-    struct Node {
-        int key;
-        array<atomic<Node*>, L> next;
-        Node(int k) : key(k) { for (auto& p : next) p.store(nullptr, memory_order_relaxed); }
-    };
-    Node* head;
-    mt19937 rng;
-
-    LockFreeSkipList() : rng(4242) { head = new Node(INT_MIN); }
-    int random_level() {
-        int lv = 1;
-        while (lv < L && (rng() & 1)) ++lv;
-        return lv;
-    }
-    bool search(int key, array<Node*, L>* preds = nullptr,
-                array<Node*, L>* succs = nullptr) const {
-        Node* cur = head;
-        for (int l = L - 1; l >= 0; --l) {
-            Node* nxt = cur->next[l].load(memory_order_relaxed);
-            while (nxt && nxt->key < key) { cur = nxt; nxt = cur->next[l].load(memory_order_relaxed); }
-            if (preds) (*preds)[l] = cur;
-            if (succs) (*succs)[l] = nxt;
-        }
-        Node* t = cur->next[0].load(memory_order_relaxed);
-        return t && t->key == key;
-    }
-    bool contains(int key) const { return search(key); }
-    void insert(int key) {
-        if (search(key)) return;
-        array<Node*, L> preds, succs;
-        search(key, &preds, &succs);
-        int lv = random_level();
-        Node* n = new Node(key);
-        for (int l = 0; l < lv; ++l) n->next[l].store(succs[l], memory_order_relaxed);
-        Node* s0 = succs[0];
-        while (!preds[0]->next[0].compare_exchange_weak(s0, n, memory_order_release, memory_order_relaxed)) {
-            search(key, &preds, &succs);
-            if (succs[0] && succs[0]->key == key) { delete n; return; }  // кто-то вставил
-            s0 = succs[0];
-            for (int l = 0; l < lv; ++l) n->next[l].store(succs[l], memory_order_relaxed);
-        }
-        for (int l = 1; l < lv; ++l) {  // верхние уровни — оптимизация
-            Node* s = succs[l];
-            if (!preds[l]->next[l].compare_exchange_weak(s, n, memory_order_release, memory_order_relaxed)) break;
-        }
-    }
-    vector<int> inorder() const {
-        vector<int> res;
-        for (Node* cur = head->next[0].load(memory_order_acquire); cur; cur = cur->next[0].load(memory_order_acquire))
-            res.push_back(cur->key);
-        return res;
-    }
-    int size() const {
-        int n = 0;
-        for (Node* cur = head->next[0].load(memory_order_acquire); cur; cur = cur->next[0].load(memory_order_acquire)) ++n;
-        return n;
-    }
-};
-
 };  // struct ConcurrentStructures
 
 #ifndef STRUCT_H_MAIN
@@ -837,20 +770,6 @@ int main() {
              << " (ожидаем 10 20)" << endl;
     }
 
-    // ---------- E.3 Lock-free Skip List ----------
-    {
-        H::LockFreeSkipList sl;
-        for (int x : {5, 3, 8, 1, 9, 4, 7, 2, 10, 6}) sl.insert(x);
-        vector<int> in = sl.inorder();
-        cout << "LF SkipList inorder =";
-        for (int x : in) cout << " " << x;
-        cout << " (ожидаем 1 2 3 4 5 6 7 8 9 10)" << endl;
-        cout << "LF SkipList contains(7) = " << sl.contains(7)
-             << ", contains(11) = " << sl.contains(11)
-             << ", size = " << sl.size()
-             << " (ожидаем 1 0 10)" << endl;
-    }
-
     cout << "\n=== ОБЩЕЕ: многопоточные дымовые тесты ===" << endl;
 
     // TreiberStack: 4 потока × 1000 вставок, главный вынимает все
@@ -985,23 +904,6 @@ int main() {
         stop.store(true, memory_order_relaxed);
         writer.join();
         cout << "Seqlock consistent reads (expect 1) = 1" << endl;
-    }
-
-    // Lock-free Skip List: 4 потока вставляют разные ключи
-    {
-        H::LockFreeSkipList sl;
-        const int T = 4, N = 500;
-        vector<thread> ts;
-        for (int t = 0; t < T; ++t)
-            ts.emplace_back([&sl, t] {
-                for (int i = 0; i < N; ++i) sl.insert(t * N + i);
-            });
-        for (auto& th : ts) th.join();
-        vector<int> in = sl.inorder();
-        bool ok = (int)in.size() == T * N;
-        for (int i = 0; i < (int)in.size() && ok; ++i) ok &= in[i] == i;
-        for (int i = 0; i < T * N && ok; ++i) ok &= sl.contains(i);
-        cout << "LockFreeSkipList 4x500 sorted+found (expect 1) = " << ok << endl;
     }
 
     cout << "\nAll tests passed!" << endl;

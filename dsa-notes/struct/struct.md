@@ -2,7 +2,7 @@
 
 > Разделы I–XI: `struct/a/` ... `struct/k/` — каждый раздел — конспект `X.md` + реализация `X.cpp`. Классы образуют цепочку наследования: `LinearStructures` (a.cpp) ← `SearchTrees` (b.cpp) ← `SetStructures` (c.cpp) ← `Heaps` (d.cpp) ← `RangeQueries` (e.cpp) ← `SqrtStructures` (f.cpp) ← `PersistentStructures` (g.cpp) ← `ConcurrentStructures` (h.cpp) ← `SyntaxStructures` (i.cpp) ← `CachingStructures` (j.cpp) ← `TheoreticalStructures` (k.cpp): каждый конспект использует материал предыдущих (арены и курсоры из I, представления деревьев из II, амортизационный анализ из V и analysis.md). Имена классов финализируются при написании каждого конспекта.
 >
-> **Связи с другими ветками:** хеш-таблицы и Bloom Filter — `hashing.md`; строковые контейнеры, rope, trie, суффиксные структуры, парсеры строк — `string.md`; представления графов (Adjacency, CSR, Forward Star), Incidence Matrix, структуры динамической связности — `graph.md`; пространственные структуры (R-Tree, KD-Tree, QuadTree/Octree) — `geometry.md`; монотонная очередь и оптимизации ДП — `dynamic.md` (J); амортизированный анализ, массив с удвоением — `analysis.md`; бинарный поиск как приём над структурами — `technique.md`; структуры на числовых множествах (решёта, факторизация) — `math/number-theory`.
+> **Связи с другими ветками:** строковые контейнеры, rope, trie, суффиксные структуры, парсеры строк — `string.md`; представления графов (Adjacency, CSR, Forward Star), Incidence Matrix, структуры динамической связности — `graph.md`; пространственные структуры (R-Tree, KD-Tree, QuadTree/Octree) — `geometry.md`; монотонная очередь и оптимизации ДП — `dynamic.md` (J); амортизированный анализ, массив с удвоением — `analysis.md`; бинарный поиск как приём над структурами — `technique.md`; структуры на числовых множествах (решёта, факторизация) — `math/number-theory`.
 
 ---
 
@@ -21,25 +21,6 @@
     *   **Порядок и память**
         *   Row-major / column-major: индексация многомерных массивов, кэш-локализация
         *   Аллокация пулом страниц / расположение в памяти (locality of reference)
-    *   **Алгоритмы на массивах** (с сохранением стиля «одна задача — один обобщённый метод»):
-        *   Equilibrium Index In Array
-        *   Find Triplets With 0 Sum
-        *   Index 2D Array In 1D
-        *   Kth Largest Element
-        *   Median Two Array
-        *   Monotonic Array
-        *   Pairs With Given Sum
-        *   Permutations
-        *   Prefix Sum
-        *   Product Sum
-        *   Rotate Array
-        *   Sudoku Solver
-        *   **Дополнительно:**
-            *   Kadane's Algorithm (максимальная подмассивная сумма)
-            *   Dutch National Flag (сортировка 3 цветов)
-            *   Maximum Subarray Sum (разделяй и властвуй)
-            *   Sliding Window Maximum
-            *   Rain Water Trapping
 *   **BIT BOARD**
     *   Для игровых движков (шахматы, шашки): доска фиксированного размера `n×n` как последовательность машинных слов
     *   Побитовые операции над состояниями: сдвиги, маски, `popcount`, атаки/перемещения как битовые операции; обобщение на произвольный размер поля `n` и число битов на клетку `b` (не только 1)
@@ -74,7 +55,6 @@
         *   Rotate To The Right
         *   Swap Nodes
     *   **Продвинутые структуры:**
-        *   Skip List (вероятностная структура — см. `hashing.md` IV, базовые операции здесь не дублируются)
         *   Self-Organizing List (перемещение к началу/транспозиция)
 
 ### **C. СТЕКИ (LIFO - LAST IN, FIRST OUT)**
@@ -96,22 +76,6 @@
     *   Следующий меньший/больший элемент, предыдущие меньшие/большие (обобщение на произвольный предикат сравнения)
     *   Largest Rectangle Histogram (мост: координатная полоса, `n` произвольное)
     *   Stock Span Problem (глубина стека как метрика)
-*   **Алгоритмы на стеке:**
-    *   Balanced Parentheses (обобщение на `k` типов скобок)
-    *   Infix To Postfix Conversion
-    *   Infix To Prefix Conversion
-    *   Postfix Evaluation
-    *   Prefix Evaluation
-    *   Largest Rectangle Histogram
-    *   Lexicographical Numbers
-    *   Next Greater Element
-    *   Stock Span Problem
-    *   Dijkstras Two Stack Algorithm
-*   **Применения:**
-    *   Call Stack (рекурсия)
-    *   Undo/Redo в редакторах
-    *   Backtracking алгоритмы
-    *   Depth-First Search (DFS) — связь `graph.md`
 
 ### **D. ОЧЕРЕДИ (FIFO - FIRST IN, FIRST OUT)**
 *   **Базовые реализации очереди:**
@@ -153,14 +117,11 @@
 *   **Кольцевые буферы (RING/CIRCULAR BUFFERS):**
     *   Fixed-size circular buffer
     *   Overwriting circular buffer
-    *   Producer-Consumer паттерны (мост в `hashing.md` IV — конкурентные)
+    *   Producer-Consumer паттерны
 *   **Буферы скользящего окна:**
     *   Time-based sliding windows
     *   Count-based sliding windows
     *   Moving Average вычисления (скользящее среднее, экспоненциальное сглаживание)
-*   **Буферы для потоков данных:**
-    *   Reservoir Sampling (случайная выборка из потока — см. `hashing.md` IV)
-    *   Bloom Filter (см. `hashing.md` IV)
 
 ### **F. ГИБРИДНЫЕ, ФУНКЦИОНАЛЬНЫЕ И ЛЕНИВЫЕ СТРУКТУРЫ**
 *   **Finger Tree:**
@@ -311,7 +272,7 @@
 *   **Косая куча (Skew Heap):**
     *   Skew Heap (амортизированный merge, обмен правого/левого на каждом шаге)
 *   **Рандомизированная куча:**
-    *   Randomized Heap (merge с монеткой приоритетов — мост в `hashing.md` IV)
+    *   Randomized Heap (merge с монеткой приоритетов)
 *   **Для целочисленных ключей (Radix Heap):**
     *   Radix Heap / Bucket Heap: приоритеты из малого диапазона — O(1) амортизированно (мост из I.D Bucket Queue)
 *   **Двусторонняя куча (Double-ended Priority Queue):**
@@ -468,7 +429,6 @@
     *   `concurrent_vector`, `concurrent_hash_map`
 *   **Специальные примитивы:**
     *   Seqlock (write-lock + версия), RCU (Read-Copy-Update)
-    *   Lock-free Skip List (мост из `hashing.md` IV)
 
 ---
 
@@ -558,7 +518,7 @@
 *   **Применения:**
     *   Кэши в ОС (страницы, TLB), СУБД (буфер-пул страниц), CPU (аппаратные кэши — мост в XI cache-oblivious)
     *   Кэши вычислений: мемоизация (мост из I.F), кэши результатов функций (веб-кэши)
-    *   Скользящие кэши в потоковой обработке — связь `hashing.md` (вероятностные счётчики)
+    *   Скользящие кэши в потоковой обработке
 
 ---
 
