@@ -1,104 +1,185 @@
 /* ============================================
-   KNOWLEDGE BASE — NAVIGATION
+   KNOWLEDGE BASE — NAVIGATION (full tree)
    ============================================ */
 
 (function () {
     'use strict';
 
-    // --- Section metadata ---
-    var SECTIONS = {
-        'math': { name: 'Математика', subsections: {
-            'discrete-and-logic': { name: 'Дискретная математика и логика', letters: 'a,b,c,d'.split(',') },
-            'number-theory': { name: 'Теория чисел', letters: 'a,b,c,d,e'.split(',') },
-            'combinatorics': { name: 'Комбинаторика', letters: 'a,b,c,d'.split(',') },
-            'algebra': { name: 'Алгебра', letters: 'a,b,c,d,e,f,g,h,i,j'.split(',') },
-            'linear-algebra': { name: 'Линейная алгебра', letters: 'a,b,c,d,e,f,g,h,i,j,k,l,m'.split(',') },
-            'analysis': { name: 'Матанализ', letters: 'a,b,c,d,e,f,g,h,i,j'.split(',') },
-            'prob-and-stats': { name: 'Теория вероятностей', letters: 'a,b,c,d,e,f,g,h,i'.split(',') },
-            'pictures': { name: 'Графика', letters: 'a,b'.split(',') },
-            'geometry': { name: 'Геометрия', letters: 'a,b,c,d,e,f,g,h'.split(',') }
-        }},
-        'struct': { name: 'Структуры данных', letters: 'a,b,c,d,e,f,g,h,i,j,k'.split(',') },
-        'dynamic': { name: 'Динамическое программирование', letters: 'a,b,c,d,e,f,g,h,i,j'.split(',') },
-        'graph': { name: 'Теория графов', letters: 'a,b,c,d,e,f,g,h,i,j,k,l'.split(',') },
-        'string': { name: 'Строки', letters: 'a,b,c,d,e,f,g,h,i,j'.split(',') },
-        'technique': { name: 'Техники и алгоритмы', letters: 'a,b,c,cpp,d,e,f,g'.split(',') },
-        'hashing': { name: 'Хеширование', letters: 'a,b,c,d,e,f,g,h,i,j'.split(',') },
-        'geometry': { name: 'Геометрия', letters: [] },
-        'algo-analysis': { name: 'Анализ алгоритмов', letters: 'a,b,c,d,e,f,g,h'.split(',') },
-        'special-numbers': { name: 'Специальные числа', letters: [] },
-        'special-sequences': { name: 'Специальные последовательности', letters: [] }
-    };
+    // --- Full tree structure ---
+    var TREE = [
+        { id: 'math', name: 'Математика', children: [
+            { id: 'discrete-and-logic', name: 'Дискретная математика и логика', letters: 'a,b,c,d'.split(',') },
+            { id: 'number-theory', name: 'Теория чисел', letters: 'a,b,c,d,e'.split(',') },
+            { id: 'combinatorics', name: 'Комбинаторика', letters: 'a,b,c,d'.split(',') },
+            { id: 'algebra', name: 'Алгебра', letters: 'a,b,c,d,e,f,g,h,i,j'.split(',') },
+            { id: 'linear-algebra', name: 'Линейная алгебра', letters: 'a,b,c,d,e,f,g,h,i,j,k,l,m'.split(',') },
+            { id: 'analysis', name: 'Матанализ', letters: 'a,b,c,d,e,f,g,h,i,j'.split(',') },
+            { id: 'prob-and-stats', name: 'Теория вероятностей', letters: 'a,b,c,d,e,f,g,h,i'.split(',') },
+            { id: 'pictures', name: 'Графика', letters: 'a,b'.split(',') },
+            { id: 'geometry', name: 'Геометрия', letters: 'a,b,c,d,e,f,g,h'.split(',') }
+        ]},
+        { id: 'struct', name: 'Структуры данных', letters: 'a,b,c,d,e,f,g,h,i,j,k'.split(',') },
+        { id: 'dynamic', name: 'Динамическое программирование', letters: 'a,b,c,d,e,f,g,h,i,j'.split(',') },
+        { id: 'graph', name: 'Теория графов', letters: 'a,b,c,d,e,f,g,h,i,j,k,l'.split(',') },
+        { id: 'string', name: 'Строки', letters: 'a,b,c,d,e,f,g,h,i,j'.split(',') },
+        { id: 'technique', name: 'Техники и алгоритмы', letters: 'a,b,c,cpp,d,e,f,g'.split(',') },
+        { id: 'hashing', name: 'Хеширование', letters: 'a,b,c,d,e,f,g,h,i,j'.split(',') },
+        { id: 'algo-analysis', name: 'Анализ алгоритмов', letters: 'a,b,c,d,e,f,g,h'.split(',') },
+        { id: 'geometry', name: 'Геометрия', letters: [] },
+        { id: 'special-numbers', name: 'Специальные числа', letters: [] },
+        { id: 'special-sequences', name: 'Специальные последовательности', letters: [] }
+    ];
 
-    var ROOT_NAME = 'Главная';
-
-    // --- Parse current URL ---
+    // --- Parse URL ---
     function parseURL() {
         var path = window.location.pathname;
-        // Remove leading/trailing slashes and split
         var parts = path.replace(/^\/+|\/+$/g, '').split('/');
-        // Remove 'learn-production' if present
         if (parts[0] === 'learn-production') parts.shift();
+        if (parts[parts.length - 1] === 'index.html') parts.pop();
         return parts;
     }
 
-    // --- Build breadcrumb items ---
-    function buildBreadcrumbs(parts) {
-        var items = [];
-        var depth = parts.length;
-        var href = '';
-
-        // Root
-        href = depth > 0 ? '../'.repeat(depth) : './';
-        items.push({ name: ROOT_NAME, href: href, isCurrent: depth === 0 });
-
-        if (depth === 0) return items;
-
-        var section = parts[0];
-        var sectionMeta = SECTIONS[section];
-        if (!sectionMeta) return items;
-
-        // Section
-        href = depth > 1 ? '../'.repeat(depth - 1) : './';
-        items.push({ name: sectionMeta.name, href: href, isCurrent: depth === 1 });
-
-        if (depth === 1) return items;
-
-        var subsection = parts[1];
-        var subMeta = sectionMeta.subsections ? sectionMeta.subsections[subsection] : null;
-
-        // Subsection (math only)
-        if (subMeta) {
-            href = depth > 2 ? '../'.repeat(depth - 2) : './';
-            items.push({ name: subMeta.name, href: href, isCurrent: depth === 2 });
-
-            if (depth === 2) return items;
-
-            // Letter in subsection
-            var letter = parts[2];
-            items.push({ name: letter.toUpperCase(), href: './', isCurrent: depth === 3 });
-        } else {
-            // Letter directly in section
-            var letter = parts[1];
-            items.push({ name: letter.toUpperCase(), href: './', isCurrent: depth === 2 });
-        }
-
-        return items;
+    // --- Build relative path from current page ---
+    function relPath(depth) {
+        return '../'.repeat(depth);
     }
 
-    // --- Render breadcrumbs ---
+    // --- Render full tree sidebar ---
+    function renderSidebar() {
+        var parts = parseURL();
+        var depth = parts.length;
+        var rel = relPath(depth);
+
+        var html = '<nav class="sidebar">';
+        html += '<div class="sidebar-title">Навигация</div>';
+        html += '<ul class="sidebar-list">';
+
+        // Link to root
+        html += '<li><a href="' + rel + 'index.html"' +
+            (depth === 0 ? ' class="active"' : '') +
+            '>Главная</a></li>';
+
+        for (var s = 0; s < TREE.length; s++) {
+            var section = TREE[s];
+            var isCurrentSection = parts[0] === section.id;
+            var sectionOpen = isCurrentSection || depth === 0;
+            var sectionRel = depth > 0 ? rel : '';
+
+            html += '<li class="sidebar-section">';
+            html += '<a href="' + sectionRel + section.id + '/index.html"' +
+                (isCurrentSection && depth <= 1 ? ' class="active"' : '') +
+                '>' + section.name + '</a>';
+
+            // Show children if this section is current or if at root
+            if (section.children && sectionOpen) {
+                html += '<ul class="sidebar-sub">';
+
+                for (var c = 0; c < section.children.length; c++) {
+                    var sub = section.children[c];
+                    var isCurrentSub = isCurrentSection && parts[1] === sub.id;
+                    var subRel = depth > 1 ? rel : (isCurrentSection ? rel : '');
+
+                    html += '<li class="sidebar-subsection">';
+                    html += '<a href="' + subRel + section.id + '/' + sub.id + '/index.html"' +
+                        (isCurrentSub && depth <= 2 ? ' class="active"' : '') +
+                        '>' + sub.name + '</a>';
+
+                    // Show letters if this subsection is current
+                    if (isCurrentSub && sub.letters && sub.letters.length > 0) {
+                        html += '<ul class="sidebar-letters">';
+                        for (var l = 0; l < sub.letters.length; l++) {
+                            var letter = sub.letters[l];
+                            var displayName = letter === 'cpp' ? 'C++' : letter.toUpperCase();
+                            var isCurrentLetter = parts[2] === letter;
+                            var letterRel = depth > 2 ? rel : '';
+                            html += '<li><a href="' + letterRel + section.id + '/' + sub.id + '/' + letter + '/' + letter + '.html"' +
+                                (isCurrentLetter ? ' class="active"' : '') +
+                                '>' + displayName + '</a></li>';
+                        }
+                        html += '</ul>';
+                    }
+
+                    html += '</li>';
+                }
+
+                html += '</ul>';
+            } else if (!section.children && section.letters && section.letters.length > 0 && sectionOpen) {
+                // Direct letters (struct, dynamic, etc.)
+                html += '<ul class="sidebar-letters">';
+                for (var l = 0; l < section.letters.length; l++) {
+                    var letter = section.letters[l];
+                    var displayName = letter === 'cpp' ? 'C++' : letter.toUpperCase();
+                    var isCurrentLetter = isCurrentSection && parts[1] === letter;
+                    var letterRel = depth > 1 ? rel : '';
+                    html += '<li><a href="' + letterRel + section.id + '/' + letter + '/' + letter + '.html"' +
+                        (isCurrentLetter ? ' class="active"' : '') +
+                        '>' + displayName + '</a></li>';
+                }
+                html += '</ul>';
+            }
+
+            html += '</li>';
+        }
+
+        html += '</ul></nav>';
+
+        var main = document.querySelector('main.content');
+        if (main) {
+            main.insertAdjacentHTML('beforebegin', html);
+        }
+    }
+
+    // --- Breadcrumbs ---
     function renderBreadcrumbs() {
         var el = document.getElementById('breadcrumbs');
         if (!el) return;
 
         var parts = parseURL();
-        var items = buildBreadcrumbs(parts);
+        var depth = parts.length;
+        var items = [];
+
+        // Root
+        items.push({ name: 'Главная', href: relPath(depth) + 'index.html', isCurrent: depth === 0 });
+        if (depth === 0) { el.innerHTML = '<span class="current">Главная</span>'; return; }
+
+        // Find section
+        var sectionId = parts[0];
+        var sectionName = sectionId;
+        var subName = null;
+        var letterName = null;
+
+        for (var s = 0; s < TREE.length; s++) {
+            if (TREE[s].id === sectionId) {
+                sectionName = TREE[s].name;
+                if (TREE[s].children && parts[1]) {
+                    for (var c = 0; c < TREE[s].children.length; c++) {
+                        if (TREE[s].children[c].id === parts[1]) {
+                            subName = TREE[s].children[c].name;
+                            if (parts[2]) letterName = parts[2].toUpperCase();
+                        }
+                    }
+                } else if (TREE[s].letters && parts[1]) {
+                    letterName = parts[1].toUpperCase();
+                }
+                break;
+            }
+        }
+
+        items.push({ name: sectionName, href: relPath(depth - 1) + sectionId + '/index.html', isCurrent: depth === 1 });
+
+        if (subName) {
+            items.push({ name: subName, href: relPath(Math.max(depth - 2, 0)) + sectionId + '/' + parts[1] + '/index.html', isCurrent: depth === 2 });
+        }
+
+        if (letterName && depth > 2) {
+            items.push({ name: letterName, href: '#', isCurrent: true });
+        } else if (letterName && !subName && depth > 1) {
+            items.push({ name: letterName, href: '#', isCurrent: true });
+        }
 
         var html = '';
         for (var i = 0; i < items.length; i++) {
-            if (i > 0) {
-                html += '<span class="separator">›</span>';
-            }
+            if (i > 0) html += '<span class="separator">›</span>';
             if (items[i].isCurrent) {
                 html += '<span class="current">' + items[i].name + '</span>';
             } else {
@@ -108,173 +189,53 @@
         el.innerHTML = html;
     }
 
-    // --- Render sidebar ---
-    function renderSidebar() {
-        var parts = parseURL();
-        if (parts.length === 0) return;
-
-        var section = parts[0];
-        var sectionMeta = SECTIONS[section];
-        if (!sectionMeta) return;
-
-        // Determine if we're in a subsection (math) or directly in section
-        var subsection = null;
-        var letters = sectionMeta.letters || [];
-        var basePath = '../';
-
-        if (sectionMeta.subsections && parts.length > 1 && parts[1] !== 'index.html') {
-            subsection = parts[1];
-            var subMeta = sectionMeta.subsections[subsection];
-            if (subMeta) {
-                letters = subMeta.letters;
-                basePath = '../../';
-            }
-        }
-
-        // Build sidebar HTML
-        var html = '<nav class="sidebar">';
-        html += '<div class="sidebar-title">' + sectionMeta.name + '</div>';
-        html += '<ul class="sidebar-list">';
-
-        if (subsection) {
-            // Show all subsections
-            var subKeys = Object.keys(sectionMeta.subsections);
-            for (var i = 0; i < subKeys.length; i++) {
-                var key = subKeys[i];
-                var meta = sectionMeta.subsections[key];
-                var active = key === subsection ? ' active' : '';
-                html += '<li class="sidebar-subsection' + active + '">';
-                html += '<a href="' + basePath + key + '/index.html">' + meta.name + '</a>';
-                html += '</li>';
-            }
-        } else if (letters.length > 0) {
-            // Show letters
-            for (var i = 0; i < letters.length; i++) {
-                var l = letters[i];
-                var currentLetter = parts.length > 1 ? parts[1] : null;
-                // Handle 'cpp' in technique
-                var displayName = l === 'cpp' ? 'C++' : l.toUpperCase();
-                var active = l === currentLetter ? ' active' : '';
-                html += '<li class="sidebar-letter' + active + '">';
-                html += '<a href="' + basePath + l + '/' + l + '.html">' + displayName + '</a>';
-                html += '</li>';
-            }
-        }
-
-        html += '</ul></nav>';
-
-        // Insert sidebar before main content or at body start
-        var main = document.querySelector('main.content');
-        if (main) {
-            main.insertAdjacentHTML('beforebegin', html);
-        }
-    }
-
-    // --- Add sidebar CSS dynamically ---
-    function addSidebarStyles() {
+    // --- CSS ---
+    function addStyles() {
         var style = document.createElement('style');
-        style.textContent = [
-            '.sidebar {',
-            '  position: fixed;',
-            '  top: 0;',
-            '  left: 0;',
-            '  width: var(--sidebar-width);',
-            '  height: 100vh;',
-            '  background: var(--bg-sidebar);',
-            '  border-right: 1px solid var(--border);',
-            '  overflow-y: auto;',
-            '  padding: 1.5rem 0;',
-            '  z-index: 100;',
-            '}',
-            '.sidebar-title {',
-            '  padding: 0 1.25rem;',
-            '  font-size: 0.8rem;',
-            '  font-weight: 600;',
-            '  text-transform: uppercase;',
-            '  letter-spacing: 0.05em;',
-            '  color: var(--text-muted);',
-            '  margin-bottom: 0.75rem;',
-            '}',
-            '.sidebar-list {',
-            '  list-style: none;',
-            '  padding: 0;',
-            '  margin: 0;',
-            '}',
-            '.sidebar-list li {',
-            '  margin: 0;',
-            '}',
-            '.sidebar-list a {',
-            '  display: block;',
-            '  padding: 0.35rem 1.25rem;',
-            '  font-size: 0.88rem;',
-            '  color: var(--text);',
-            '  text-decoration: none;',
-            '  transition: background 0.15s, color 0.15s;',
-            '}',
-            '.sidebar-list a:hover {',
-            '  background: var(--border-light);',
-            '  color: var(--accent);',
-            '  text-decoration: none;',
-            '}',
-            '.sidebar-list .active a {',
-            '  color: var(--accent);',
-            '  font-weight: 600;',
-            '  background: var(--accent-light);',
-            '}',
-            '.sidebar-subsection {',
-            '  border-bottom: 1px solid var(--border-light);',
-            '  padding-bottom: 0.25rem;',
-            '  margin-bottom: 0.25rem;',
-            '}',
-            '',
-            '/* Offset main content for sidebar */',
-            '.site-header, .content {',
-            '  margin-left: var(--sidebar-width);',
-            '}',
-            '',
-            '/* Responsive: hide sidebar on mobile */',
-            '@media (max-width: 900px) {',
-            '  .sidebar {',
-            '    position: static;',
-            '    width: 100%;',
-            '    height: auto;',
-            '    border-right: none;',
-            '    border-bottom: 1px solid var(--border);',
-            '    padding: 0.75rem 0;',
-            '  }',
-            '  .sidebar-list {',
-            '    display: flex;',
-            '    flex-wrap: wrap;',
-            '    padding: 0 0.75rem;',
-            '    gap: 0.25rem;',
-            '  }',
-            '  .sidebar-list li {',
-            '    flex: 0 0 auto;',
-            '  }',
-            '  .sidebar-list a {',
-            '    padding: 0.25rem 0.6rem;',
-            '    border-radius: var(--radius);',
-            '    font-size: 0.82rem;',
-            '  }',
-            '  .sidebar-title {',
-            '    display: none;',
-            '  }',
-            '  .sidebar-subsection {',
-            '    border: none;',
-            '    padding: 0;',
-            '    margin: 0;',
-            '  }',
-            '  .site-header, .content {',
-            '    margin-left: 0;',
-            '  }',
-            '}'
-        ].join('\n');
+        style.textContent = `
+            .sidebar {
+                position: fixed; top: 0; left: 0;
+                width: var(--sidebar-width); height: 100vh;
+                background: var(--bg-sidebar);
+                border-right: 1px solid var(--border);
+                overflow-y: auto; padding: 1.5rem 0; z-index: 100;
+            }
+            .sidebar-title {
+                padding: 0 1.25rem; font-size: 0.8rem; font-weight: 600;
+                text-transform: uppercase; letter-spacing: 0.05em;
+                color: var(--text-muted); margin-bottom: 0.75rem;
+            }
+            .sidebar-list { list-style: none; padding: 0; margin: 0; }
+            .sidebar-list li { margin: 0; }
+            .sidebar-list a {
+                display: block; padding: 0.3rem 1.25rem;
+                font-size: 0.85rem; color: var(--text);
+                text-decoration: none; transition: background 0.15s, color 0.15s;
+            }
+            .sidebar-list a:hover { background: var(--border-light); color: var(--accent); text-decoration: none; }
+            .sidebar-list a.active { color: var(--accent); font-weight: 600; background: var(--accent-light); }
+            .sidebar-section > a { font-weight: 600; font-size: 0.9rem; padding-top: 0.5rem; }
+            .sidebar-sub { list-style: none; padding: 0; }
+            .sidebar-sub > li > a { padding-left: 1.75rem; font-size: 0.83rem; }
+            .sidebar-letters { list-style: none; padding: 0; }
+            .sidebar-letters li a { padding-left: 2.5rem; font-size: 0.8rem; color: var(--text-muted); }
+            .sidebar-letters li a.active { color: var(--accent); }
+            .site-header, .content { margin-left: var(--sidebar-width); }
+            @media (max-width: 900px) {
+                .sidebar { position: static; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 0.75rem 0; }
+                .sidebar-list { display: flex; flex-wrap: wrap; padding: 0 0.75rem; gap: 0.25rem; }
+                .sidebar-list li { flex: 0 0 auto; }
+                .sidebar-list a { padding: 0.25rem 0.6rem; border-radius: var(--radius); font-size: 0.82rem; }
+                .sidebar-title, .sidebar-sub, .sidebar-letters, .sidebar-section > a:first-child + .sidebar-sub { display: none; }
+                .site-header, .content { margin-left: 0; }
+            }
+        `;
         document.head.appendChild(style);
     }
 
     // --- Init ---
     function init() {
-        addSidebarStyles();
+        addStyles();
         renderBreadcrumbs();
         renderSidebar();
     }
