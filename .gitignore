@@ -32,3 +32,11 @@ dsa-notes/**/*
 !dsa-notes/**/*.cpp
 !dsa-notes/**/*.md
 !dsa-notes/**/*.txt
+
+# Manim render output (nested media/media/, Tex/, __pycache__)
+**/media/media/
+**/media/Tex/
+**/__pycache__/
+
+# Root-level media (stray manim renders)
+/media/
