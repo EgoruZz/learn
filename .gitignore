@@ -40,3 +40,7 @@ dsa-notes/**/*
 
 # Root-level media (stray manim renders)
 /media/
+
+# Temp files
+temp.txt
+visited.txt
