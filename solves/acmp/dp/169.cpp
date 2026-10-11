@@ -2,28 +2,21 @@
 #include <vector>
 using namespace std;
 
-int solve() {
+void solve() {
    int n, k;
    cin >> n >> k;
 
-   if (n > k || (k - n) % 2 != 0) return 0;
-
-   vector<int> dp((k - n) / 2 + 1, 0);
-   dp[0] = 1;
-
-   for (int i = 1; i <= k; i++) {
-        for (int j = (k - n) / 2; j >= 0; j--) {
-            if ((i - j < 0) || (i - 2 * j >= n && i < k)) {
-                dp[j] = 0;
-                continue;
-            }
-            if (j > 0) dp[j] += dp[j - 1];
+   vector<vector<int>> dp(k + 1, vector<int>(k + n + 1, 0));
+   dp[0][0] = 1;
+   for (int step = 1; step <= k; step++) {
+        for (int dist = 1; dist <= k + n; dist++) {
+            dp[step][dist] += dp[step - 1][dist - 1];
+            dp[step][dist] += dp[step - 1][dist + 1];
         }
    }
-
-   return dp[dp.size() - 1];
+   cout << dp[k][n];
 }
 
 signed main() {
-    cout << solve();
+    solve();
 }
