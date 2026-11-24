@@ -18,14 +18,6 @@
 *.out
 .cache/
 
-# Solves: keep only source files (.cpp/.txt/.py/.md)
-solves/**
-!solves/**/
-!solves/**/*.cpp
-!solves/**/*.txt
-!solves/**/*.py
-!solves/**/*.md
-
 # dsa-notes: keep only sources, ignore binaries (Code Runner / F5)
 dsa-notes/**/*
 !dsa-notes/**/
@@ -43,4 +35,3 @@ dsa-notes/**/*
 
 # Temp files
 temp.txt
-visited.txt
