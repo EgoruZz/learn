@@ -1,1 +1,0 @@
-print(sum(list(map(int, str(pow(2, 1000))))))

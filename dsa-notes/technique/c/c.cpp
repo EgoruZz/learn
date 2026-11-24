@@ -204,23 +204,108 @@ vector<int> fixed_window_max(const vector<int>& a, int k) {
     return result;
 }
 
-// --- B.7. Динамическое окно ---
-// Окно переменного размера: расширяем пока condition, сжимаем пока нет.
-// O(n) время, O(1) память (каждый элемент добавляется/удаляется ≤ 1 раз).
-// Возвращает {left, right} — границы найденного окна.
-pair<int, int> dynamic_window_generic(const vector<int>& a,
-                                       const function<bool(int, int)>& condition,
-                                       const function<void(int)>& add,
-                                       const function<void(int)>& remove) {
+// ============================================================
+// Три шаблона скользящего окна (sliding.png)
+// cond() — предикат, управляемый внешним состоянием (add/remove).
+// add(v) / remove(v) — добавить/убрать элемент из окна.
+// ============================================================
+
+// --- B.7.A. «Expand-then-shrink» (оба указателя) ---
+// Структура:
+//   for (l = 0, r = 0; r < n;) {
+//       while (r < n && cond())  add a[r++];
+//       while (l < r && !cond()) remove a[l++];
+//   }
+// КОГДА: нужно найти ДЛИННЕЙШЕЕ окно с cond() или обработать все
+// допустимые окна. Оба указателя движутся вперёд — каждый элемент
+// добавляется один раз и убирается один раз → O(n).
+// Задачи: «максимальная длина подмассива, где ...», «самое длинное окно
+// без повторов», «все окна с свойством P».
+pair<int, int> window_expand_shrink(
+    const vector<int>& a,
+    const function<bool()>& cond,
+    const function<void(int)>& add,
+    const function<void(int)>& remove) {
     int n = (int)a.size();
     int left = 0, best_left = 0, best_right = -1;
-    add(a[0]);
-    for (int right = 0; right < n; right++) {
-        while (left <= right && !condition(left, right)) {
+    for (int right = 0; right < n; ) {
+        while (right < n && cond()) {
+            add(a[right]);
+            right++;
+        }
+        while (left < right && !cond()) {
             remove(a[left]);
             left++;
         }
-        if (right - left > best_right - best_left) {
+        // окно [left, right) допустимо
+        if (right - left > best_right - best_left + 1) {
+            best_left = left;
+            best_right = right - 1;
+        }
+    }
+    return {best_left, best_right};
+}
+
+// --- B.7.B. «Left-greedy» (левый ведёт, правый догоняет) ---
+// Структура:
+//   for (l = 0, r = 0; l < n; l++) {
+//       while (r < n && cond())  add a[r++];
+//       remove a[l];
+//   }
+// КОГДА: нужен КРАТЧАЙШЕЕ окно с cond(). Для каждого левого края
+// жадно продвигаем правый, пока окно допустимо. Правый никогда не
+// движется назад → O(n).
+// Задачи: «минимальная длина подмассива, где ...», «minimum window
+// substring», «коротчайшее окно, покрывающее все символы».
+pair<int, int> window_left_greedy(
+    const vector<int>& a,
+    const function<bool()>& cond,
+    const function<void(int)>& add,
+    const function<void(int)>& remove) {
+    int n = (int)a.size();
+    int best_len = n + 1, best_left = -1, best_right = -1;
+    int right = 0;
+    for (int left = 0; left < n; left++) {
+        while (right < n && cond()) {
+            add(a[right]);
+            right++;
+        }
+        // окно [left, right) допустимо
+        if (right - left < best_len) {
+            best_len = right - left;
+            best_left = left;
+            best_right = right - 1;
+        }
+        remove(a[left]);
+    }
+    return {best_left, best_right};
+}
+
+// --- B.7.C. «Right-first» (правый ведёт, левый догоняет) — классика ---
+// Структура:
+//   for (l = 0, r = 0; r < n; r++) {
+//       add a[r];
+//       while (!cond())  remove a[l++];
+//   }
+// КОГДА: нужно ПОДДЕРЖИВАТЬ инвариант cond() в окне — расширяем
+// правый и сжимаем левый при нарушении. Самый частый паттерн.
+// Каждый элемент добавляется один раз и убирается один раз → O(n).
+// Задачи: «окно без k одинаковых», «longest substring with at most K
+// distinct», «максимальная сумма подмассива с ограничением».
+pair<int, int> window_right_first(
+    const vector<int>& a,
+    const function<bool()>& cond,
+    const function<void(int)>& add,
+    const function<void(int)>& remove) {
+    int n = (int)a.size();
+    int left = 0, best_left = 0, best_right = -1;
+    for (int right = 0; right < n; right++) {
+        add(a[right]);
+        while (left <= right && !cond()) {
+            remove(a[left]);
+            left++;
+        }
+        if (right - left > best_right - best_left + 1) {
             best_left = left;
             best_right = right;
         }
