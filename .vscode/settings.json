@@ -9,5 +9,5 @@
         "pvpython": "/Applications/ParaView-6.2.0-RC1.app/Contents/bin/pvpython $fileName",
         "wolfram": "wolframscript -file $fileName"
     },
-    "python.defaultInterpreterPath": "/Users/egorsergeev/stack/manim-env/bin/python"
+    "python.defaultInterpreterPath": "/Users/egorsergeev/stack/manim-env/bin/python",
 }
